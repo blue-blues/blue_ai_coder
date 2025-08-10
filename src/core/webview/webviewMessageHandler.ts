@@ -4,7 +4,7 @@ import * as os from "os"
 import * as fs from "fs/promises"
 import pWaitFor from "p-wait-for"
 import * as vscode from "vscode"
-import axios from "axios" // kilocode_change
+import axios from "axios" // bluescode_change
 import * as yaml from "yaml"
 
 import {
@@ -13,7 +13,7 @@ import {
 	type GlobalState,
 	type ClineMessage,
 	TelemetryEventName,
-	ghostServiceSettingsSchema, // kilocode_change
+	ghostServiceSettingsSchema, // bluescode_change
 } from "@roo-code/types"
 import { CloudService } from "@roo-code/cloud"
 import { TelemetryService } from "@roo-code/telemetry"
@@ -39,8 +39,8 @@ import { discoverChromeHostUrl, tryChromeHostUrl } from "../../services/browser/
 import { searchWorkspaceFiles } from "../../services/search/file-search"
 import { fileExistsAtPath } from "../../utils/fs"
 import { playTts, setTtsEnabled, setTtsSpeed, stopTts } from "../../utils/tts"
-import { showSystemNotification } from "../../integrations/notifications" // kilocode_change
-import { singleCompletionHandler } from "../../utils/single-completion-handler" // kilocode_change
+import { showSystemNotification } from "../../integrations/notifications" // bluescode_change
+import { singleCompletionHandler } from "../../utils/single-completion-handler" // bluescode_change
 import { searchCommits } from "../../utils/git"
 import { exportSettings, importSettingsWithFeedback } from "../config/importExport"
 import { getOpenAiModels } from "../../api/providers/openai"
@@ -55,8 +55,8 @@ import { GetModelsOptions } from "../../shared/api"
 import { generateSystemPrompt } from "./generateSystemPrompt"
 import { getCommand } from "../../utils/commands"
 import { toggleWorkflow, toggleRule, createRuleFile, deleteRuleFile } from "./kilorules"
-import { mermaidFixPrompt } from "../prompts/utilities/mermaid" // kilocode_change
-import { editMessageHandler, fetchKilocodeNotificationsHandler } from "../kilocode/webview/webviewMessageHandlerUtils" // kilocode_change
+import { mermaidFixPrompt } from "../prompts/utilities/mermaid" // bluescode_change
+import { editMessageHandler, fetchBluesCodeNotificationsHandler } from "../bluescode/webview/webviewMessageHandlerUtils" // bluescode_change
 
 const ALLOWED_VSCODE_SETTINGS = new Set(["terminal.integrated.inheritEnv"])
 
@@ -224,11 +224,11 @@ export const webviewMessageHandler = async (
 			await updateGlobalState("customModes", customModes)
 
 			// Refresh workflow toggles
-			const { refreshWorkflowToggles } = await import("../context/instructions/workflows") // kilocode_change
-			await refreshWorkflowToggles(provider.context, provider.cwd) // kilocode_change
+			const { refreshWorkflowToggles } = await import("../context/instructions/workflows") // bluescode_change
+			await refreshWorkflowToggles(provider.context, provider.cwd) // bluescode_change
 
 			provider.postStateToWebview()
-			provider.postRulesDataToWebview() // kilocode_change: send workflows and rules immediately
+			provider.postRulesDataToWebview() // bluescode_change: send workflows and rules immediately
 			provider.workspaceTracker?.initializeFilePaths() // Don't await.
 
 			getTheme().then((theme) => provider.postMessageToWebview({ type: "theme", text: JSON.stringify(theme) }))
@@ -289,11 +289,11 @@ export const webviewMessageHandler = async (
 				)
 
 			// If user already opted in to telemetry, enable telemetry service
-			provider.getStateToPostToWebview().then(async (/*kilocode_change*/ state) => {
+			provider.getStateToPostToWebview().then(async (/*bluescode_change*/ state) => {
 				const { telemetrySetting } = state
 				const isOptedIn = telemetrySetting === "enabled"
 				TelemetryService.instance.updateTelemetryState(isOptedIn)
-				await TelemetryService.instance.updateIdentity(state.apiConfiguration.kilocodeToken ?? "") // kilocode_change
+				await TelemetryService.instance.updateIdentity(state.apiConfiguration.bluesCodeToken ?? "") // bluescode_change
 			})
 
 			provider.isViewLaunched = true
@@ -304,11 +304,11 @@ export const webviewMessageHandler = async (
 			// task. This essentially creates a fresh slate for the new task.
 			await provider.initClineWithTask(message.text, message.images)
 			break
-		// kilocode_change start
+		// bluescode_change start
 		case "condense":
 			provider.getCurrentCline()?.handleWebviewAskResponse("yesButtonClicked")
 			break
-		// kilocode_change end
+		// bluescode_change end
 		case "customInstructions":
 			await provider.updateCustomInstructions(message.text)
 			break
@@ -544,7 +544,7 @@ export const webviewMessageHandler = async (
 				glama: {},
 				unbound: {},
 				litellm: {},
-				"kilocode-openrouter": {}, // kilocode_change
+				"bluescode-openrouter": {}, // bluescode_change
 				ollama: {},
 				lmstudio: {},
 			}
@@ -561,7 +561,7 @@ export const webviewMessageHandler = async (
 				}
 			}
 
-			// kilocode_change start: openrouter auth, kilocode provider
+			// bluescode_change start: openrouter auth, bluescode provider
 			const openRouterApiKey = apiConfiguration.openRouterApiKey || message?.values?.openRouterApiKey
 			const openRouterBaseUrl = apiConfiguration.openRouterBaseUrl || message?.values?.openRouterBaseUrl
 
@@ -574,12 +574,12 @@ export const webviewMessageHandler = async (
 				{ key: "glama", options: { provider: "glama" } },
 				{ key: "unbound", options: { provider: "unbound", apiKey: apiConfiguration.unboundApiKey } },
 				{
-					key: "kilocode-openrouter",
-					options: { provider: "kilocode-openrouter", kilocodeToken: apiConfiguration.kilocodeToken },
+					key: "bluescode-openrouter",
+					options: { provider: "bluescode-openrouter", bluesCodeToken: apiConfiguration.bluesCodeToken },
 				},
 				{ key: "ollama", options: { provider: "ollama", baseUrl: apiConfiguration.ollamaBaseUrl } },
 			]
-			// kilocode_change end
+			// bluescode_change end
 
 			// Don't fetch Ollama and LM Studio models by default anymore
 			// They have their own specific handlers: requestOllamaModels and requestLmStudioModels
@@ -834,7 +834,7 @@ export const webviewMessageHandler = async (
 			}
 
 			const workspaceFolder = vscode.workspace.workspaceFolders[0]
-			const rooDir = path.join(workspaceFolder.uri.fsPath, ".kilocode")
+			const rooDir = path.join(workspaceFolder.uri.fsPath, ".bluescode")
 			const mcpPath = path.join(rooDir, "mcp.json")
 
 			try {
@@ -954,9 +954,9 @@ export const webviewMessageHandler = async (
 			await updateGlobalState("enableMcpServerCreation", message.bool ?? true)
 			await provider.postStateToWebview()
 			break
-		// kilocode_change begin
+		// bluescode_change begin
 		case "openGlobalKeybindings":
-			vscode.commands.executeCommand("workbench.action.openGlobalKeybindings", message.text ?? "kilo-code.")
+			vscode.commands.executeCommand("workbench.action.openGlobalKeybindings", message.text ?? "blues-code.")
 			break
 		case "showSystemNotification":
 			const isSystemNotificationsEnabled = getGlobalState("systemNotificationsEnabled") ?? true
@@ -977,7 +977,7 @@ export const webviewMessageHandler = async (
 				vscode.env.openExternal(vscode.Uri.parse(message.url))
 			}
 			break
-		// kilocode_change end
+		// bluescode_change end
 		case "refreshAllMcpServers": {
 			const mcpHub = provider.getMcpHub()
 			if (mcpHub) {
@@ -1341,7 +1341,7 @@ export const webviewMessageHandler = async (
 			await updateGlobalState("maxReadFileLine", message.value)
 			await provider.postStateToWebview()
 			break
-		// kilocode_change start
+		// bluescode_change start
 		case "showAutoApproveMenu":
 			await updateGlobalState("showAutoApproveMenu", message.bool ?? true)
 			await provider.postStateToWebview()
@@ -1354,7 +1354,7 @@ export const webviewMessageHandler = async (
 			await updateGlobalState("allowVeryLargeReads", message.bool ?? false)
 			await provider.postStateToWebview()
 			break
-		// kilocode_change end
+		// bluescode_change end
 		case "maxImageFileSize":
 			await updateGlobalState("maxImageFileSize", message.value)
 			await provider.postStateToWebview()
@@ -1401,19 +1401,19 @@ export const webviewMessageHandler = async (
 			await updateGlobalState("enhancementApiConfigId", message.text)
 			await provider.postStateToWebview()
 			break
-		// kilocode_change start - commitMessageApiConfigId
+		// bluescode_change start - commitMessageApiConfigId
 		case "commitMessageApiConfigId":
 			await updateGlobalState("commitMessageApiConfigId", message.text)
 			await provider.postStateToWebview()
 			break
-		// kilocode_change end - commitMessageApiConfigId
-		// kilocode_change start - terminalCommandApiConfigId
+		// bluescode_change end - commitMessageApiConfigId
+		// bluescode_change start - terminalCommandApiConfigId
 		case "terminalCommandApiConfigId":
 			await updateGlobalState("terminalCommandApiConfigId", message.text)
 			await provider.postStateToWebview()
 			break
-		// kilocode_change end - terminalCommandApiConfigId
-		// kilocode_change start - ghostServiceSettings
+		// bluescode_change end - terminalCommandApiConfigId
+		// bluescode_change start - ghostServiceSettings
 		case "ghostServiceSettings":
 			if (!message.values) {
 				return
@@ -1424,7 +1424,7 @@ export const webviewMessageHandler = async (
 			await provider.postStateToWebview()
 			vscode.commands.executeCommand("kilo-code.ghost.reload")
 			break
-		// kilocode_change end
+		// bluescode_change end
 		case "includeTaskHistoryInEnhance":
 			await updateGlobalState("includeTaskHistoryInEnhance", message.bool ?? false)
 			await provider.postStateToWebview()
@@ -1486,7 +1486,7 @@ export const webviewMessageHandler = async (
 						`Error enhancing prompt: ${JSON.stringify(error, Object.getOwnPropertyNames(error), 2)}`,
 					)
 
-					TelemetryService.instance.captureException(error, { context: "enhance_prompt" }) // kilocode_change
+					TelemetryService.instance.captureException(error, { context: "enhance_prompt" }) // bluescode_change
 					vscode.window.showErrorMessage(t("common:errors.enhance_prompt"))
 					await provider.postMessageToWebview({ type: "enhancedPrompt" })
 				}
@@ -1539,7 +1539,7 @@ export const webviewMessageHandler = async (
 			}
 			break
 		}
-		// kilocode_change start
+		// bluescode_change start
 		case "showFeedbackOptions": {
 			const githubIssuesText = t("common:feedback.githubIssues")
 			const discordText = t("common:feedback.discord")
@@ -1554,15 +1554,15 @@ export const webviewMessageHandler = async (
 			)
 
 			if (answer === githubIssuesText) {
-				await vscode.env.openExternal(vscode.Uri.parse("https://github.com/Kilo-Org/kilocode/issues"))
+				await vscode.env.openExternal(vscode.Uri.parse("https://github.com/Blues-Org/bluescode/issues"))
 			} else if (answer === discordText) {
 				await vscode.env.openExternal(vscode.Uri.parse("https://discord.gg/fxrhCFGhkP"))
 			} else if (answer === customerSupport) {
-				await vscode.env.openExternal(vscode.Uri.parse("https://kilocode.ai/support"))
+				await vscode.env.openExternal(vscode.Uri.parse("https://bluescode.ai/support"))
 			}
 			break
 		}
-		// kilocode_change end
+		// bluescode_change end
 		case "searchFiles": {
 			const workspacePath = getWorkspacePath()
 
@@ -2089,32 +2089,32 @@ export const webviewMessageHandler = async (
 			}
 			break
 
-		// kilocode_change_start
+		// bluescode_change_start
 		case "fetchProfileDataRequest":
 			try {
 				const { apiConfiguration } = await provider.getState()
-				const kilocodeToken = apiConfiguration?.kilocodeToken
+				const bluesCodeToken = apiConfiguration?.bluesCodeToken
 
-				if (!kilocodeToken) {
-					provider.log("KiloCode token not found in extension state.")
+				if (!bluesCodeToken) {
+					provider.log("Blues Code token not found in extension state.")
 					provider.postMessageToWebview({
 						type: "profileDataResponse",
-						payload: { success: false, error: "KiloCode API token not configured." },
+						payload: { success: false, error: "Blues Code API token not configured." },
 					})
 					break
 				}
 
 				// Changed to /api/profile
-				const response = await axios.get("https://kilocode.ai/api/profile", {
+				const response = await axios.get("https://bluescode.ai/api/profile", {
 					headers: {
-						Authorization: `Bearer ${kilocodeToken}`,
+						Authorization: `Bearer ${bluesCodeToken}`,
 						"Content-Type": "application/json",
 					},
 				})
 
 				provider.postMessageToWebview({
 					type: "profileDataResponse", // Assuming this response type is still appropriate for /api/profile
-					payload: { success: true, data: { kilocodeToken, ...response.data } },
+					payload: { success: true, data: { bluesCodeToken, ...response.data } },
 				})
 			} catch (error: any) {
 				const errorMessage =
@@ -2131,21 +2131,21 @@ export const webviewMessageHandler = async (
 		case "fetchBalanceDataRequest": // New handler
 			try {
 				const { apiConfiguration } = await provider.getState()
-				const kilocodeToken = apiConfiguration?.kilocodeToken
+				const bluesCodeToken = apiConfiguration?.bluesCodeToken
 
-				if (!kilocodeToken) {
-					provider.log("KiloCode token not found in extension state for balance data.")
+				if (!bluesCodeToken) {
+					provider.log("Blues Code token not found in extension state for balance data.")
 					provider.postMessageToWebview({
 						type: "balanceDataResponse", // New response type
-						payload: { success: false, error: "KiloCode API token not configured." },
+						payload: { success: false, error: "Blues Code API token not configured." },
 					})
 					break
 				}
 
-				const response = await axios.get("https://kilocode.ai/api/profile/balance", {
+				const response = await axios.get("https://bluescode.ai/api/profile/balance", {
 					// Original path for balance
 					headers: {
-						Authorization: `Bearer ${kilocodeToken}`,
+						Authorization: `Bearer ${bluesCodeToken}`,
 						"Content-Type": "application/json",
 					},
 				})
@@ -2166,9 +2166,9 @@ export const webviewMessageHandler = async (
 		case "shopBuyCredits": // New handler
 			try {
 				const { apiConfiguration } = await provider.getState()
-				const kilocodeToken = apiConfiguration?.kilocodeToken
-				if (!kilocodeToken) {
-					provider.log("KiloCode token not found in extension state for buy credits.")
+				const bluesCodeToken = apiConfiguration?.bluesCodeToken
+				if (!bluesCodeToken) {
+					provider.log("Blues Code token not found in extension state for buy credits.")
 					break
 				}
 				const credits = message.values?.credits || 50
@@ -2177,11 +2177,11 @@ export const webviewMessageHandler = async (
 				const source = uiKind === "Web" ? "web" : uriScheme
 
 				const response = await axios.post(
-					`https://kilocode.ai/payments/topup?origin=extension&source=${source}&amount=${credits}`,
+					`https://bluescode.ai/payments/topup?origin=extension&source=${source}&amount=${credits}`,
 					{},
 					{
 						headers: {
-							Authorization: `Bearer ${kilocodeToken}`,
+							Authorization: `Bearer ${bluesCodeToken}`,
 							"Content-Type": "application/json",
 						},
 						maxRedirects: 0, // Prevent axios from following redirects automatically
@@ -2262,7 +2262,7 @@ export const webviewMessageHandler = async (
 					await createRuleFile(message.filename, message.isGlobal, message.ruleType)
 				} catch (error) {
 					console.error("Error creating rule file:", error)
-					vscode.window.showErrorMessage(t("kilocode:rules.errors.failedToCreateRuleFile"))
+					vscode.window.showErrorMessage(t("bluescode:rules.errors.failedToCreateRuleFile"))
 				}
 				await provider.postRulesDataToWebview()
 			}
@@ -2275,7 +2275,7 @@ export const webviewMessageHandler = async (
 					await deleteRuleFile(message.rulePath)
 				} catch (error) {
 					console.error("Error deleting rule file:", error)
-					vscode.window.showErrorMessage(t("kilocode:rules.errors.failedToDeleteRuleFile"))
+					vscode.window.showErrorMessage(t("bluescode:rules.errors.failedToDeleteRuleFile"))
 				}
 				await provider.postRulesDataToWebview()
 			}
@@ -2285,7 +2285,7 @@ export const webviewMessageHandler = async (
 		case "reportBug":
 			provider.getCurrentCline()?.handleWebviewAskResponse("yesButtonClicked")
 			break
-		// end kilocode_change
+		// end bluescode_change
 		case "telemetrySetting": {
 			const telemetrySetting = message.text as TelemetrySetting
 			await updateGlobalState("telemetrySetting", telemetrySetting)
@@ -2592,7 +2592,7 @@ export const webviewMessageHandler = async (
 			}
 			break
 		}
-		// kilocode_change start - add clearUsageData
+		// bluescode_change start - add clearUsageData
 		case "clearUsageData": {
 			try {
 				const usageTracker = UsageTracker.getInstance()
@@ -2605,7 +2605,7 @@ export const webviewMessageHandler = async (
 			}
 			break
 		}
-		// kilocode_change start - add getUsageData
+		// bluescode_change start - add getUsageData
 		case "getUsageData": {
 			if (message.text) {
 				try {
@@ -2623,14 +2623,14 @@ export const webviewMessageHandler = async (
 			}
 			break
 		}
-		// kilocode_change end - add getUsageData
-		// kilocode_change start - add toggleTaskFavorite
+		// bluescode_change end - add getUsageData
+		// bluescode_change start - add toggleTaskFavorite
 		case "toggleTaskFavorite":
 			if (message.text) {
 				await provider.toggleTaskFavorite(message.text)
 			}
 			break
-		// kilocode_change start - add fixMermaidSyntax
+		// bluescode_change start - add fixMermaidSyntax
 		case "fixMermaidSyntax":
 			if (message.text && message.requestId) {
 				try {
@@ -2659,7 +2659,7 @@ export const webviewMessageHandler = async (
 				}
 			}
 			break
-		// kilocode_change end
+		// bluescode_change end
 		case "focusPanelRequest": {
 			// Execute the focusPanel command to focus the WebView
 			await vscode.commands.executeCommand(getCommand("focusPanel"))
@@ -2796,13 +2796,13 @@ export const webviewMessageHandler = async (
 			}
 			break
 		}
-		// kilocode_change start
+		// bluescode_change start
 		case "editMessage": {
 			await editMessageHandler(provider, message)
 			break
 		}
-		case "fetchKilocodeNotifications": {
-			await fetchKilocodeNotificationsHandler(provider)
+		case "fetchBluesCodeNotifications": {
+			await fetchBluesCodeNotificationsHandler(provider)
 			break
 		}
 		case "dismissNotificationId": {
@@ -2816,7 +2816,7 @@ export const webviewMessageHandler = async (
 			await provider.postStateToWebview()
 			break
 		}
-		// kilocode_change end
+		// bluescode_change end
 		case "insertTextToChatArea":
 			provider.postMessageToWebview({ type: "insertTextToChatArea", text: message.text })
 			break

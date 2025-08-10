@@ -21,12 +21,12 @@ import { formatResponse } from "../prompts/responses"
 import { Task } from "../task/Task"
 import { formatReminderSection } from "./reminder"
 
-// kilocode_change start
+// bluescode_change start
 import { OpenRouterHandler } from "../../api/providers/openrouter"
 import { TelemetryService } from "@roo-code/telemetry"
 import { t } from "../../i18n"
-import { KilocodeOllamaHandler } from "../../api/providers/kilocode-ollama"
-// kilocode_change end
+import { BluesCodeOllamaHandler } from "../../api/providers/kilocode-ollama"
+// bluescode_change end
 
 export async function getEnvironmentDetails(cline: Task, includeFileDetails: boolean = false) {
 	let details = ""
@@ -210,21 +210,21 @@ export async function getEnvironmentDetails(cline: Task, includeFileDetails: boo
 	// Add context tokens information.
 	const { contextTokens, totalCost } = getApiMetrics(cline.clineMessages)
 
-	// kilocode_change start
+	// bluescode_change start
 	// Be sure to fetch the model information before we need it.
-	if (cline.api instanceof OpenRouterHandler || cline.api instanceof KilocodeOllamaHandler) {
+	if (cline.api instanceof OpenRouterHandler || cline.api instanceof BluesCodeOllamaHandler) {
 		try {
 			await cline.api.fetchModel()
 		} catch (e) {
 			TelemetryService.instance.captureException(e, { context: "getEnvironmentDetails" })
 			await cline.say(
 				"error",
-				t("kilocode:notLoggedInError", { error: e instanceof Error ? e.message : String(e) }),
+				t("bluescode:notLoggedInError", { error: e instanceof Error ? e.message : String(e) }),
 			)
 			return `<environment_details>\n${details.trim()}\n</environment_details>`
 		}
 	}
-	// kilocode_change end
+	// bluescode_change end
 
 	const { id: modelId, info: modelInfo } = cline.api.getModel()
 
@@ -246,7 +246,7 @@ export async function getEnvironmentDetails(cline: Task, includeFileDetails: boo
 		language: language ?? formatLanguage(vscode.env.language),
 	})
 
-	const currentMode = modeDetails.slug ?? mode // kilocode_change: don't try to use non-existent modes
+	const currentMode = modeDetails.slug ?? mode // bluescode_change: don't try to use non-existent modes
 
 	details += `\n\n# Current Mode\n`
 	details += `<slug>${currentMode}</slug>\n`

@@ -117,7 +117,7 @@ export async function createRuleFile(
 ): Promise<void> {
 	const workspacePath = getWorkspacePath()
 	if (!workspacePath && !isGlobal) {
-		vscode.window.showErrorMessage(t("kilocode:rules.errors.noWorkspaceFound"))
+		vscode.window.showErrorMessage(t("bluescode:rules.errors.noWorkspaceFound"))
 		return
 	}
 
@@ -130,7 +130,7 @@ export async function createRuleFile(
 	const filePath = path.join(rulesDir, filename)
 
 	if (await fileExistsAtPath(filePath)) {
-		vscode.window.showErrorMessage(t("kilocode:rules.errors.fileAlreadyExists", { filename }))
+		vscode.window.showErrorMessage(t("bluescode:rules.errors.fileAlreadyExists", { filename }))
 		return
 	}
 
@@ -144,38 +144,38 @@ export async function createRuleFile(
 function workflowTemplate(baseFileName: string) {
 	return `# ${baseFileName}
 
-${t("kilocode:rules.templates.workflow.description")}
+${t("bluescode:rules.templates.workflow.description")}
 
-${t("kilocode:rules.templates.workflow.stepsHeader")}
+${t("bluescode:rules.templates.workflow.stepsHeader")}
 
-1. ${t("kilocode:rules.templates.workflow.step1")}
-2. ${t("kilocode:rules.templates.workflow.step2")}
+1. ${t("bluescode:rules.templates.workflow.step1")}
+2. ${t("bluescode:rules.templates.workflow.step2")}
 `
 }
 
 function ruleTemplate(baseFileName: string) {
 	return `# ${baseFileName}
 
-${t("kilocode:rules.templates.rule.description")}
+${t("bluescode:rules.templates.rule.description")}
 
-${t("kilocode:rules.templates.rule.guidelinesHeader")}
+${t("bluescode:rules.templates.rule.guidelinesHeader")}
 
-- ${t("kilocode:rules.templates.rule.guideline1")}
-- ${t("kilocode:rules.templates.rule.guideline2")}
+- ${t("bluescode:rules.templates.rule.guideline1")}
+- ${t("bluescode:rules.templates.rule.guideline2")}
 `
 }
 
 export async function deleteRuleFile(rulePath: string): Promise<void> {
-	const deleteAction = t("kilocode:rules.actions.delete")
+	const deleteAction = t("bluescode:rules.actions.delete")
 	const filename = path.basename(rulePath)
 	const result = await vscode.window.showWarningMessage(
-		t("kilocode:rules.actions.confirmDelete", { filename }),
+		t("bluescode:rules.actions.confirmDelete", { filename }),
 		{ modal: true },
 		deleteAction,
 	)
 
 	if (result === deleteAction) {
 		await fs.unlink(rulePath)
-		vscode.window.showInformationMessage(t("kilocode:rules.actions.deleted", { filename }))
+		vscode.window.showInformationMessage(t("bluescode:rules.actions.deleted", { filename }))
 	}
 }

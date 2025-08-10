@@ -1,8 +1,8 @@
 /* eslint no-misleading-character-class: 0 */
-// kilocode_change: this file was pulled from Cline and adjusted for us
+// bluescode_change: this file was pulled from Cline and adjusted for us
 
 import { getAllModes } from "@roo/modes"
-import { getBasename } from "./kilocode/path-webview"
+import { getBasename } from "./bluescode/path-webview"
 import { ClineRulesToggles } from "@roo/cline-rules"
 
 export interface SlashCommand {
@@ -25,9 +25,9 @@ export function getSupportedSlashCommands(
 		},
 		{
 			name: "newrule",
-			description: "Create a new Kilo rule with context from your conversation",
+			description: "Create a new Blues Code rule with context from your conversation",
 		},
-		{ name: "reportbug", description: "Create a KiloCode GitHub issue" },
+		{ name: "reportbug", description: "Create a Blues Code GitHub issue" },
 		{ name: "smol", description: "Condenses your current context window" },
 	]
 

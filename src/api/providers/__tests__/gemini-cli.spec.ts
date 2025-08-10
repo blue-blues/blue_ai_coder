@@ -1,4 +1,4 @@
-// kilocode_change new file
+// bluescode_change new file
 
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { GeminiCliHandler } from "../gemini-cli"

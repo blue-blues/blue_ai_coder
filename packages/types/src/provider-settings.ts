@@ -18,7 +18,7 @@ export const providerNames = [
 	"ollama",
 	"vscode-lm",
 	"lmstudio",
-	"gemini", // kilocode_change
+	"gemini", // bluescode_change
 	"gemini-cli",
 	"openai-native",
 	"mistral",
@@ -33,11 +33,12 @@ export const providerNames = [
 	"groq",
 	"chutes",
 	"litellm",
-	// kilocode_change start
+	// bluescode_change start
 	"kilocode",
+	"bluescode",
 	"virtual-quota-fallback",
 	"bigmodel",
-	// kilocode_change end
+	// bluescode_change end
 	"huggingface",
 	"cerebras",
 	"sambanova",
@@ -85,14 +86,14 @@ const baseProviderSettingsSchema = z.object({
 	modelMaxTokens: z.number().optional(),
 	modelMaxThinkingTokens: z.number().optional(),
 
-	morphApiKey: z.string().optional(), // kilocode_change: Morph fast apply
+	morphApiKey: z.string().optional(), // bluescode_change: Morph fast apply
 
-	// // kilocode_change start
+	// // bluescode_change start
 	// kilocodeToken: z.string().optional(),
 	// kilocodeModel: z.string().optional(),
 	// fireworksModelId: z.string().optional(),
 	// fireworksApiKey: z.string().optional(),
-	// // kilocode_change end
+	// // bluescode_change end
 })
 
 // Several of the providers share common model config properties.
@@ -192,12 +193,12 @@ const geminiSchema = apiModelIdProviderModelSchema.extend({
 	enableGrounding: z.boolean().optional(),
 })
 
-// kilocode_change start
+// bluescode_change start
 const geminiCliSchema = apiModelIdProviderModelSchema.extend({
 	geminiCliOAuthPath: z.string().optional(),
 	geminiCliProjectId: z.string().optional(),
 })
-// kilocode_change end
+// bluescode_change end
 
 const openAiNativeSchema = apiModelIdProviderModelSchema.extend({
 	openAiNativeApiKey: z.string().optional(),
@@ -246,11 +247,11 @@ const xaiSchema = apiModelIdProviderModelSchema.extend({
 	xaiApiKey: z.string().optional(),
 })
 
-// kilocode_change start
+// bluescode_change start
 const bigModelSchema = apiModelIdProviderModelSchema.extend({
 	bigModelApiKey: z.string().optional(),
 })
-// kilocode_change end
+// bluescode_change end
 
 const groqSchema = apiModelIdProviderModelSchema.extend({
 	groqApiKey: z.string().optional(),
@@ -281,10 +282,10 @@ const sambaNovaSchema = apiModelIdProviderModelSchema.extend({
 	sambaNovaApiKey: z.string().optional(),
 })
 
-// kilocode_change start
-const kilocodeSchema = baseProviderSettingsSchema.extend({
-	kilocodeToken: z.string().optional(),
-	kilocodeModel: z.string().optional(),
+// bluescode_change start
+const bluesCodeSchema = baseProviderSettingsSchema.extend({
+	bluesCodeToken: z.string().optional(),
+	bluesCodeModel: z.string().optional(),
 	openRouterSpecificProvider: z.string().optional(),
 })
 
@@ -305,7 +306,7 @@ export const virtualQuotaFallbackProfileDataSchema = z.object({
 const virtualQuotaFallbackSchema = baseProviderSettingsSchema.extend({
 	profiles: z.array(virtualQuotaFallbackProfileDataSchema).optional(),
 })
-// kilocode_change end
+// bluescode_change end
 const zaiSchema = apiModelIdProviderModelSchema.extend({
 	zaiApiKey: z.string().optional(),
 	zaiApiLine: z.union([z.literal("china"), z.literal("international")]).optional(),
@@ -341,12 +342,12 @@ export const providerSettingsSchemaDiscriminated = z.discriminatedUnion("apiProv
 	humanRelaySchema.merge(z.object({ apiProvider: z.literal("human-relay") })),
 	fakeAiSchema.merge(z.object({ apiProvider: z.literal("fake-ai") })),
 	xaiSchema.merge(z.object({ apiProvider: z.literal("xai") })),
-	// kilocode_change start
+	// bluescode_change start
 	bigModelSchema.merge(z.object({ apiProvider: z.literal("bigmodel") })),
 	geminiCliSchema.merge(z.object({ apiProvider: z.literal("gemini-cli") })),
-	kilocodeSchema.merge(z.object({ apiProvider: z.literal("kilocode") })),
+	bluesCodeSchema.merge(z.object({ apiProvider: z.literal("bluescode") })),
 	virtualQuotaFallbackSchema.merge(z.object({ apiProvider: z.literal("virtual-quota-fallback") })),
-	// kilocode_change end
+	// bluescode_change end
 	groqSchema.merge(z.object({ apiProvider: z.literal("groq") })),
 	huggingFaceSchema.merge(z.object({ apiProvider: z.literal("huggingface") })),
 	chutesSchema.merge(z.object({ apiProvider: z.literal("chutes") })),
@@ -371,12 +372,12 @@ export const providerSettingsSchema = z.object({
 	...vsCodeLmSchema.shape,
 	...lmStudioSchema.shape,
 	...geminiSchema.shape,
-	// kilocode_change start
+	// bluescode_change start
 	...geminiCliSchema.shape,
-	...kilocodeSchema.shape,
+	...bluesCodeSchema.shape,
 	...bigModelSchema.shape,
 	...virtualQuotaFallbackSchema.shape,
-	// kilocode_change end
+	// bluescode_change end
 	...openAiNativeSchema.shape,
 	...mistralSchema.shape,
 	...deepSeekSchema.shape,

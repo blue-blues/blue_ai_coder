@@ -16,7 +16,7 @@ import { DIFF_VIEW_URI_SCHEME } from "../../integrations/editor/DiffViewProvider
 
 import { CheckpointServiceOptions, RepoPerTaskCheckpointService } from "../../services/checkpoints"
 
-// kilocode_change start
+// bluescode_change start
 import { TelemetryEventName } from "@roo-code/types"
 import { stringifyError } from "../../shared/kilocode/errorUtils"
 
@@ -26,7 +26,7 @@ function reportError(callsite: string, error: unknown) {
 		error: stringifyError(error),
 	})
 }
-// kilocode_change end
+// bluescode_change end
 
 export async function getCheckpointService(
 	cline: Task,
@@ -109,7 +109,7 @@ export async function getCheckpointService(
 	} catch (err) {
 		log(`[Task#getCheckpointService] ${err.message}`)
 		cline.enableCheckpoints = false
-		reportError("Task#getCheckpointService", err) // kilocode_change
+		reportError("Task#getCheckpointService", err) // bluescode_change
 		return undefined
 	}
 }
@@ -158,13 +158,13 @@ async function checkGitInstallation(
 					.catch((err) => {
 						log("[Task#getCheckpointService] caught unexpected error in say('checkpoint_saved')")
 						console.error(err)
-						reportError("getCheckpointService:say('checkpoint_saved')", err) // kilocode_change
+						reportError("getCheckpointService:say('checkpoint_saved')", err) // bluescode_change
 					})
 			} catch (err) {
 				log("[Task#getCheckpointService] caught unexpected error in on('checkpoint'), disabling checkpoints")
 				console.error(err)
 				cline.enableCheckpoints = false
-				reportError("getCheckpointService:on('checkpoint')", err) // kilocode_change
+				reportError("getCheckpointService:on('checkpoint')", err) // bluescode_change
 			}
 		})
 
@@ -174,13 +174,13 @@ async function checkGitInstallation(
 		} catch (err) {
 			log(`[Task#getCheckpointService] initShadowGit -> ${err.message}`)
 			cline.enableCheckpoints = false
-			reportError("getCheckpointService:initShadowGit", err) // kilocode_change
+			reportError("getCheckpointService:initShadowGit", err) // bluescode_change
 		}
 	} catch (err) {
 		log(`[Task#getCheckpointService] Unexpected error during Git check: ${err.message}`)
 		console.error("Git check error:", err)
 		cline.enableCheckpoints = false
-		reportError("getCheckpointService", err) // kilocode_change
+		reportError("getCheckpointService", err) // bluescode_change
 	}
 }
 
@@ -204,7 +204,7 @@ export async function checkpointSave(cline: Task, force = false) {
 	return service.saveCheckpoint(`Task: ${cline.taskId}, Time: ${Date.now()}`, { allowEmpty: force }).catch((err) => {
 		console.error("[Task#checkpointSave] caught unexpected error, disabling checkpoints", err)
 		cline.enableCheckpoints = false
-		reportError("checkpointSave", err) // kilocode_change
+		reportError("checkpointSave", err) // bluescode_change
 	})
 }
 
@@ -272,7 +272,7 @@ export async function checkpointRestore(cline: Task, { ts, commitHash, mode }: C
 	} catch (err) {
 		provider?.log("[checkpointRestore] disabling checkpoints for this task")
 		cline.enableCheckpoints = false
-		reportError("checkpointRestore", err) // kilocode_change
+		reportError("checkpointRestore", err) // bluescode_change
 	}
 }
 
@@ -328,6 +328,6 @@ export async function checkpointDiff(cline: Task, { ts, previousCommitHash, comm
 		const provider = cline.providerRef.deref()
 		provider?.log("[checkpointDiff] disabling checkpoints for this task")
 		cline.enableCheckpoints = false
-		reportError("checkpointDiff", err) // kilocode_change
+		reportError("checkpointDiff", err) // bluescode_change
 	}
 }

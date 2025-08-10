@@ -1,2 +1,2 @@
-// kilocode_change whole file
+// bluescode_change whole file
 export type ClineRulesToggles = Record<string, boolean> // filepath -> enabled/disabled

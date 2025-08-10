@@ -96,20 +96,20 @@ import {
 import { ApiMessage } from "../task-persistence/apiMessages"
 import { getMessagesSinceLastSummary, summarizeConversation } from "../condense"
 import { maybeRemoveImageBlocks } from "../../api/transform/image-cleaning"
-import { processKiloUserContentMentions } from "../mentions/processKiloUserContentMentions" // kilocode_change
-import { refreshWorkflowToggles } from "../context/instructions/workflows" // kilocode_change
-import { parseMentions } from "../mentions" // kilocode_change
-import { parseKiloSlashCommands } from "../slash-commands/kilo" // kilocode_change
-import { GlobalFileNames } from "../../shared/globalFileNames" // kilocode_change
-import { ensureLocalKilorulesDirExists } from "../context/instructions/kilo-rules" // kilocode_change
+import { processKiloUserContentMentions } from "../mentions/processKiloUserContentMentions" // bluescode_change
+import { refreshWorkflowToggles } from "../context/instructions/workflows" // bluescode_change
+import { parseMentions } from "../mentions" // bluescode_change
+import { parseKiloSlashCommands } from "../slash-commands/kilo" // bluescode_change
+import { GlobalFileNames } from "../../shared/globalFileNames" // bluescode_change
+import { ensureLocalKilorulesDirExists } from "../context/instructions/kilo-rules" // bluescode_change
 import { restoreTodoListForTask } from "../tools/updateTodoListTool"
-import { reportExcessiveRecursion, yieldPromise } from "../kilocode" // kilocode_change
+import { reportExcessiveRecursion, yieldPromise } from "../bluescode" // bluescode_change
 import { AutoApprovalHandler } from "./AutoApprovalHandler"
 
 const MAX_EXPONENTIAL_BACKOFF_SECONDS = 600 // 10 minutes
 
 export type TaskOptions = {
-	context: vscode.ExtensionContext // kilocode_change
+	context: vscode.ExtensionContext // bluescode_change
 	provider: ClineProvider
 	apiConfiguration: ProviderSettings
 	enableDiff?: boolean
@@ -127,14 +127,14 @@ export type TaskOptions = {
 	onCreated?: (task: Task) => void
 }
 
-type UserContent = Array<Anthropic.ContentBlockParam> // kilocode_change
+type UserContent = Array<Anthropic.ContentBlockParam> // bluescode_change
 
 export class Task extends EventEmitter<TaskEvents> implements TaskLike {
-	private context: vscode.ExtensionContext // kilocode_change
+	private context: vscode.ExtensionContext // bluescode_change
 
 	todoList?: TodoItem[]
 	readonly taskId: string
-	private taskIsFavorited?: boolean // kilocode_change
+	private taskIsFavorited?: boolean // bluescode_change
 	readonly instanceId: string
 
 	readonly rootTask: Task | undefined
@@ -266,7 +266,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 	isAssistantMessageParserEnabled = false
 
 	constructor({
-		context, // kilocode_change
+		context, // bluescode_change
 		provider,
 		apiConfiguration,
 		enableDiff = false,
@@ -283,18 +283,18 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		onCreated,
 	}: TaskOptions) {
 		super()
-		this.context = context // kilocode_change
+		this.context = context // bluescode_change
 
 		if (startTask && !task && !images && !historyItem) {
 			throw new Error("Either historyItem or task/images must be provided")
 		}
 
 		this.taskId = historyItem ? historyItem.id : crypto.randomUUID()
-		this.taskIsFavorited = historyItem?.isFavorited // kilocode_change
+		this.taskIsFavorited = historyItem?.isFavorited // bluescode_change
 		// Normal use-case is usually retry similar history task with new workspace.
 		this.workspacePath = parentTask
 			? parentTask.workspacePath
-			: getWorkspacePath(path.join(os.homedir(), "Documents")) // kilocode_change: use Documents instead of Desktop as default
+			: getWorkspacePath(path.join(os.homedir(), "Documents")) // bluescode_change: use Documents instead of Desktop as default
 
 		this.instanceId = crypto.randomUUID().slice(0, 8)
 		this.taskNumber = -1
@@ -372,7 +372,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		}
 	}
 
-	// kilocode_change start
+	// bluescode_change start
 	private getContext(): vscode.ExtensionContext {
 		const context = this.context
 		if (!context) {
@@ -380,7 +380,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		}
 		return context
 	}
-	// kilocode_change end
+	// bluescode_change end
 	/**
 	 * Initialize the task mode from the provider state.
 	 * This method handles async initialization with proper error handling.
@@ -1378,9 +1378,9 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 	public async recursivelyMakeClineRequests(
 		userContent: Anthropic.Messages.ContentBlockParam[],
 		includeFileDetails: boolean = false,
-		recursionDepth: number = 0, // kilocode_change
+		recursionDepth: number = 0, // bluescode_change
 	): Promise<boolean> {
-		reportExcessiveRecursion("recursivelyMakeClineRequests", recursionDepth) // kilocode_change
+		reportExcessiveRecursion("recursivelyMakeClineRequests", recursionDepth) // bluescode_change
 		if (this.abort) {
 			throw new Error(`[KiloCode#recursivelyMakeClineRequests] task ${this.taskId}.${this.instanceId} aborted`)
 		}
@@ -1457,7 +1457,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		} = (await this.providerRef.deref()?.getState()) ?? {}
 
 		const [parsedUserContent, needsRulesFileCheck] = await processKiloUserContentMentions({
-			context: this.context, // kilocode_change
+			context: this.context, // bluescode_change
 			userContent,
 			cwd: this.cwd,
 			urlContentFetcher: this.urlContentFetcher,
@@ -1472,10 +1472,10 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		if (needsRulesFileCheck) {
 			await this.say(
 				"error",
-				"Issue with processing the /newrule command. Double check that, if '.kilocode/rules' already exists, it's a directory and not a file. Otherwise there was an issue referencing this file/directory",
+				"Issue with processing the /newrule command. Double check that, if '.bluescode/rules' already exists, it's a directory and not a file. Otherwise there was an issue referencing this file/directory",
 			)
 		}
-		// kilocode_change end
+		// bluescode_change end
 
 		const environmentDetails = await getEnvironmentDetails(this, includeFileDetails)
 
@@ -1506,7 +1506,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			let inputTokens = 0
 			let outputTokens = 0
 			let totalCost: number | undefined
-			let usageMissing = false // kilocode_change
+			let usageMissing = false // bluescode_change
 
 			// We can't use `api_req_finished` anymore since it's a unique case
 			// where it could come after a streaming message (i.e. in the middle
@@ -1516,11 +1516,11 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			// of prices in tasks from history (it's worth removing a few months
 			// from now).
 			const updateApiReqMsg = (cancelReason?: ClineApiReqCancelReason, streamingFailedMessage?: string) => {
-				// kilocode_change start: pending upstream pr https://github.com/RooCodeInc/Roo-Code/pull/6122
+				// bluescode_change start: pending upstream pr https://github.com/RooCodeInc/Roo-Code/pull/6122
 				if (lastApiReqIndex < 0 || !this.clineMessages[lastApiReqIndex]) {
 					return
 				}
-				// kilocode_change end
+				// bluescode_change end
 
 				const existingData = JSON.parse(this.clineMessages[lastApiReqIndex].text || "{}")
 				this.clineMessages[lastApiReqIndex].text = JSON.stringify({
@@ -1538,7 +1538,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 							cacheWriteTokens,
 							cacheReadTokens,
 						),
-					usageMissing, // kilocode_change
+					usageMissing, // bluescode_change
 					cancelReason,
 					streamingFailedMessage,
 				} satisfies ClineApiReqInfo)
@@ -1613,7 +1613,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			this.isStreaming = true
 
 			try {
-				// kilocode change: use manual iterator instead of for ... of
+				// bluescode change: use manual iterator instead of for ... of
 				const iterator = stream[Symbol.asyncIterator]()
 				let item = await iterator.next()
 				while (!item.done) {
@@ -1698,7 +1698,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 					}
 				}
 
-				// kilocode_change start: pending upstream pr https://github.com/RooCodeInc/Roo-Code/pull/6122
+				// bluescode_change start: pending upstream pr https://github.com/RooCodeInc/Roo-Code/pull/6122
 				// Create a copy of current token values to avoid race conditions
 				const currentTokens = {
 					input: inputTokens,
@@ -1852,15 +1852,15 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 				drainStreamInBackgroundToFindAllUsage(lastApiReqIndex).catch((error) => {
 					console.error("Background usage collection failed:", error)
 				})
-				// kilocode_change end
+				// bluescode_change end
 			} catch (error) {
-				// kilocode_change start
+				// bluescode_change start
 				TelemetryService.instance.captureException(error, {
 					abandoned: this.abandoned,
 					abort: this.abort,
 					context: "recursivelyMakeClineRequests",
 				})
-				// kilocode_change end
+				// bluescode_change end
 
 				// Abandoned happens when extension is no longer waiting for the
 				// Cline instance to finish aborting (error is thrown here when
@@ -1894,7 +1894,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 				this.isStreaming = false
 			}
 
-			// kilocode_change: pending upstream pr https://github.com/RooCodeInc/Roo-Code/pull/6122
+			// bluescode_change: pending upstream pr https://github.com/RooCodeInc/Roo-Code/pull/6122
 			//if (inputTokens > 0 || outputTokens > 0 || cacheWriteTokens > 0 || cacheReadTokens > 0) {
 			//	TelemetryService.instance.captureLlmCompletion(this.taskId, {
 			//		inputTokens,
@@ -2001,7 +2001,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 					this.consecutiveMistakeCount++
 				}
 
-				// kilocode_change start: prevent excessive recursion
+				// bluescode_change start: prevent excessive recursion
 				// e.g. https://github.com/RooCodeInc/Roo-Code/issues/5601#issuecomment-3120612488
 				await yieldPromise()
 				const recDidEndLoop = await this.recursivelyMakeClineRequests(
@@ -2009,7 +2009,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 					undefined,
 					recursionDepth + 1,
 				)
-				// kilocode_change end
+				// bluescode_change end
 				didEndLoop = recDidEndLoop
 			} else {
 				// If there's no assistant_responses, that means we got no text
@@ -2038,7 +2038,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		}
 	}
 
-	// kilocode_change start
+	// bluescode_change start
 	async loadContext(
 		userContent: UserContent,
 		includeFileDetails: boolean = false,
@@ -2114,9 +2114,9 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		// Return all results
 		return [processedUserContent, environmentDetails, clinerulesError]
 	}
-	// kilocode_change end
+	// bluescode_change end
 
-	/*private kilocode_change*/ async getSystemPrompt(): Promise<string> {
+	/*private bluescode_change*/ async getSystemPrompt(): Promise<string> {
 		const { mcpEnabled } = (await this.providerRef.deref()?.getState()) ?? {}
 		let mcpHub: McpHub | undefined
 		if (mcpEnabled ?? true) {
@@ -2168,7 +2168,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			return SYSTEM_PROMPT(
 				provider.context,
 				this.cwd,
-				// kilocode_change: supports images => supports browser
+				// bluescode_change: supports images => supports browser
 				(this.api.getModel().info.supportsImages ?? false) && (browserToolEnabled ?? true),
 				mcpHub,
 				this.diffStrategy,
@@ -2342,17 +2342,17 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			this.isWaitingForFirstChunk = false
 			// note that this api_req_failed ask is unique in that we only present this option if the api hasn't streamed any content yet (ie it fails on the first chunk due), as it would allow them to hit a retry button. However if the api failed mid-stream, it could be in any arbitrary state where some tools may have executed, so that error is handled differently and requires cancelling the task entirely.
 		} catch (error) {
-			// kilocode_change start
-			// Check for payment required error from KiloCode provider
-			if ((error as any).status === 402 && apiConfiguration?.apiProvider === "kilocode") {
+			// bluescode_change start
+			// Check for payment required error from Blues Code provider
+			if ((error as any).status === 402 && apiConfiguration?.apiProvider === "bluescode") {
 				const balance = (error as any).balance ?? "0.00"
-				const buyCreditsUrl = (error as any).buyCreditsUrl ?? "https://kilocode.ai/profile"
+				const buyCreditsUrl = (error as any).buyCreditsUrl ?? "https://bluescode.ai/profile"
 
 				const { response } = await this.ask(
 					"payment_required_prompt",
 					JSON.stringify({
-						title: t("kilocode:lowCreditWarning.title"),
-						message: t("kilocode:lowCreditWarning.message"),
+						title: t("bluescode:lowCreditWarning.title"),
+						message: t("bluescode:lowCreditWarning.message"),
 						balance: balance,
 						buyCreditsUrl: buyCreditsUrl,
 					}),
@@ -2367,7 +2367,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 				}
 				// Removed incorrect closing brace and comments from lines 1274-1276
 			} else if (autoApprovalEnabled && alwaysApproveResubmit) {
-				// kilocode_change end
+				// bluescode_change end
 				let errorMsg
 
 				if (error.error?.metadata?.raw) {

@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// bluescode_change - new file
 import * as vscode from "vscode"
 import { ContextProxy } from "../../core/config/ContextProxy"
 import { ProviderSettingsManager } from "../../core/config/ProviderSettingsManager"
@@ -35,17 +35,17 @@ export class CommitMessageProvider {
 	 * Activates the commit message provider by setting up Git integration.
 	 */
 	public async activate(): Promise<void> {
-		this.outputChannel.appendLine(t("kilocode:commitMessage.activated"))
+		this.outputChannel.appendLine(t("bluescode:commitMessage.activated"))
 
 		try {
 			await this.providerSettingsManager.initialize()
 		} catch (error) {
-			this.outputChannel.appendLine(t("kilocode:commitMessage.gitInitError", { error }))
+			this.outputChannel.appendLine(t("bluescode:commitMessage.gitInitError", { error }))
 		}
 
 		// Register the command
 		const disposable = vscode.commands.registerCommand(
-			"kilo-code.generateCommitMessage",
+			"blues-code.generateCommitMessage",
 			(commitContext?: GitRepository) => this.generateCommitMessage(commitContext),
 		)
 		this.context.subscriptions.push(disposable)
@@ -59,7 +59,7 @@ export class CommitMessageProvider {
 		await vscode.window.withProgress(
 			{
 				location: vscode.ProgressLocation.SourceControl,
-				title: t("kilocode:commitMessage.generating"),
+				title: t("bluescode:commitMessage.generating"),
 				cancellable: false,
 			},
 			async (progress) => {
@@ -73,15 +73,15 @@ export class CommitMessageProvider {
 						staged = false
 						changes = await this.gitService.gatherChanges({ staged })
 						if (changes.length > 0) {
-							vscode.window.showInformationMessage(t("kilocode:commitMessage.generatingFromUnstaged"))
+							vscode.window.showInformationMessage(t("bluescode:commitMessage.generatingFromUnstaged"))
 						} else {
-							vscode.window.showInformationMessage(t("kilocode:commitMessage.noChanges"))
+							vscode.window.showInformationMessage(t("bluescode:commitMessage.noChanges"))
 							return
 						}
 					}
 
 					// Report initial progress after gathering changes (10% of total)
-					progress.report({ increment: 10, message: t("kilocode:commitMessage.generating") })
+					progress.report({ increment: 10, message: t("bluescode:commitMessage.generating") })
 
 					// Track progress for diff collection (70% of total progress)
 					let lastReportedProgress = 0
@@ -89,7 +89,7 @@ export class CommitMessageProvider {
 						const currentProgress = (percentage / 100) * 70
 						const increment = currentProgress - lastReportedProgress
 						if (increment > 0) {
-							progress.report({ increment, message: t("kilocode:commitMessage.generating") })
+							progress.report({ increment, message: t("bluescode:commitMessage.generating") })
 							lastReportedProgress = currentProgress
 						}
 					}
@@ -108,7 +108,7 @@ export class CommitMessageProvider {
 					TelemetryService.instance.captureEvent(TelemetryEventName.COMMIT_MSG_GENERATED)
 				} catch (error) {
 					const errorMessage = error instanceof Error ? error.message : "Unknown error occurred"
-					vscode.window.showErrorMessage(t("kilocode:commitMessage.generationFailed", { errorMessage }))
+					vscode.window.showErrorMessage(t("bluescode:commitMessage.generationFailed", { errorMessage }))
 					console.error("Error generating commit message:", error)
 				}
 			},
@@ -135,7 +135,7 @@ export class CommitMessageProvider {
 				minIncrement,
 			)
 			const increment = Math.min(incrementLimited, maxProgress - totalProgressUsed)
-			progress.report({ increment: increment, message: t("kilocode:commitMessage.generating") })
+			progress.report({ increment: increment, message: t("bluescode:commitMessage.generating") })
 			totalProgressUsed += increment
 		}, 100)
 

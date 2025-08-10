@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// bluescode_change - new file
 // npx vitest services/commit-message/__tests__/GitExtensionService.spec.ts
 import { spawnSync } from "child_process"
 import * as path from "path"

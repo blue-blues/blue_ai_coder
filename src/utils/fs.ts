@@ -46,7 +46,7 @@ export async function fileExistsAtPath(filePath: string): Promise<boolean> {
 	}
 }
 
-//	kilocode_change start
+//	bluescode_change start
 /**
  * Checks if the path is a directory
  * @param filePath - The path to check.
@@ -106,4 +106,4 @@ export const readDirectory = async (directoryPath: string, excludedPaths: string
 	}
 }
 
-// kilocode_change end
+// bluescode_change end

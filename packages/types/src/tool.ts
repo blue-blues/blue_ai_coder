@@ -33,12 +33,12 @@ export const toolNames = [
 	"new_task",
 	"fetch_instructions",
 	"codebase_search",
-	// kilocode_change start
+	// bluescode_change start
 	"edit_file",
 	"new_rule",
 	"report_bug",
 	"condense",
-	// kilocode_change end
+	// bluescode_change end
 	"update_todo_list",
 ] as const
 

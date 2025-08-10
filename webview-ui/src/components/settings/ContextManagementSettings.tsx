@@ -220,11 +220,11 @@ export const ContextManagementSettings = ({
 						checked={allowVeryLargeReads}
 						onChange={(e: any) => setCachedStateField("allowVeryLargeReads", e.target.checked)}>
 						<label className="block font-medium mb-1">
-							{t("kilocode:settings.contextManagement.allowVeryLargeReads.label")}
+							{t("bluescode:settings.contextManagement.allowVeryLargeReads.label")}
 						</label>
 					</VSCodeCheckbox>
 					<div className="text-vscode-descriptionForeground text-sm mt-1 mb-3">
-						{t("kilocode:settings.contextManagement.allowVeryLargeReads.description")}
+						{t("bluescode:settings.contextManagement.allowVeryLargeReads.description")}
 					</div>
 				</div>
 				{/*kilocode_change end*/}

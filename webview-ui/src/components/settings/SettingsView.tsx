@@ -75,7 +75,7 @@ import PromptsSettings from "./PromptsSettings"
 import { cn } from "@/lib/utils"
 import McpView from "../kilocodeMcp/McpView" // kilocode_change
 import deepEqual from "fast-deep-equal" // kilocode_change
-import { GhostServiceSettingsView } from "../kilocode/settings/GhostServiceSettings" // kilocode_change
+import { GhostServiceSettingsView } from "../bluescode/settings/GhostServiceSettings" // bluescode_change
 
 export const settingsTabsContainer = "flex flex-1 overflow-hidden [&.narrow_.tab-label]:hidden"
 export const settingsTabList =
@@ -231,7 +231,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 	// kilocode_change start
 	// Temporary way of making sure that the Settings view updates its local state properly when receiving
 	// api keys from providers that support url callbacks. This whole Settings View needs proper with this local state thing later
-	const { kilocodeToken, openRouterApiKey, glamaApiKey, requestyApiKey } = extensionState.apiConfiguration ?? {}
+	const { bluesCodeToken, openRouterApiKey, glamaApiKey, requestyApiKey } = extensionState.apiConfiguration ?? {}
 	useEffect(() => {
 		setCachedState((prevCachedState) => ({
 			...prevCachedState,
@@ -239,13 +239,13 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 				...prevCachedState.apiConfiguration,
 				// Only set specific tokens/keys instead of spreading the entire
 				// `prevCachedState.apiConfiguration` since it may contain unsaved changes
-				kilocodeToken,
+				bluesCodeToken,
 				openRouterApiKey,
 				glamaApiKey,
 				requestyApiKey,
 			},
 		}))
-	}, [kilocodeToken, openRouterApiKey, glamaApiKey, requestyApiKey])
+	}, [bluesCodeToken, openRouterApiKey, glamaApiKey, requestyApiKey])
 
 	useEffect(() => {
 		// Only update if we're not already detecting changes
@@ -624,9 +624,9 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 									<Icon className="w-4 h-4" />
 									<span className="tab-label">
 										{id === "mcp"
-											? t(`kilocode:settings.sections.mcp`)
+											? t(`bluescode:settings.sections.mcp`)
 											: id === "ghost"
-												? t(`kilocode:ghost.title`)
+												? t(`bluescode:ghost.title`)
 												: t(`settings:sections.${id}`)}
 									</span>
 								</div>
@@ -645,9 +645,9 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 										<TooltipContent side="right" className="text-base">
 											<p className="m-0">
 												{id === "mcp"
-													? t(`kilocode:settings.sections.mcp`)
+													? t(`bluescode:settings.sections.mcp`)
 													: id === "ghost"
-														? t(`kilocode:ghost.title`)
+														? t(`bluescode:ghost.title`)
 														: t(`settings:sections.${id}`)}
 											</p>
 										</TooltipContent>

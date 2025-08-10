@@ -13,10 +13,10 @@ import {
 	VertexHandler,
 	AnthropicVertexHandler,
 	OpenAiHandler,
-	// OllamaHandler, // kilocode_change
+	// OllamaHandler, // bluescode_change
 	LmStudioHandler,
 	GeminiHandler,
-	GeminiCliHandler, // kilocode_change
+	GeminiCliHandler, // bluescode_change
 	OpenAiNativeHandler,
 	DeepSeekHandler,
 	MoonshotHandler,
@@ -27,22 +27,22 @@ import {
 	HumanRelayHandler,
 	FakeAIHandler,
 	XAIHandler,
-	BigModelHandler, // kilocode_change
+	BigModelHandler, // bluescode_change
 	GroqHandler,
 	HuggingFaceHandler,
 	ChutesHandler,
 	LiteLLMHandler,
-	VirtualQuotaFallbackHandler, // kilocode_change
+	VirtualQuotaFallbackHandler, // bluescode_change
 	ClaudeCodeHandler,
 	SambaNovaHandler,
 	DoubaoHandler,
 	ZAiHandler,
 	FireworksHandler,
 } from "./providers"
-// kilocode_change start
-import { KilocodeOpenrouterHandler } from "./providers/kilocode-openrouter"
-import { KilocodeOllamaHandler } from "./providers/kilocode-ollama"
-// kilocode_change end
+// bluescode_change start
+import { BluesCodeOpenrouterHandler } from "./providers/kilocode-openrouter"
+import { BluesCodeOllamaHandler } from "./providers/kilocode-ollama"
+// bluescode_change end
 
 export interface SingleCompletionHandler {
 	completePrompt(prompt: string): Promise<string>
@@ -77,8 +77,8 @@ export function buildApiHandler(configuration: ProviderSettings): ApiHandler {
 	const { apiProvider, ...options } = configuration
 
 	switch (apiProvider) {
-		case "kilocode":
-			return new KilocodeOpenrouterHandler(options)
+		case "bluescode":
+			return new BluesCodeOpenrouterHandler(options)
 		case "anthropic":
 			return new AnthropicHandler(options)
 		case "claude-code":
@@ -96,15 +96,15 @@ export function buildApiHandler(configuration: ProviderSettings): ApiHandler {
 		case "openai":
 			return new OpenAiHandler(options)
 		case "ollama":
-			return new KilocodeOllamaHandler(options)
+			return new BluesCodeOllamaHandler(options)
 		case "lmstudio":
 			return new LmStudioHandler(options)
 		case "gemini":
 			return new GeminiHandler(options)
-		// kilocode_change start
+		// bluescode_change start
 		case "gemini-cli":
 			return new GeminiCliHandler(options)
-		// kilocode_change end
+		// bluescode_change end
 		case "openai-native":
 			return new OpenAiNativeHandler(options)
 		case "deepseek":
@@ -123,12 +123,12 @@ export function buildApiHandler(configuration: ProviderSettings): ApiHandler {
 			return new RequestyHandler(options)
 		case "human-relay":
 			return new HumanRelayHandler()
-		// kilocode_change start
+		// bluescode_change start
 		case "virtual-quota-fallback":
 			return new VirtualQuotaFallbackHandler(options)
 		case "bigmodel":
 			return new BigModelHandler(options)
-		// kilocode_change end
+		// bluescode_change end
 		case "fake-ai":
 			return new FakeAIHandler(options)
 		case "xai":

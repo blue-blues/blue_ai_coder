@@ -43,17 +43,17 @@ export class ToolRepetitionDetector {
 			this.previousToolCallJson = currentToolCallJson
 		}
 
-		// kilocode_change start: browser scrolling many times is fine
+		// bluescode_change start: browser scrolling many times is fine
 		const limit =
 			currentToolCallBlock.name === "browser_action"
 				? 10 * this.consecutiveIdenticalToolCallLimit
 				: this.consecutiveIdenticalToolCallLimit
-		// kilocode_change end
+		// bluescode_change end
 
 		// Check if limit is reached (0 means unlimited)
 		if (
 			this.consecutiveIdenticalToolCallLimit > 0 &&
-			this.consecutiveIdenticalToolCallCount >= limit /*kilocode_change*/
+			this.consecutiveIdenticalToolCallCount >= limit /*bluescode_change*/
 		) {
 			// Reset counters to allow recovery if user guides the AI past this point
 			this.consecutiveIdenticalToolCallCount = 0

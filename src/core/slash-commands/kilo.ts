@@ -1,4 +1,4 @@
-// kilocode_change whole file
+// bluescode_change whole file
 
 import { ClineRulesToggles } from "../../shared/cline-rules"
 import fs from "fs/promises"

@@ -70,7 +70,7 @@ export const modeConfigSchema = z.object({
 	customInstructions: z.string().optional(),
 	groups: groupEntryArraySchema,
 	source: z.enum(["global", "project"]).optional(),
-	iconName: z.string().optional(), // kilocode_change
+	iconName: z.string().optional(), // bluescode_change
 })
 
 export type ModeConfig = z.infer<typeof modeConfigSchema>
@@ -137,10 +137,10 @@ export type CustomSupportPrompts = z.infer<typeof customSupportPromptsSchema>
 export const DEFAULT_MODES: readonly ModeConfig[] = [
 	{
 		slug: "code",
-		// kilocode_change start
+		// bluescode_change start
 		name: "💻 Code",
 		iconName: "codicon-code",
-		// kilocode_change end
+		// bluescode_change end
 		roleDefinition:
 			"You are Kilo Code, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.",
 		whenToUse:
@@ -152,10 +152,10 @@ export const DEFAULT_MODES: readonly ModeConfig[] = [
 	},
 	{
 		slug: "orchestrator",
-		// kilocode_change start
+		// bluescode_change start
 		name: "🪃 Orchestrator",
 		iconName: "codicon-run-all",
-		// kilocode_change end
+		// bluescode_change end
 		roleDefinition:
 			"You are Kilo Code, a strategic workflow orchestrator who coordinates complex tasks by delegating them to appropriate specialized modes. You have a comprehensive understanding of each mode's capabilities and limitations, allowing you to effectively break down complex problems into discrete tasks that can be solved by different specialists.",
 		whenToUse:

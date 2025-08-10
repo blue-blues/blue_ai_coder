@@ -1,10 +1,10 @@
 import type { AssertEqual, Equals, Keys, Values, ExperimentId, Experiments } from "@roo-code/types"
 
 export const EXPERIMENT_IDS = {
-	MORPH_FAST_APPLY: "morphFastApply", // kilocode_change
+	MORPH_FAST_APPLY: "morphFastApply", // bluescode_change
 	MULTI_FILE_APPLY_DIFF: "multiFileApplyDiff",
 	POWER_STEERING: "powerSteering",
-	INLINE_ASSIST: "inlineAssist", // kilocode_change
+	INLINE_ASSIST: "inlineAssist", // bluescode_change
 	PREVENT_FOCUS_DISRUPTION: "preventFocusDisruption",
 	ASSISTANT_MESSAGE_PARSER: "assistantMessageParser",
 } as const satisfies Record<string, ExperimentId>
@@ -18,10 +18,10 @@ interface ExperimentConfig {
 }
 
 export const experimentConfigsMap: Record<ExperimentKey, ExperimentConfig> = {
-	MORPH_FAST_APPLY: { enabled: false }, // kilocode_change
+	MORPH_FAST_APPLY: { enabled: false }, // bluescode_change
 	MULTI_FILE_APPLY_DIFF: { enabled: false },
 	POWER_STEERING: { enabled: false },
-	INLINE_ASSIST: { enabled: false }, // kilocode_change
+	INLINE_ASSIST: { enabled: false }, // bluescode_change
 	PREVENT_FOCUS_DISRUPTION: { enabled: false },
 	ASSISTANT_MESSAGE_PARSER: { enabled: false },
 }

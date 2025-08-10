@@ -13,7 +13,7 @@ import { executeRipgrep } from "../../services/search/file-search"
 import { CheckpointDiff, CheckpointResult, CheckpointEventMap } from "./types"
 import { getExcludePatterns } from "./excludes"
 
-// kilocode_change start
+// bluescode_change start
 import { TelemetryService } from "@roo-code/telemetry"
 import { TelemetryEventName } from "@roo-code/types"
 import { stringifyError } from "../../shared/kilocode/errorUtils"
@@ -24,7 +24,7 @@ function reportError(callsite: string, error: unknown) {
 		error: stringifyError(error),
 	})
 }
-// kilocode_change end
+// bluescode_change end
 
 export abstract class ShadowCheckpointService extends EventEmitter {
 	public readonly taskId: string
@@ -163,7 +163,7 @@ export abstract class ShadowCheckpointService extends EventEmitter {
 			this.log(
 				`[${this.constructor.name}#stageAll] failed to add files to git: ${error instanceof Error ? error.message : String(error)}`,
 			)
-			reportError(`${this.constructor.name}#stageAll`, error) // kilocode_change
+			reportError(`${this.constructor.name}#stageAll`, error) // bluescode_change
 		}
 	}
 
@@ -192,7 +192,7 @@ export abstract class ShadowCheckpointService extends EventEmitter {
 			this.log(
 				`[${this.constructor.name}#hasNestedGitRepositories] failed to check for nested git repos: ${error instanceof Error ? error.message : String(error)}`,
 			)
-			reportError(`${this.constructor.name}#hasNestedGitRepositories`, error) // kilocode_change
+			reportError(`${this.constructor.name}#hasNestedGitRepositories`, error) // bluescode_change
 
 			// If we can't check, assume there are no nested repos to avoid blocking the feature.
 			return false
@@ -207,7 +207,7 @@ export abstract class ShadowCheckpointService extends EventEmitter {
 				this.log(
 					`[${this.constructor.name}#getShadowGitConfigWorktree] failed to get core.worktree: ${error instanceof Error ? error.message : String(error)}`,
 				)
-				reportError(`${this.constructor.name}#getShadowGitConfigWorktree`, error) // kilocode_change
+				reportError(`${this.constructor.name}#getShadowGitConfigWorktree`, error) // bluescode_change
 			}
 		}
 
@@ -310,17 +310,17 @@ export abstract class ShadowCheckpointService extends EventEmitter {
 			const relPath = file.file
 			const absPath = path.join(cwdPath, relPath)
 			const before = await this.git.show([`${from}:${relPath}`]).catch((err) => {
-				reportError(`[${this.constructor.name}#getDiff:git.show:before`, err) // kilocode_change
+				reportError(`[${this.constructor.name}#getDiff:git.show:before`, err) // bluescode_change
 				return ""
 			})
 
 			const after = to
 				? await this.git.show([`${to}:${relPath}`]).catch((err) => {
-						reportError(`[${this.constructor.name}#getDiff:git.show:after`, err) // kilocode_change
+						reportError(`[${this.constructor.name}#getDiff:git.show:after`, err) // bluescode_change
 						return ""
 					})
 				: await fs.readFile(absPath, "utf8").catch((err) => {
-						reportError(`[${this.constructor.name}#getDiff:readFile`, err) // kilocode_change
+						reportError(`[${this.constructor.name}#getDiff:readFile`, err) // bluescode_change
 						return ""
 					})
 
@@ -427,7 +427,7 @@ export abstract class ShadowCheckpointService extends EventEmitter {
 				console.error(
 					`[${this.constructor.name}#deleteBranch] failed to delete branch ${branchName}: ${error instanceof Error ? error.message : String(error)}`,
 				)
-				reportError(`${this.constructor.name}#deleteBranch`, error) // kilocode_change
+				reportError(`${this.constructor.name}#deleteBranch`, error) // bluescode_change
 
 				return false
 			} finally {

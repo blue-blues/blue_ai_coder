@@ -39,8 +39,8 @@ export const NotificationSettings = ({
 		vscode.postMessage({
 			type: "showSystemNotification",
 			notificationOptions: {
-				title: t("kilocode:settings.systemNotifications.testTitle"),
-				message: t("kilocode:settings.systemNotifications.testMessage"),
+				title: t("bluescode:settings.systemNotifications.testTitle"),
+				message: t("bluescode:settings.systemNotifications.testMessage"),
 			},
 		})
 	}
@@ -131,10 +131,10 @@ export const NotificationSettings = ({
 						checked={systemNotificationsEnabled}
 						onChange={(e: any) => setCachedStateField("systemNotificationsEnabled", e.target.checked)}
 						data-testid="system-notifications-enabled-checkbox">
-						<span className="font-medium">{t("kilocode:settings.systemNotifications.label")}</span>
+						<span className="font-medium">{t("bluescode:settings.systemNotifications.label")}</span>
 					</VSCodeCheckbox>
 					<div className="text-vscode-descriptionForeground text-sm mt-1">
-						{t("kilocode:settings.systemNotifications.description")}
+						{t("bluescode:settings.systemNotifications.description")}
 					</div>
 				</div>
 				{showTestSystemNotification && (
@@ -143,7 +143,7 @@ export const NotificationSettings = ({
 							disabled={!areSettingsCommitted}
 							className="w-fit text-vscode-button-background hover:text-vscode-button-hoverBackground"
 							onClick={onTestNotificationClick}>
-							{t("kilocode:settings.systemNotifications.testButton")}
+							{t("bluescode:settings.systemNotifications.testButton")}
 						</Button>
 					</div>
 				)}

@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// bluescode_change - new file
 import * as vscode from "vscode"
 import { CommitMessageProvider } from "../CommitMessageProvider"
 import { GitExtensionService, GitChange } from "../GitExtensionService"
@@ -9,7 +9,7 @@ import type { Mock } from "vitest"
 vi.mock("../../../core/config/ContextProxy", () => {
 	const mockContextProxy = {
 		getProviderSettings: vi.fn().mockReturnValue({
-			kilocodeToken: "mock-token",
+			bluesCodeToken: "mock-token",
 		}),
 		getValue: vi.fn().mockImplementation((key: string) => {
 			switch (key) {
@@ -296,7 +296,7 @@ describe("CommitMessageProvider", () => {
 				}
 			})
 
-			const defaultConfig = { kilocodeToken: "mock-token" }
+			const defaultConfig = { bluesCodeToken: "mock-token" }
 			mockInstance.getProviderSettings.mockReturnValue(defaultConfig)
 
 			await commitMessageProvider.generateCommitMessage()

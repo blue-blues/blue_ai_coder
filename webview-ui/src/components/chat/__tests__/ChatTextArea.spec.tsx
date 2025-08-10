@@ -1049,7 +1049,7 @@ describe("ChatTextArea", () => {
 		})
 	})
 
-	// kilocode_change: removed in kilocode
+	// bluescode_change: removed in bluescode
 	describe.skip("selectApiConfig", () => {
 		// Helper function to get the API config dropdown
 		const getApiConfigDropdown = () => {

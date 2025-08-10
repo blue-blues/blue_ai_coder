@@ -27,7 +27,7 @@ export const ModelInfoView = ({
 
 	// kilocode_change start
 	const kiloCodeTrustsThePricing =
-		(apiProvider !== "kilocode" && apiProvider !== "openrouter") ||
+		(apiProvider !== "bluescode" && apiProvider !== "openrouter") ||
 		selectedModelId.startsWith("anthropic/") ||
 		selectedModelId.startsWith("google/")
 	// kilocode_change end
@@ -82,7 +82,7 @@ export const ModelInfoView = ({
 		!kiloCodeTrustsThePricing && selectedModelId && (
 			<span className="font-medium">
 				<a href={`https://openrouter.ai/${selectedModelId}`} className="text-vscode-link">
-					{t("kilocode:pricing.discoverModelPricing")}
+					{t("bluescode:pricing.discoverModelPricing")}
 				</a>
 			</span>
 		),

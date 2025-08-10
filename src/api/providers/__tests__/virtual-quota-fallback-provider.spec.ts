@@ -287,14 +287,14 @@ describe("VirtualQuotaFallbackProvider", () => {
 
 		describe("adjustActiveHandler", () => {
 			beforeEach(() => {
-				// kilocode_change start
+				// bluescode_change start
 				;(mockSettingsManager.getProfile as any).mockImplementation(async ({ id }: { id: string }) => {
 					if (id === "p1") return { id: "p1", name: "primary-profile" }
 					if (id === "p2") return { id: "p2", name: "secondary-profile" }
 					if (id === "p3") return { id: "p3", name: "backup-profile" }
 					return undefined
 				})
-				// kilocode_change end
+				// bluescode_change end
 			})
 			it("should set first handler as active if it is under limit", async () => {
 				const handler = new VirtualQuotaFallbackHandler({

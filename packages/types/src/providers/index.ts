@@ -5,7 +5,7 @@ export * from "./chutes.js"
 export * from "./claude-code.js"
 export * from "./deepseek.js"
 export * from "./gemini.js"
-export * from "./gemini-cli.js" // kilocode_change
+export * from "./gemini-cli.js" // bluescode_change
 export * from "./glama.js"
 export * from "./groq.js"
 export * from "./huggingface.js"
@@ -22,7 +22,7 @@ export * from "./unbound.js"
 export * from "./vertex.js"
 export * from "./vscode-llm.js"
 export * from "./xai.js"
-export * from "./bigmodel.js" // kilocode_change
+export * from "./bigmodel.js" // bluescode_change
 export * from "./doubao.js"
 export * from "./zai.js"
 export * from "./fireworks.js"

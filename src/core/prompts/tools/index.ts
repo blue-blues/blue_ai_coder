@@ -13,7 +13,7 @@ import { getSearchFilesDescription } from "./search-files"
 import { getListFilesDescription } from "./list-files"
 import { getInsertContentDescription } from "./insert-content"
 import { getSearchAndReplaceDescription } from "./search-and-replace"
-import { getEditFileDescription } from "./edit-file" // kilocode_change: Morph fast apply
+import { getEditFileDescription } from "./edit-file" // bluescode_change: Morph fast apply
 import { getListCodeDefinitionNamesDescription } from "./list-code-definition-names"
 import { getBrowserActionDescription } from "./browser-action"
 import { getAskFollowupQuestionDescription } from "./ask-followup-question"
@@ -45,7 +45,7 @@ const toolDescriptionMap: Record<string, (args: ToolArgs) => string | undefined>
 	new_task: (args) => getNewTaskDescription(args),
 	insert_content: (args) => getInsertContentDescription(args),
 	search_and_replace: (args) => getSearchAndReplaceDescription(args),
-	edit_file: () => getEditFileDescription(), // kilocode_change: Morph fast apply
+	edit_file: () => getEditFileDescription(), // bluescode_change: Morph fast apply
 	apply_diff: (args) =>
 		args.diffStrategy ? args.diffStrategy.getToolDescription({ cwd: args.cwd, toolOptions: args.toolOptions }) : "",
 	update_todo_list: (args) => getUpdateTodoListDescription(args),
@@ -115,7 +115,7 @@ export function getToolDescriptionsForMode(
 		tools.delete("codebase_search")
 	}
 
-	// kilocode_change: Morph fast apply
+	// bluescode_change: Morph fast apply
 	if (experiments?.morphFastApply !== true) {
 		tools.delete("edit_file")
 	}
@@ -158,6 +158,6 @@ export {
 	getSwitchModeDescription,
 	getInsertContentDescription,
 	getSearchAndReplaceDescription,
-	getEditFileDescription, // kilocode_change: Morph fast apply
+	getEditFileDescription, // bluescode_change: Morph fast apply
 	getCodebaseSearchDescription,
 }

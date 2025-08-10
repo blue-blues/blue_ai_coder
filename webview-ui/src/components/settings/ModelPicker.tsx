@@ -7,7 +7,7 @@ import type { ProviderSettings, ModelInfo, OrganizationAllowList } from "@roo-co
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { useSelectedModel } from "@/components/ui/hooks/useSelectedModel"
-import { usePreferredModels } from "@/components/ui/hooks/kilocode/usePreferredModels" // kilocode_change
+import { usePreferredModels } from "@/components/ui/hooks/bluescode/usePreferredModels" // bluescode_change
 // import { filterModels } from "./utils/organizationFilters" // kilocode_change: not doing this
 import { cn } from "@src/lib/utils"
 import {
@@ -36,7 +36,7 @@ type ModelIdKey = keyof Pick<
 	| "requestyModelId"
 	| "openAiModelId"
 	| "litellmModelId"
-	| "kilocodeModel"
+	| "bluesCodeModel"
 >
 
 interface ModelPickerProps {
@@ -239,8 +239,8 @@ export const ModelPicker = ({
 			<div className="text-sm text-vscode-descriptionForeground">
 				{
 					/*kilocode_change start*/
-					apiConfiguration.apiProvider === "kilocode" ? (
-						<Trans i18nKey="kilocode:settings.provider.automaticFetch" />
+					apiConfiguration.apiProvider === "bluescode" ? (
+						<Trans i18nKey="bluescode:settings.provider.automaticFetch" />
 					) : (
 						<Trans
 							i18nKey="settings:modelPicker.automaticFetch"

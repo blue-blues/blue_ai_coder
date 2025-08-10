@@ -72,11 +72,11 @@ function validateModelsAndKeysProvided(apiConfiguration: ProviderSettings): stri
 				return i18next.t("settings:validation.apiKey")
 			}
 			break
-		// kilocode_change start
+		// bluescode_change start
 		case "gemini-cli":
 			// OAuth-based provider, no API key validation needed
 			break
-		// kilocode_change end
+		// bluescode_change end
 		case "openai-native":
 			if (!apiConfiguration.openAiNativeApiKey) {
 				return i18next.t("settings:validation.apiKey")
@@ -107,13 +107,13 @@ function validateModelsAndKeysProvided(apiConfiguration: ProviderSettings): stri
 				return i18next.t("settings:validation.modelSelector")
 			}
 			break
-		// kilocode_change start
-		case "kilocode":
-			if (!apiConfiguration.kilocodeToken) {
+		// bluescode_change start
+		case "bluescode":
+			if (!apiConfiguration.bluesCodeToken) {
 				return i18next.t("settings:validation.apiKey")
 			}
 			break
-		// kilocode_change end
+		// bluescode_change end
 		case "huggingface":
 			if (!apiConfiguration.huggingFaceApiKey) {
 				return i18next.t("settings:validation.apiKey")

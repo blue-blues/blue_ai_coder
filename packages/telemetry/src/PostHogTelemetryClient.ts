@@ -22,7 +22,7 @@ export class PostHogTelemetryClient extends BaseTelemetryClient {
 				type: "exclude",
 				events: [
 					TelemetryEventName.TASK_MESSAGE,
-					// TelemetryEventName.LLM_COMPLETION // kilocode_change
+					// TelemetryEventName.LLM_COMPLETION // bluescode_change
 				],
 			},
 			debug,
@@ -30,7 +30,7 @@ export class PostHogTelemetryClient extends BaseTelemetryClient {
 
 		this.client = new PostHog(process.env.KILOCODE_POSTHOG_API_KEY || "", {
 			host: "https://us.i.posthog.com",
-			disableGeoip: false, // kilocode_change
+			disableGeoip: false, // bluescode_change
 		})
 	}
 
@@ -97,7 +97,7 @@ export class PostHogTelemetryClient extends BaseTelemetryClient {
 		await this.client.shutdown()
 	}
 
-	// kilocode_change start
+	// bluescode_change start
 	public override async captureException(error: Error, properties?: Record<string | number, unknown>): Promise<void> {
 		if (this.isTelemetryEnabled()) {
 			let providerProperties = {}
@@ -114,24 +114,24 @@ export class PostHogTelemetryClient extends BaseTelemetryClient {
 	}
 
 	private counter = 0
-	private kilocodeToken = ""
+	private bluesCodeToken = ""
 
-	public override async updateIdentity(kilocodeToken: string) {
-		if (kilocodeToken === this.kilocodeToken) {
+	public override async updateIdentity(bluesCodeToken: string) {
+		if (bluesCodeToken === this.bluesCodeToken) {
 			console.debug("KILOTEL: Identity up-to-date")
 			return
 		}
-		if (!kilocodeToken) {
+		if (!bluesCodeToken) {
 			console.debug("KILOTEL: Updating identity to machine ID")
 			this.distinctId = vscode.env.machineId
-			this.kilocodeToken = ""
+			this.bluesCodeToken = ""
 			return
 		}
 		const id = ++this.counter
 		try {
-			const response = await fetch("https://kilocode.ai/api/profile", {
+			const response = await fetch("https://bluescode.ai/api/profile", {
 				headers: {
-					Authorization: `Bearer ${kilocodeToken}`,
+					Authorization: `Bearer ${bluesCodeToken}`,
 					"Content-Type": "application/json",
 				},
 			})
@@ -141,7 +141,7 @@ export class PostHogTelemetryClient extends BaseTelemetryClient {
 			}
 			if (id === this.counter) {
 				this.distinctId = data.user.email
-				this.kilocodeToken = kilocodeToken
+				this.bluesCodeToken = bluesCodeToken
 				console.debug("KILOTEL: Identity updated to:", this.distinctId)
 			} else {
 				console.debug("KILOTEL: Identity update ignored, newer request in progress")
@@ -150,9 +150,9 @@ export class PostHogTelemetryClient extends BaseTelemetryClient {
 			console.error("KILOTEL: Failed to update identity", error)
 			if (id === this.counter) {
 				this.distinctId = vscode.env.machineId
-				this.kilocodeToken = ""
+				this.bluesCodeToken = ""
 			}
 		}
 	}
-	// kilocode_change end
+	// bluescode_change end
 }

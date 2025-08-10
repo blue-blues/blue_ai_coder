@@ -724,7 +724,7 @@ describe("summarizeConversation with custom settings", () => {
 	/**
 	 * Test that telemetry is called for custom prompt usage
 	 */
-	// kilocode_change: skip
+	// bluescode_change: skip
 	it.skip("should capture telemetry when using custom prompt", async () => {
 		await summarizeConversation(
 			sampleMessages,
@@ -748,7 +748,7 @@ describe("summarizeConversation with custom settings", () => {
 	/**
 	 * Test that telemetry is called for custom API handler usage
 	 */
-	// kilocode_change: skip
+	// bluescode_change: skip
 	it.skip("should capture telemetry when using custom API handler", async () => {
 		await summarizeConversation(
 			sampleMessages,
@@ -773,7 +773,7 @@ describe("summarizeConversation with custom settings", () => {
 	/**
 	 * Test that telemetry is called with both custom prompt and API handler
 	 */
-	// kilocode_change: skip
+	// bluescode_change: skip
 	it.skip("should capture telemetry when using both custom prompt and API handler", async () => {
 		await summarizeConversation(
 			sampleMessages,

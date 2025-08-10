@@ -8,6 +8,7 @@ import { allowNetConnect } from "../../../vitest.setup"
 
 const KEYS = {
 	KILOCODE: null,
+	BLUESCODE: null,
 	OPENROUTER: null,
 	MISTRAL: null,
 }
@@ -55,11 +56,11 @@ describe("GhostModelPerformance", () => {
 			if (!KEYS.KILOCODE) {
 				return
 			}
-			allowNetConnect("kilocode.ai")
+			allowNetConnect("bluescode.ai")
 			const apiHandler = buildApiHandler({
-				apiProvider: "kilocode",
-				kilocodeModel: "google/gemini-2.5-flash",
-				kilocodeToken: KEYS.KILOCODE,
+				apiProvider: "bluescode",
+				bluesCodeModel: "google/gemini-2.5-flash",
+				bluesCodeToken: KEYS.BLUESCODE,
 			})
 			await performTestBattery(apiHandler)
 		})
@@ -67,11 +68,11 @@ describe("GhostModelPerformance", () => {
 			if (!KEYS.KILOCODE) {
 				return
 			}
-			allowNetConnect("kilocode.ai")
+			allowNetConnect("bluescode.ai")
 			const apiHandler = buildApiHandler({
-				apiProvider: "kilocode",
-				kilocodeModel: "mistralai/codestral-2501",
-				kilocodeToken: KEYS.KILOCODE,
+				apiProvider: "bluescode",
+				bluesCodeModel: "mistralai/codestral-2501",
+				bluesCodeToken: KEYS.BLUESCODE,
 			})
 			await performTestBattery(apiHandler)
 		})

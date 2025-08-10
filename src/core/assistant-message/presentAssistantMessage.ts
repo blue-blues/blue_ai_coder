@@ -14,7 +14,7 @@ import { writeToFileTool } from "../tools/writeToFileTool"
 import { applyDiffTool } from "../tools/multiApplyDiffTool"
 import { insertContentTool } from "../tools/insertContentTool"
 import { searchAndReplaceTool } from "../tools/searchAndReplaceTool"
-import { editFileTool } from "../tools/editFileTool" // kilocode_change: Morph fast apply
+import { editFileTool } from "../tools/editFileTool" // bluescode_change: Morph fast apply
 import { listCodeDefinitionNamesTool } from "../tools/listCodeDefinitionNamesTool"
 import { searchFilesTool } from "../tools/searchFilesTool"
 import { browserActionTool } from "../tools/browserActionTool"
@@ -31,13 +31,13 @@ import { updateTodoListTool } from "../tools/updateTodoListTool"
 import { formatResponse } from "../prompts/responses"
 import { validateToolUse } from "../tools/validateToolUse"
 import { Task } from "../task/Task"
-import { newRuleTool } from "../tools/newRuleTool" // kilocode_change
-import { reportBugTool } from "../tools/reportBugTool" // kilocode_change
-import { condenseTool } from "../tools/condenseTool" // kilocode_change
+import { newRuleTool } from "../tools/newRuleTool" // bluescode_change
+import { reportBugTool } from "../tools/reportBugTool" // bluescode_change
+import { condenseTool } from "../tools/condenseTool" // bluescode_change
 import { codebaseSearchTool } from "../tools/codebaseSearchTool"
 import { experiments, EXPERIMENT_IDS } from "../../shared/experiments"
 import { applyDiffToolLegacy } from "../tools/applyDiffTool"
-import { reportExcessiveRecursion, yieldPromise } from "../kilocode"
+import { reportExcessiveRecursion, yieldPromise } from "../bluescode"
 
 /**
  * Processes and presents assistant message content to the user interface.
@@ -56,8 +56,8 @@ import { reportExcessiveRecursion, yieldPromise } from "../kilocode"
  * as it becomes available.
  */
 
-export async function presentAssistantMessage(cline: Task, recursionDepth: number = 0 /*kilocode_change*/) {
-	reportExcessiveRecursion("presentAssistantMessage", recursionDepth) // kilocode_change
+export async function presentAssistantMessage(cline: Task, recursionDepth: number = 0 /*bluescode_change*/) {
+	reportExcessiveRecursion("presentAssistantMessage", recursionDepth) // bluescode_change
 
 	if (cline.abort) {
 		throw new Error(`[Task#presentAssistantMessage] task ${cline.taskId}.${cline.instanceId} aborted`)
@@ -194,10 +194,10 @@ export async function presentAssistantMessage(cline: Task, recursionDepth: numbe
 						return `[${block.name} for '${block.params.path}']`
 					case "search_and_replace":
 						return `[${block.name} for '${block.params.path}']`
-					// kilocode_change start: Morph fast apply
+					// bluescode_change start: Morph fast apply
 					case "edit_file":
 						return `[${block.name} for '${block.params.target_file}']`
-					// kilocode_change end
+					// bluescode_change end
 					case "list_files":
 						return `[${block.name} for '${block.params.path}']`
 					case "list_code_definition_names":
@@ -224,14 +224,14 @@ export async function presentAssistantMessage(cline: Task, recursionDepth: numbe
 						const modeName = getModeBySlug(mode, customModes)?.name ?? mode
 						return `[${block.name} in ${modeName} mode: '${message}']`
 					}
-					// kilocode_change start
+					// bluescode_change start
 					case "new_rule":
 						return `[${block.name} for '${block.params.path}']`
 					case "report_bug":
 						return `[${block.name}]`
 					case "condense":
 						return `[${block.name}]`
-					// kilocode_change end
+					// bluescode_change end
 				}
 			}
 
@@ -472,11 +472,11 @@ export async function presentAssistantMessage(cline: Task, recursionDepth: numbe
 					await checkpointSaveAndMark(cline)
 					await searchAndReplaceTool(cline, block, askApproval, handleError, pushToolResult, removeClosingTag)
 					break
-				// kilocode_change start: Morph fast apply
+				// bluescode_change start: Morph fast apply
 				case "edit_file":
 					await editFileTool(cline, block, askApproval, handleError, pushToolResult, removeClosingTag)
 					break
-				// kilocode_change end
+				// bluescode_change end
 				case "read_file":
 					await readFileTool(cline, block, askApproval, handleError, pushToolResult, removeClosingTag)
 
@@ -550,7 +550,7 @@ export async function presentAssistantMessage(cline: Task, recursionDepth: numbe
 						askFinishSubTaskApproval,
 					)
 					break
-				// kilocode_change start
+				// bluescode_change start
 				case "new_rule":
 					await newRuleTool(cline, block, askApproval, handleError, pushToolResult, removeClosingTag)
 					break
@@ -560,9 +560,9 @@ export async function presentAssistantMessage(cline: Task, recursionDepth: numbe
 				case "condense":
 					await condenseTool(cline, block, askApproval, handleError, pushToolResult, removeClosingTag)
 					break
-				// kilocode_change end
+				// bluescode_change end
 			}
-			// kilocode_change end
+			// bluescode_change end
 
 			break
 	}
@@ -605,20 +605,20 @@ export async function presentAssistantMessage(cline: Task, recursionDepth: numbe
 		if (cline.currentStreamingContentIndex < cline.assistantMessageContent.length) {
 			// There are already more content blocks to stream, so we'll call
 			// this function ourselves.
-			// kilocode_change start: prevent excessive recursion
+			// bluescode_change start: prevent excessive recursion
 			await yieldPromise()
 			await presentAssistantMessage(cline, recursionDepth + 1)
-			// kilocode_change end
+			// bluescode_change end
 			return
 		}
 	}
 
 	// Block is partial, but the read stream may have finished.
 	if (cline.presentAssistantMessageHasPendingUpdates) {
-		// kilocode_change start: prevent excessive recursion
+		// bluescode_change start: prevent excessive recursion
 		await yieldPromise()
 		await presentAssistantMessage(cline, recursionDepth + 1)
-		// kilocode_change end
+		// bluescode_change end
 	}
 }
 

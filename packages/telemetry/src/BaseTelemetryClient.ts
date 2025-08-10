@@ -46,7 +46,7 @@ export abstract class BaseTelemetryClient implements TelemetryClient {
 				console.error(
 					`Error getting telemetry properties: ${error instanceof Error ? error.message : String(error)}`,
 				)
-				providerProperties.exception = error instanceof Error ? error.stack || error.message : String(error) // kilocode_change
+				providerProperties.exception = error instanceof Error ? error.stack || error.message : String(error) // bluescode_change
 			}
 		}
 
@@ -66,13 +66,13 @@ export abstract class BaseTelemetryClient implements TelemetryClient {
 
 	public abstract updateTelemetryState(didUserOptIn: boolean): void
 
-	// kilocode_change start
+	// bluescode_change start
 	public async captureException(_error: Error, _properties?: Record<string | number, unknown>): Promise<void> {}
 
-	public updateIdentity(_kilocodeToken: string): Promise<void> {
+	public updateIdentity(_bluesCodeToken: string): Promise<void> {
 		return Promise.resolve()
 	}
-	// kilocode_change end
+	// bluescode_change end
 
 	public isTelemetryEnabled(): boolean {
 		return this.telemetryEnabled

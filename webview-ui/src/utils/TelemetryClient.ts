@@ -21,7 +21,7 @@ class TelemetryClient {
 				autocapture: false,
 			})
 
-			posthog.identify(distinctId) // kilocode_change: loaded above only works the first time
+			posthog.identify(distinctId) // bluescode_change: loaded above only works the first time
 		} else {
 			TelemetryClient.telemetryEnabled = false
 		}
@@ -35,7 +35,7 @@ class TelemetryClient {
 		return TelemetryClient.instance
 	}
 
-	// kilocode_change start
+	// bluescode_change start
 	public captureException(error: Error, properties?: Record<string, any>) {
 		if (TelemetryClient.telemetryEnabled) {
 			try {
@@ -45,7 +45,7 @@ class TelemetryClient {
 			}
 		}
 	}
-	// kilocode_change end
+	// bluescode_change end
 
 	public capture(eventName: string, properties?: Record<string, any>) {
 		if (TelemetryClient.telemetryEnabled) {

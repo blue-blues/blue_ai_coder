@@ -31,7 +31,7 @@ import {
 	chutesDefaultModelId,
 	bedrockDefaultModelId,
 	vertexDefaultModelId,
-	kilocodeDefaultModelId,
+	bluesCodeDefaultModelId,
 	sambaNovaDefaultModelId,
 	internationalZAiDefaultModelId,
 	mainlandZAiDefaultModelId,
@@ -109,8 +109,8 @@ import { TemperatureControl } from "./TemperatureControl"
 import { RateLimitSecondsControl } from "./RateLimitSecondsControl"
 import { ConsecutiveMistakeLimitControl } from "./ConsecutiveMistakeLimitControl"
 import { BedrockCustomArn } from "./providers/BedrockCustomArn"
-import { KiloCode } from "../kilocode/settings/providers/KiloCode" // kilocode_change
-import { KiloCodeAdvanced } from "../kilocode/settings/providers/KiloCodeAdvanced" // kilocode_change
+import { KiloCode } from "../bluescode/settings/providers/KiloCode" // bluescode_change
+import { KiloCodeAdvanced } from "../bluescode/settings/providers/KiloCodeAdvanced" // bluescode_change
 import { buildDocLink } from "@src/utils/docLinks"
 
 export interface ApiOptionsProps {
@@ -121,7 +121,7 @@ export interface ApiOptionsProps {
 	fromWelcomeView?: boolean
 	errorMessage: string | undefined
 	setErrorMessage: React.Dispatch<React.SetStateAction<string | undefined>>
-	hideKiloCodeButton?: boolean // kilocode_change
+	hideBluesCodeButton?: boolean // kilocode_change
 	currentApiConfigName?: string // kilocode_change
 }
 
@@ -133,7 +133,7 @@ const ApiOptions = ({
 	fromWelcomeView,
 	errorMessage,
 	setErrorMessage,
-	hideKiloCodeButton = false,
+	hideBluesCodeButton = false,
 	currentApiConfigName, // kilocode_change
 }: ApiOptionsProps) => {
 	const { t } = useAppTranslation()
@@ -355,7 +355,7 @@ const ApiOptions = ({
 				lmstudio: { field: "lmStudioModelId" },
 				// kilocode_change start
 				bigmodel: { field: "apiModelId", default: bigModelDefaultModelId },
-				kilocode: { field: "kilocodeModel", default: kilocodeDefaultModelId },
+				bluescode: { field: "bluesCodeModel", default: bluesCodeDefaultModelId },
 				// kilocode_change end
 			}
 
@@ -448,11 +448,11 @@ const ApiOptions = ({
 			{errorMessage && <ApiErrorMessage errorMessage={errorMessage} />}
 
 			{/* kilocode_change start */}
-			{selectedProvider === "kilocode" && (
+			{selectedProvider === "bluescode" && (
 				<KiloCode
 					apiConfiguration={apiConfiguration}
 					setApiConfigurationField={setApiConfigurationField}
-					hideKiloCodeButton={hideKiloCodeButton}
+					hideBluesCodeButton={hideBluesCodeButton}
 					currentApiConfigName={currentApiConfigName}
 					routerModels={routerModels}
 					organizationAllowList={organizationAllowList}
@@ -734,7 +734,7 @@ const ApiOptions = ({
 							onChange={(value) => setApiConfigurationField("consecutiveMistakeLimit", value)}
 						/>
 						{/* kilocode_change start */}
-						{selectedProvider === "kilocode" && (
+						{selectedProvider === "bluescode" && (
 							<KiloCodeAdvanced
 								apiConfiguration={apiConfiguration}
 								setApiConfigurationField={setApiConfigurationField}

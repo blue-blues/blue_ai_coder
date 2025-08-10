@@ -9,7 +9,7 @@ import {
 
 export type ApiHandlerOptions = Omit<ProviderSettings, "apiProvider">
 
-// kilocode_change start
+// bluescode_change start
 // Cerebras
 // https://inference-docs.cerebras.ai/api-reference/models
 
@@ -111,7 +111,7 @@ export const cerebrasModels = {
 export type CerebrasModelId = keyof typeof cerebrasModels
 export const cerebrasDefaultModelId: CerebrasModelId = "gpt-oss-120b"
 
-// kilocode_change end
+// bluescode_change end
 
 // RouterName
 
@@ -121,7 +121,7 @@ const routerNames = [
 	"glama",
 	"unbound",
 	"litellm",
-	"kilocode-openrouter",
+	"bluescode-openrouter",
 	"ollama",
 	"lmstudio",
 ] as const
@@ -220,12 +220,12 @@ export const getModelMaxOutputTokens = ({
 // GetModelsOptions
 
 export type GetModelsOptions =
-	| { provider: "openrouter"; apiKey?: string; baseUrl?: string } // kilocode_change: add apiKey, baseUrl
+	| { provider: "openrouter"; apiKey?: string; baseUrl?: string } // bluescode_change: add apiKey, baseUrl
 	| { provider: "glama" }
 	| { provider: "requesty"; apiKey?: string }
 	| { provider: "unbound"; apiKey?: string }
 	| { provider: "litellm"; apiKey: string; baseUrl: string }
-	| { provider: "kilocode-openrouter"; kilocodeToken?: string } // kilocode_change
-	| { provider: "cerebras"; cerebrasApiKey?: string } // kilocode_change
+	| { provider: "bluescode-openrouter"; bluescodeToken?: string } // bluescode_change
+	| { provider: "cerebras"; cerebrasApiKey?: string } // bluescode_change
 	| { provider: "ollama"; baseUrl?: string }
 	| { provider: "lmstudio"; baseUrl?: string }

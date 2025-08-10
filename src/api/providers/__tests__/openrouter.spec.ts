@@ -61,8 +61,8 @@ describe("OpenRouterHandler", () => {
 			baseURL: "https://openrouter.ai/api/v1",
 			apiKey: mockOptions.openRouterApiKey,
 			defaultHeaders: {
-				"HTTP-Referer": "https://kilocode.ai",
-				"X-Title": "Kilo Code",
+				"HTTP-Referer": "https://bluescode.ai",
+				"X-Title": "Blues Code",
 				"X-KiloCode-Version": Package.version,
 				"User-Agent": `Kilo-Code/${Package.version}`,
 			},
@@ -183,7 +183,7 @@ describe("OpenRouterHandler", () => {
 					top_p: undefined,
 					transforms: ["middle-out"],
 				}),
-				undefined, // kilocode_change
+				undefined, // bluescode_change
 			)
 		})
 
@@ -210,7 +210,7 @@ describe("OpenRouterHandler", () => {
 
 			expect(mockCreate).toHaveBeenCalledWith(
 				expect.objectContaining({ transforms: ["middle-out"] }),
-				undefined, // kilocode_change
+				undefined, // bluescode_change
 			)
 		})
 
@@ -253,7 +253,7 @@ describe("OpenRouterHandler", () => {
 						}),
 					]),
 				}),
-				undefined, // kilocode_change
+				undefined, // bluescode_change
 			)
 		})
 

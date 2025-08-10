@@ -227,8 +227,8 @@ export class GhostProvider {
 		})
 
 		const userInput = await vscode.window.showInputBox({
-			prompt: t("kilocode:ghost.input.title"),
-			placeHolder: t("kilocode:ghost.input.placeholder"),
+			prompt: t("bluescode:ghost.input.title"),
+			placeHolder: t("bluescode:ghost.input.placeholder"),
 		})
 		if (!userInput) {
 			return
@@ -389,16 +389,16 @@ export class GhostProvider {
 
 	private async updateGlobalContext() {
 		const hasSuggestions = this.suggestions.hasSuggestions()
-		await vscode.commands.executeCommand("setContext", "kilocode.ghost.hasSuggestions", hasSuggestions)
-		await vscode.commands.executeCommand("setContext", "kilocode.ghost.isProcessing", this.isProcessing)
+		await vscode.commands.executeCommand("setContext", "bluescode.ghost.hasSuggestions", hasSuggestions)
+		await vscode.commands.executeCommand("setContext", "bluescode.ghost.isProcessing", this.isProcessing)
 		await vscode.commands.executeCommand(
 			"setContext",
-			"kilocode.ghost.enableQuickInlineTaskKeybinding",
+			"bluescode.ghost.enableQuickInlineTaskKeybinding",
 			this.settings?.enableQuickInlineTaskKeybinding || false,
 		)
 		await vscode.commands.executeCommand(
 			"setContext",
-			"kilocode.ghost.enableSmartInlineTaskKeybinding",
+			"bluescode.ghost.enableSmartInlineTaskKeybinding",
 			this.settings?.enableSmartInlineTaskKeybinding || false,
 		)
 	}
@@ -571,15 +571,15 @@ export class GhostProvider {
 	}
 
 	public async showIncompatibilityExtensionPopup() {
-		const message = t("kilocode:ghost.incompatibilityExtensionPopup.message")
-		const disableCopilot = t("kilocode:ghost.incompatibilityExtensionPopup.disableCopilot")
-		const disableInlineAssist = t("kilocode:ghost.incompatibilityExtensionPopup.disableInlineAssist")
+		const message = t("bluescode:ghost.incompatibilityExtensionPopup.message")
+		const disableCopilot = t("bluescode:ghost.incompatibilityExtensionPopup.disableCopilot")
+		const disableInlineAssist = t("bluescode:ghost.incompatibilityExtensionPopup.disableInlineAssist")
 		const response = await vscode.window.showErrorMessage(message, disableCopilot, disableInlineAssist)
 
 		if (response === disableCopilot) {
 			await vscode.commands.executeCommand<any>("github.copilot.completions.disable")
 		} else if (response === disableInlineAssist) {
-			await vscode.commands.executeCommand<any>("kilo-code.ghost.disable")
+			await vscode.commands.executeCommand<any>("blues-code.ghost.disable")
 		}
 	}
 

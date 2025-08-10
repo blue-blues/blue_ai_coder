@@ -47,7 +47,7 @@ export const modelInfoSchema = z.object({
 	minTokensPerCachePoint: z.number().optional(),
 	maxCachePoints: z.number().optional(),
 	cachableFields: z.array(z.string()).optional(),
-	preferredIndex: z.number().nullish(), // kilocode_change
+	preferredIndex: z.number().nullish(), // bluescode_change
 	tiers: z
 		.array(
 			z.object({

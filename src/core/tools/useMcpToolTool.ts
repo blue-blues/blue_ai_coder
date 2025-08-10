@@ -4,8 +4,8 @@ import { formatResponse } from "../prompts/responses"
 import { ClineAskUseMcpServer } from "../../shared/ExtensionMessage"
 import { McpExecutionStatus } from "@roo-code/types"
 import { t } from "../../i18n"
-import { McpToolCallResponse } from "../../shared/mcp" // kilocode_change
-import { summarizeSuccessfulMcpOutputWhenTooLong } from "./kilocode" // kilocode_change
+import { McpToolCallResponse } from "../../shared/mcp" // bluescode_change
+import { summarizeSuccessfulMcpOutputWhenTooLong } from "./bluescode" // bluescode_change
 
 interface McpToolParams {
 	server_name?: string
@@ -91,13 +91,13 @@ async function sendExecutionStatus(cline: Task, status: McpExecutionStatus): Pro
 	})
 }
 
-// kilocode_change: make async, add task parameter
+// bluescode_change: make async, add task parameter
 async function processToolContent(task: Task, toolResult: McpToolCallResponse): Promise<string> {
 	if (!toolResult?.content || toolResult.content.length === 0) {
 		return ""
 	}
 
-	const outputText = toolResult.content // kilocode_change: introduce const
+	const outputText = toolResult.content // bluescode_change: introduce const
 		.map((item: any) => {
 			if (item.type === "text") {
 				return item.text
@@ -111,7 +111,7 @@ async function processToolContent(task: Task, toolResult: McpToolCallResponse): 
 		.filter(Boolean)
 		.join("\n\n")
 
-	// kilocode_change: summarize
+	// bluescode_change: summarize
 	return toolResult.isError ? outputText : await summarizeSuccessfulMcpOutputWhenTooLong(task, outputText)
 }
 
@@ -138,7 +138,7 @@ async function executeToolAndProcessResult(
 	let toolResultPretty = "(No response)"
 
 	if (toolResult) {
-		// kilocode_change: await, add api parameter
+		// bluescode_change: await, add api parameter
 		const outputText = await processToolContent(cline, toolResult)
 
 		if (outputText) {

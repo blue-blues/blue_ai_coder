@@ -10,13 +10,13 @@ import { type ModeConfig, type PromptComponent, customModesSettingsSchema, modeC
 
 import { fileExistsAtPath } from "../../utils/fs"
 import { getWorkspacePath } from "../../utils/path"
-import { getGlobalRooDirectory, getProjectRooDirectoryForCwd /*kilocode_change*/ } from "../../services/roo-config"
+import { getGlobalRooDirectory, getProjectRooDirectoryForCwd /*bluescode_change*/ } from "../../services/roo-config"
 import { logger } from "../../utils/logging"
 import { GlobalFileNames } from "../../shared/globalFileNames"
 import { ensureSettingsDirectoryExists } from "../../utils/globalContext"
 import { t } from "../../i18n"
 
-const ROOMODES_FILENAME = ".kilocodemodes"
+const ROOMODES_FILENAME = ".bluescodemodes"
 
 // Type definitions for import/export functionality
 interface RuleFile {
@@ -293,11 +293,11 @@ export class CustomModesManager {
 					return
 				}
 
-				// Get modes from .kilocodemodes if it exists (takes precedence)
+				// Get modes from .bluescodemodes if it exists (takes precedence)
 				const roomodesPath = await this.getWorkspaceRoomodes()
 				const roomodesModes = roomodesPath ? await this.loadModesFromFile(roomodesPath) : []
 
-				// Merge modes from both sources (.kilocodemodes takes precedence)
+				// Merge modes from both sources (.bluescodemodes takes precedence)
 				const mergedModes = await this.mergeCustomModes(roomodesModes, result.data.customModes)
 				await this.context.globalState.update("customModes", mergedModes)
 				this.clearCache()
@@ -329,7 +329,7 @@ export class CustomModesManager {
 					this.clearCache()
 					await this.onUpdate()
 				} catch (error) {
-					console.error(`[CustomModesManager] Error handling .kilocodemodes file change:`, error)
+					console.error(`[CustomModesManager] Error handling .bluescodemodes file change:`, error)
 				}
 			}
 
@@ -364,7 +364,7 @@ export class CustomModesManager {
 		const settingsPath = await this.getCustomModesFilePath()
 		const settingsModes = await this.loadModesFromFile(settingsPath)
 
-		// Get modes from .kilocodemodes if it exists
+		// Get modes from .bluescodemodes if it exists
 		const roomodesPath = await this.getWorkspaceRoomodes()
 		const roomodesModes = roomodesPath ? await this.loadModesFromFile(roomodesPath) : []
 
@@ -666,7 +666,7 @@ export class CustomModesManager {
 					return false
 				}
 				modeRulesDir = path.join(
-					getProjectRooDirectoryForCwd(workspacePath) /* kilocode_change */,
+					getProjectRooDirectoryForCwd(workspacePath) /* bluescode_change */,
 					`rules-${slug}`,
 				)
 			}
@@ -774,7 +774,7 @@ export class CustomModesManager {
 			// Check for .roo/rules-{slug}/ directory (or rules-{slug}/ for global)
 			const modeRulesDir = isGlobalMode
 				? path.join(baseDir, `rules-${slug}`)
-				: path.join(getProjectRooDirectoryForCwd(baseDir) /* kilocode_change */, `rules-${slug}`)
+				: path.join(getProjectRooDirectoryForCwd(baseDir) /* bluescode_change */, `rules-${slug}`)
 
 			let rulesFiles: RuleFile[] = []
 			try {
@@ -858,7 +858,7 @@ export class CustomModesManager {
 			rulesFolderPath = path.join(baseDir, `rules-${importMode.slug}`)
 		} else {
 			const workspacePath = getWorkspacePath()
-			baseDir = getProjectRooDirectoryForCwd(workspacePath) // kilocode_change
+			baseDir = getProjectRooDirectoryForCwd(workspacePath) // bluescode_change
 			rulesFolderPath = path.join(baseDir, `rules-${importMode.slug}`)
 		}
 

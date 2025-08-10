@@ -47,7 +47,7 @@ logs
 .idea/
 .qodo/
 .vercel
-.roo/mcp.json
+.bluescode/mcp.json
 
 # Nix / Direnv
 .direnv

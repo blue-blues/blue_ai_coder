@@ -127,7 +127,7 @@ interface OllamaHandlerOptions {
 	ollamaModelId?: string
 }
 
-export class KilocodeOllamaHandler extends BaseProvider {
+export class BluesCodeOllamaHandler extends BaseProvider {
 	private options: OllamaHandlerOptions
 	private client: Ollama | undefined
 	protected models: ModelRecord = {}

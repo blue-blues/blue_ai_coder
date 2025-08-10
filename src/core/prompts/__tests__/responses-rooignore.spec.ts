@@ -53,10 +53,10 @@ describe("RooIgnore Response Formatting", () => {
 
 			// Verify error message format
 			expect(errorMessage).toContain(
-				"Access to secrets/api-keys.json is blocked by the .kilocodeignore file settings",
+				"Access to secrets/api-keys.json is blocked by the .bluescodeignore file settings",
 			)
 			expect(errorMessage).toContain("continue in the task without using this file")
-			expect(errorMessage).toContain("ask the user to update the .kilocodeignore file")
+			expect(errorMessage).toContain("ask the user to update the .bluescodeignore file")
 		})
 
 		/**
@@ -211,7 +211,7 @@ describe("RooIgnore Response Formatting", () => {
 		/**
 		 * Tests the instructions format
 		 */
-		it("should format .kilocodeignore instructions for the LLM", async () => {
+		it("should format .bluescodeignore instructions for the LLM", async () => {
 			// Create controller
 			const controller = new RooIgnoreController(TEST_CWD)
 			await controller.initialize()
@@ -220,7 +220,7 @@ describe("RooIgnore Response Formatting", () => {
 			const instructions = controller.getInstructions()
 
 			// Verify format and content
-			expect(instructions).toContain("# .kilocodeignore")
+			expect(instructions).toContain("# .bluescodeignore")
 			expect(instructions).toContain(LOCK_TEXT_SYMBOL)
 			expect(instructions).toContain("node_modules")
 			expect(instructions).toContain(".git")
@@ -235,11 +235,11 @@ describe("RooIgnore Response Formatting", () => {
 		/**
 		 * Tests null/undefined case
 		 */
-		it("should return undefined when no .kilocodeignore exists", async () => {
-			// Set up no .kilocodeignore
+		it("should return undefined when no .bluescodeignore exists", async () => {
+			// Set up no .bluescodeignore
 			mockFileExists.mockResolvedValue(false)
 
-			// Create controller without .kilocodeignore
+			// Create controller without .bluescodeignore
 			const controller = new RooIgnoreController(TEST_CWD)
 			await controller.initialize()
 

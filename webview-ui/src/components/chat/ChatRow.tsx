@@ -37,7 +37,7 @@ import McpResourceRow from "../mcp/McpResourceRow"
 // import { Mention } from "./Mention" // kilocode_change
 import { CheckpointSaved } from "./checkpoints/CheckpointSaved"
 import { FollowUpSuggest } from "./FollowUpSuggest"
-import { LowCreditWarning } from "../kilocode/chat/LowCreditWarning" // kilocode_change
+import { LowCreditWarning } from "../bluescode/chat/LowCreditWarning" // bluescode_change
 import { BatchFilePermission } from "./BatchFilePermission"
 import { BatchDiffApproval } from "./BatchDiffApproval"
 import { ProgressIndicator } from "./ProgressIndicator"
@@ -46,13 +46,13 @@ import { CommandExecution } from "./CommandExecution"
 import { CommandExecutionError } from "./CommandExecutionError"
 import ReportBugPreview from "./ReportBugPreview"
 
-import { NewTaskPreview } from "../kilocode/chat/NewTaskPreview" // kilocode_change
-import { KiloChatRowGutterBar } from "../kilocode/chat/KiloChatRowGutterBar" // kilocode_change
+import { NewTaskPreview } from "../bluescode/chat/NewTaskPreview" // bluescode_change
+import { KiloChatRowGutterBar } from "../bluescode/chat/KiloChatRowGutterBar" // bluescode_change
 import { AutoApprovedRequestLimitWarning } from "./AutoApprovedRequestLimitWarning"
 import { CondenseContextErrorRow, CondensingContextRow, ContextCondenseRow } from "./ContextCondenseRow"
 import CodebaseSearchResultsDisplay from "./CodebaseSearchResultsDisplay"
 import { cn } from "@/lib/utils"
-import { KiloChatRowUserFeedback } from "../kilocode/chat/KiloChatRowUserFeedback" // kilocode_change
+import { KiloChatRowUserFeedback } from "../bluescode/chat/KiloChatRowUserFeedback" // bluescode_change
 import { StandardTooltip } from "../ui" // kilocode_change
 
 interface ChatRowProps {
@@ -1033,10 +1033,10 @@ export const ChatRowContent = ({
 									{
 										// kilocode_change start
 										!cost && usageMissing && (
-											<StandardTooltip content={t("kilocode:pricing.costUnknownDescription")}>
+											<StandardTooltip content={t("bluescode:pricing.costUnknownDescription")}>
 												<VSCodeBadge className="whitespace-nowrap">
 													<span className="codicon codicon-warning pr-1"></span>
-													{t("kilocode:pricing.costUnknown")}
+													{t("bluescode:pricing.costUnknown")}
 												</VSCodeBadge>
 											</StandardTooltip>
 										)
@@ -1368,7 +1368,7 @@ export const ChatRowContent = ({
 										marginBottom: "-1.5px",
 									}}></span>
 								<span style={{ color: normalColor, fontWeight: "bold" }}>
-									{t("kilocode:chat.condense.wantsToCondense")}
+									{t("bluescode:chat.condense.wantsToCondense")}
 								</span>
 							</div>
 							<NewTaskPreview context={message.text || ""} />

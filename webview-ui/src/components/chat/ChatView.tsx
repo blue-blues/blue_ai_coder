@@ -50,15 +50,15 @@ import BrowserSessionRow from "./BrowserSessionRow"
 import ChatRow from "./ChatRow"
 import ChatTextArea from "./ChatTextArea"
 // import TaskHeader from "./TaskHeader"// kilocode_change
-import KiloTaskHeader from "../kilocode/KiloTaskHeader" // kilocode_change
+import KiloTaskHeader from "../bluescode/KiloTaskHeader" // bluescode_change
 import AutoApproveMenu from "./AutoApproveMenu"
-import BottomControls from "../kilocode/BottomControls" // kilocode_change
+import BottomControls from "../bluescode/BottomControls" // bluescode_change
 import SystemPromptWarning from "./SystemPromptWarning"
-import { showSystemNotification } from "@/kilocode/helpers" // kilocode_change
+import { showSystemNotification } from "@/bluescode/helpers" // bluescode_change
 // import ProfileViolationWarning from "./ProfileViolationWarning" kilocode_change: unused
 import { CheckpointWarning } from "./CheckpointWarning"
-import { IdeaSuggestionsBox } from "../kilocode/chat/IdeaSuggestionsBox" // kilocode_change
-import { KilocodeNotifications } from "../kilocode/KilocodeNotifications" // kilocode_change
+import { IdeaSuggestionsBox } from "../bluescode/chat/IdeaSuggestionsBox" // bluescode_change
+import { KilocodeNotifications } from "../bluescode/KilocodeNotifications" // bluescode_change
 import QueuedMessages from "./QueuedMessages"
 import { getLatestTodo } from "@roo/todo"
 import { QueuedMessage } from "@roo-code/types"
@@ -302,7 +302,7 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 						case "tool":
 							if (!isAutoApproved(lastMessage) && !isPartial) {
 								playSound("notification")
-								showSystemNotification(t("kilocode:notifications.toolRequest")) // kilocode_change
+								showSystemNotification(t("bluescode:notifications.toolRequest")) // kilocode_change
 							}
 							setSendingDisabled(isPartial)
 							setClineAsk("tool")
@@ -338,7 +338,7 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 						case "browser_action_launch":
 							if (!isAutoApproved(lastMessage) && !isPartial) {
 								playSound("notification")
-								showSystemNotification(t("kilocode:notifications.browserAction")) // kilocode_change
+								showSystemNotification(t("bluescode:notifications.browserAction")) // kilocode_change
 							}
 							setSendingDisabled(isPartial)
 							setClineAsk("browser_action_launch")
@@ -349,7 +349,7 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 						case "command":
 							if (!isAutoApproved(lastMessage) && !isPartial) {
 								playSound("notification")
-								showSystemNotification(t("kilocode:notifications.command")) // kilocode_change
+								showSystemNotification(t("bluescode:notifications.command")) // kilocode_change
 							}
 							setSendingDisabled(isPartial)
 							setClineAsk("command")
@@ -415,7 +415,7 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 							setSendingDisabled(isPartial)
 							setClineAsk("condense")
 							setEnableButtons(!isPartial)
-							setPrimaryButtonText(t("kilocode:chat.condense.condenseConversation"))
+							setPrimaryButtonText(t("bluescode:chat.condense.condenseConversation"))
 							setSecondaryButtonText(undefined)
 							break
 						// kilocode_change end

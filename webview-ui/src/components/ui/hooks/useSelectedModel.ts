@@ -25,10 +25,10 @@ import {
 	vertexModels,
 	xaiDefaultModelId,
 	xaiModels,
-	// kilocode_change start
+	// bluescode_change start
 	bigModelModels,
 	bigModelDefaultModelId,
-	// kilocode_change end
+	// bluescode_change end
 	groqModels,
 	groqDefaultModelId,
 	chutesModels,
@@ -42,7 +42,7 @@ import {
 	litellmDefaultModelId,
 	claudeCodeDefaultModelId,
 	claudeCodeModels,
-	kilocodeDefaultModelId,
+	bluesCodeDefaultModelId,
 	sambaNovaModels,
 	sambaNovaDefaultModelId,
 	doubaoModels,
@@ -63,10 +63,10 @@ import { useLmStudioModels } from "./useLmStudioModels"
 
 export const useSelectedModel = (apiConfiguration?: ProviderSettings) => {
 	const provider = apiConfiguration?.apiProvider || "anthropic"
-	// kilocode_change start
+	// bluescode_change start
 	let openRouterModelId = provider === "openrouter" ? apiConfiguration?.openRouterModelId : undefined
-	if (provider === "kilocode") {
-		openRouterModelId = apiConfiguration?.kilocodeModel || undefined
+	if (provider === "bluescode") {
+		openRouterModelId = apiConfiguration?.bluesCodeModel || undefined
 	}
 
 	const routerModels = useRouterModels({
@@ -78,7 +78,7 @@ export const useSelectedModel = (apiConfiguration?: ProviderSettings) => {
 		apiConfiguration?.openRouterBaseUrl,
 		apiConfiguration?.apiKey,
 	)
-	// kilocode_change end
+	// bluescode_change end
 	const lmStudioModelId = provider === "lmstudio" ? apiConfiguration?.lmStudioModelId : undefined
 	const lmStudioModels = useLmStudioModels(lmStudioModelId)
 
@@ -169,13 +169,13 @@ function getSelectedModel({
 			const info = xaiModels[id as keyof typeof xaiModels]
 			return info ? { id, info } : { id, info: undefined }
 		}
-		// kilocode_change start
+		// bluescode_change start
 		case "bigmodel": {
 			const id = apiConfiguration.apiModelId ?? bigModelDefaultModelId
 			const info = bigModelModels[id as keyof typeof bigModelModels]
 			return { id, info }
 		}
-		// kilocode_change end
+		// bluescode_change end
 		case "groq": {
 			const id = apiConfiguration.apiModelId ?? groqDefaultModelId
 			const info = groqModels[id as keyof typeof groqModels]
@@ -287,14 +287,14 @@ function getSelectedModel({
 			const info = vscodeLlmModels[modelFamily as keyof typeof vscodeLlmModels]
 			return { id, info: { ...openAiModelInfoSaneDefaults, ...info, supportsImages: false } } // VSCode LM API currently doesn't support images.
 		}
-		// kilocode_change begin
-		case "kilocode": {
+		// bluescode_change begin
+		case "bluescode": {
 			// Use the fetched models from routerModels
-			if (routerModels["kilocode-openrouter"] && apiConfiguration.kilocodeModel) {
+			if (routerModels["bluescode-openrouter"] && apiConfiguration.bluesCodeModel) {
 				// Find the model in the fetched models
-				const modelEntries = Object.entries(routerModels["kilocode-openrouter"])
+				const modelEntries = Object.entries(routerModels["bluescode-openrouter"])
 
-				const selectedModelId = apiConfiguration.kilocodeModel.toLowerCase()
+				const selectedModelId = apiConfiguration.bluesCodeModel.toLowerCase()
 
 				// Prefer exact match
 				const selectedModel =
@@ -317,8 +317,8 @@ function getSelectedModel({
 
 			// Fallback to anthropic model if no match found
 			return {
-				id: kilocodeDefaultModelId,
-				info: routerModels["kilocode-openrouter"][kilocodeDefaultModelId],
+				id: bluesCodeDefaultModelId,
+				info: routerModels["bluescode-openrouter"][bluesCodeDefaultModelId],
 			}
 		}
 		case "fireworks": {
@@ -334,7 +334,7 @@ function getSelectedModel({
 				],
 			}
 		}
-		// kilocode_change end
+		// bluescode_change end
 
 		case "claude-code": {
 			// Claude Code models extend anthropic models but with images and prompt caching disabled
@@ -356,7 +356,7 @@ function getSelectedModel({
 		// case "human-relay":
 		// case "fake-ai":
 		default: {
-			provider satisfies "anthropic" | "human-relay" | "fake-ai"
+			provider satisfies "anthropic" | "human-relay" | "fake-ai" | "kilocode"
 			const id = apiConfiguration.apiModelId ?? anthropicDefaultModelId
 			const info = anthropicModels[id as keyof typeof anthropicModels]
 			return { id, info }

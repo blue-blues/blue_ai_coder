@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { kiloLanguages } from "./kiloLanguages.js"
+import { bluesLanguages } from "./bluesLanguages.js"
 
 /**
  * CodeAction
@@ -52,14 +52,14 @@ export const commandIds = [
 	"setCustomStoragePath",
 	"importSettings",
 
-	// "focusInput", // kilocode_change
+	// "focusInput", // bluescode_change
 	"acceptInput",
-	"profileButtonClicked", // kilocode_change
-	"helpButtonClicked", // kilocode_change
-	"focusChatInput", // kilocode_change
-	"importSettings", // kilocode_change
-	"exportSettings", // kilocode_change
-	"generateTerminalCommand", // kilocode_change
+	"profileButtonClicked", // bluescode_change
+	"helpButtonClicked", // bluescode_change
+	"focusChatInput", // bluescode_change
+	"importSettings", // bluescode_change
+	"exportSettings", // bluescode_change
+	"generateTerminalCommand", // bluescode_change
 	"focusPanel",
 ] as const
 
@@ -70,7 +70,7 @@ export type CommandId = (typeof commandIds)[number]
  */
 
 export const languages = [
-	...kiloLanguages,
+	...bluesLanguages,
 	"ca",
 	"de",
 	"en",

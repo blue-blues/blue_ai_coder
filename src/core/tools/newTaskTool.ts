@@ -82,27 +82,27 @@ export async function newTaskTool(
 			// Preserve the current mode so we can resume with it later.
 			cline.pausedModeSlug = (await provider.getState()).mode ?? defaultModeSlug
 
-			// kilocode_change start: Switch to the desired mode BEFORE creating the task
+			// bluescode_change start: Switch to the desired mode BEFORE creating the task
 			await provider.handleModeSwitch(mode)
 			// Small delay to ensure mode switch has propagated
 			await delay(100)
-			// kilocode_change end
+			// bluescode_change end
 
 			// Now create the task with the correct mode already set
 			const newCline = await provider.initClineWithTask(unescapedMessage, undefined, cline)
 			if (!newCline) {
-				await provider.handleModeSwitch(cline.pausedModeSlug) // kilocode_change: if task creation failed, switch back to the parent's mode
+				await provider.handleModeSwitch(cline.pausedModeSlug) // bluescode_change: if task creation failed, switch back to the parent's mode
 				pushToolResult(t("tools:newTask.errors.policy_restriction"))
 				return
 			}
 
-			// kilocode_change start: Switch to the desired mode BEFORE creating the task above
+			// bluescode_change start: Switch to the desired mode BEFORE creating the task above
 			// // Now switch the newly created task to the desired mode
 			// await provider.handleModeSwitch(mode)
 
 			// // Delay to allow mode change to take effect
 			// await delay(500)
-			// kilocode_change end
+			// bluescode_change end
 
 			cline.emit(RooCodeEventName.TaskSpawned, newCline.taskId)
 

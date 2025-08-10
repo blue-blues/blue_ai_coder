@@ -14,7 +14,7 @@ import { telemetrySettingsSchema } from "./telemetry.js"
 import { modeConfigSchema } from "./mode.js"
 import { customModePromptsSchema, customSupportPromptsSchema } from "./mode.js"
 import { languagesSchema } from "./vscode.js"
-import { ghostServiceSettingsSchema } from "./kilocode.js" // kilocode_change
+import { ghostServiceSettingsSchema } from "./bluescode.js" // bluescode_change
 
 /**
  * Default delay in milliseconds after writes to allow diagnostics to detect potential problems.
@@ -73,7 +73,7 @@ export const globalSettingsSchema = z.object({
 	autoCondenseContext: z.boolean().optional(),
 	autoCondenseContextPercent: z.number().optional(),
 	maxConcurrentFileReads: z.number().optional(),
-	allowVeryLargeReads: z.boolean().optional(), // kilocode_change
+	allowVeryLargeReads: z.boolean().optional(), // bluescode_change
 
 	/**
 	 * Whether to include diagnostic messages (errors, warnings) in tool outputs
@@ -88,12 +88,12 @@ export const globalSettingsSchema = z.object({
 
 	browserToolEnabled: z.boolean().optional(),
 	browserViewportSize: z.string().optional(),
-	showAutoApproveMenu: z.boolean().optional(), // kilocode_change
-	showTaskTimeline: z.boolean().optional(), // kilocode_change
-	localWorkflowToggles: z.record(z.string(), z.boolean()).optional(), // kilocode_change
-	globalWorkflowToggles: z.record(z.string(), z.boolean()).optional(), // kilocode_change
-	localRulesToggles: z.record(z.string(), z.boolean()).optional(), // kilocode_change
-	globalRulesToggles: z.record(z.string(), z.boolean()).optional(), // kilocode_change
+	showAutoApproveMenu: z.boolean().optional(), // bluescode_change
+	showTaskTimeline: z.boolean().optional(), // bluescode_change
+	localWorkflowToggles: z.record(z.string(), z.boolean()).optional(), // bluescode_change
+	globalWorkflowToggles: z.record(z.string(), z.boolean()).optional(), // bluescode_change
+	localRulesToggles: z.record(z.string(), z.boolean()).optional(), // bluescode_change
+	globalRulesToggles: z.record(z.string(), z.boolean()).optional(), // bluescode_change
 	screenshotQuality: z.number().optional(),
 	remoteBrowserEnabled: z.boolean().optional(),
 	remoteBrowserHost: z.string().optional(),
@@ -105,7 +105,7 @@ export const globalSettingsSchema = z.object({
 	ttsSpeed: z.number().optional(),
 	soundEnabled: z.boolean().optional(),
 	soundVolume: z.number().optional(),
-	systemNotificationsEnabled: z.boolean().optional(), // kilocode_change
+	systemNotificationsEnabled: z.boolean().optional(), // bluescode_change
 
 	maxOpenTabsContext: z.number().optional(),
 	maxWorkspaceFiles: z.number().optional(),
@@ -142,7 +142,7 @@ export const globalSettingsSchema = z.object({
 
 	mcpEnabled: z.boolean().optional(),
 	enableMcpServerCreation: z.boolean().optional(),
-	mcpMarketplaceCatalog: z.any().optional(), // kilocode_change: MCP marketplace catalog
+	mcpMarketplaceCatalog: z.any().optional(), // bluescode_change: MCP marketplace catalog
 
 	remoteControlEnabled: z.boolean().optional(),
 
@@ -152,10 +152,10 @@ export const globalSettingsSchema = z.object({
 	customModePrompts: customModePromptsSchema.optional(),
 	customSupportPrompts: customSupportPromptsSchema.optional(),
 	enhancementApiConfigId: z.string().optional(),
-	dismissedNotificationIds: z.string().array().optional(), // kilocode_change
-	commitMessageApiConfigId: z.string().optional(), // kilocode_change
-	terminalCommandApiConfigId: z.string().optional(), // kilocode_change
-	ghostServiceSettings: ghostServiceSettingsSchema, // kilocode_change
+	dismissedNotificationIds: z.string().array().optional(), // bluescode_change
+	commitMessageApiConfigId: z.string().optional(), // bluescode_change
+	terminalCommandApiConfigId: z.string().optional(), // bluescode_change
+	ghostServiceSettings: ghostServiceSettingsSchema, // bluescode_change
 	includeTaskHistoryInEnhance: z.boolean().optional(),
 	historyPreviewCollapsed: z.boolean().optional(),
 	profileThresholds: z.record(z.string(), z.number()).optional(),
@@ -202,10 +202,10 @@ export const SECRET_STATE_KEYS = [
 	"litellmApiKey",
 	"codeIndexOpenAiKey",
 	"codeIndexQdrantApiKey",
-	// kilocode_change start
-	"kilocodeToken",
+	// bluescode_change start
+	"bluesCodeToken",
 	"bigModelApiKey",
-	// kilocode_change end
+	// bluescode_change end
 	"codebaseIndexOpenAiCompatibleApiKey",
 	"codebaseIndexGeminiApiKey",
 	"codebaseIndexMistralApiKey",
@@ -275,9 +275,9 @@ export const EVALS_SETTINGS: RooCodeSettings = {
 	ttsSpeed: 1,
 	soundEnabled: false,
 	soundVolume: 0.5,
-	dismissedNotificationIds: [], // kilocode_change
-	systemNotificationsEnabled: true, // kilocode_change
-	ghostServiceSettings: {}, // kilocode_change
+	dismissedNotificationIds: [], // bluescode_change
+	systemNotificationsEnabled: true, // bluescode_change
+	ghostServiceSettings: {}, // bluescode_change
 
 	terminalOutputLineLimit: 500,
 	terminalOutputCharacterLimit: DEFAULT_TERMINAL_OUTPUT_CHARACTER_LIMIT,

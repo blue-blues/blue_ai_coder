@@ -38,7 +38,7 @@ type OllamaModelsResponse = z.infer<typeof OllamaModelsResponseSchema>
 type OllamaModelInfoResponse = z.infer<typeof OllamaModelInfoResponseSchema>
 
 export const parseOllamaModel = (rawModel: OllamaModelInfoResponse): ModelInfo => {
-	// kilocode_change start
+	// bluescode_change start
 	const contextLengthFromModelParameters =
 		typeof rawModel.parameters === "string"
 			? parseInt(rawModel.parameters.match(/^num_ctx\s+(\d+)/m)?.[1] ?? "", 10) || undefined
@@ -49,7 +49,7 @@ export const parseOllamaModel = (rawModel: OllamaModelInfoResponse): ModelInfo =
 		contextKey && typeof rawModel.model_info[contextKey] === "number" ? rawModel.model_info[contextKey] : undefined
 
 	const contextWindow = contextLengthFromModelParameters ?? contextLengthFromModelInfo
-	// kilocode_change end
+	// bluescode_change end
 
 	const modelInfo: ModelInfo = Object.assign({}, ollamaDefaultModelInfo, {
 		description: `Family: ${rawModel.details.family}, Context: ${contextWindow}, Size: ${rawModel.details.parameter_size}`,

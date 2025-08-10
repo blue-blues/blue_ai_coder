@@ -15,19 +15,19 @@ import { getGlamaModels } from "./glama"
 import { getUnboundModels } from "./unbound"
 import { getLiteLLMModels } from "./litellm"
 import { GetModelsOptions } from "../../../shared/api"
-import { getKiloBaseUriFromToken } from "../../../utils/kilocode-token"
+import { getBluesBaseUriFromToken } from "../../../utils/bluescode-token"
 import { getOllamaModels } from "./ollama"
 import { getLMStudioModels } from "./lmstudio"
 
 const memoryCache = new NodeCache({ stdTTL: 5 * 60, checkperiod: 5 * 60 })
 
-export /*kilocode_change*/ async function writeModels(router: RouterName, data: ModelRecord) {
+export /*bluescode_change*/ async function writeModels(router: RouterName, data: ModelRecord) {
 	const filename = `${router}_models.json`
 	const cacheDir = await getCacheDirectoryPath(ContextProxy.instance.globalStorageUri.fsPath)
 	await safeWriteJson(path.join(cacheDir, filename), data)
 }
 
-export /*kilocode_change*/ async function readModels(router: RouterName): Promise<ModelRecord | undefined> {
+export /*bluescode_change*/ async function readModels(router: RouterName): Promise<ModelRecord | undefined> {
 	const filename = `${router}_models.json`
 	const cacheDir = await getCacheDirectoryPath(ContextProxy.instance.globalStorageUri.fsPath)
 	const filePath = path.join(cacheDir, filename)
@@ -56,12 +56,12 @@ export const getModels = async (options: GetModelsOptions): Promise<ModelRecord>
 	try {
 		switch (provider) {
 			case "openrouter":
-				// kilocode_change start: base url and bearer token
+				// bluescode_change start: base url and bearer token
 				models = await getOpenRouterModels({
 					openRouterBaseUrl: options.baseUrl,
 					headers: options.apiKey ? { Authorization: `Bearer ${options.apiKey}` } : undefined,
 				})
-				// kilocode_change end
+				// bluescode_change end
 				break
 			case "requesty":
 				// Requesty models endpoint requires an API key for per-user custom policies
@@ -78,16 +78,16 @@ export const getModels = async (options: GetModelsOptions): Promise<ModelRecord>
 				// Type safety ensures apiKey and baseUrl are always provided for litellm
 				models = await getLiteLLMModels(options.apiKey, options.baseUrl)
 				break
-			// kilocode_change start
-			case "kilocode-openrouter":
+			// bluescode_change start
+			case "bluescode-openrouter":
 				models = await getOpenRouterModels({
-					openRouterBaseUrl: getKiloBaseUriFromToken(options.kilocodeToken ?? "") + "/api/openrouter",
+					openRouterBaseUrl: getBluesBaseUriFromToken(options.bluescodeToken ?? "") + "/api/openrouter",
 				})
 				break
 			case "cerebras":
 				models = cerebrasModels
 				break
-			// kilocode_change end
+			// bluescode_change end
 			case "ollama":
 				models = await getOllamaModels(options.baseUrl)
 				break
@@ -104,7 +104,7 @@ export const getModels = async (options: GetModelsOptions): Promise<ModelRecord>
 		// Cache the fetched models (even if empty, to signify a successful fetch with no models)
 		memoryCache.set(provider, models)
 
-		/* kilocode_change: skip useless file IO
+		/* bluescode_change: skip useless file IO
 		await writeModels(provider, models).catch((err) =>
 			console.error(`[getModels] Error writing ${provider} models to file cache:`, err),
 		)

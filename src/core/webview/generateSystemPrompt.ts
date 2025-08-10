@@ -51,7 +51,7 @@ export const generateSystemPrompt = async (provider: ClineProvider, message: Web
 	// This avoids relying on an active Cline instance which might not exist during preview
 	try {
 		const tempApiHandler = buildApiHandler(apiConfiguration)
-		// kilocode_change: supports images => supports browser
+		// bluescode_change: supports images => supports browser
 		modelSupportsComputerUse = tempApiHandler.getModel().info.supportsImages ?? false
 	} catch (error) {
 		console.error("Error checking if model supports computer use:", error)

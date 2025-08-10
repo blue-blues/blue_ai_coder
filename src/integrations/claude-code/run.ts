@@ -5,14 +5,14 @@ import { ClaudeCodeMessage } from "./types"
 import readline from "readline"
 import { CLAUDE_CODE_DEFAULT_MAX_OUTPUT_TOKENS } from "@roo-code/types"
 import * as os from "os"
-// kilocode_change start
+// bluescode_change start
 import path from "node:path"
 import crypto from "node:crypto"
 import fs from "node:fs/promises"
 import { t } from "../../i18n"
 
 export const MAX_SYSTEM_PROMPT_LENGTH = 65536
-// kilocode_change end
+// bluescode_change end
 const cwd = vscode.workspace.workspaceFolders?.map((folder) => folder.uri.fsPath).at(0)
 
 // Claude Code installation URL - can be easily updated if needed
@@ -20,7 +20,7 @@ const CLAUDE_CODE_INSTALLATION_URL = "https://docs.anthropic.com/en/docs/claude-
 
 type ClaudeCodeOptions = {
 	systemPrompt: string
-	systemPromptFile?: string // kilocode_change
+	systemPromptFile?: string // bluescode_change
 	messages: Anthropic.Messages.MessageParam[]
 	path?: string
 	modelId?: string
@@ -33,7 +33,7 @@ type ProcessState = {
 	exitCode: number | null
 }
 
-// kilocode_change start
+// bluescode_change start
 async function generateTempSystemPrompt(options: ClaudeCodeOptions): Promise<string | undefined> {
 	const isWindows = os.platform() === "win32"
 	const isSystemPromptTooLong = options.systemPrompt.length > MAX_SYSTEM_PROMPT_LENGTH
@@ -41,7 +41,7 @@ async function generateTempSystemPrompt(options: ClaudeCodeOptions): Promise<str
 		return undefined
 	}
 	const uniqueId = crypto.randomUUID()
-	const tempFilePath = path.join(os.tmpdir(), `kilocode-system-prompt-${uniqueId}.txt`)
+	const tempFilePath = path.join(os.tmpdir(), `bluescode-system-prompt-${uniqueId}.txt`)
 	await fs.writeFile(tempFilePath, options.systemPrompt, "utf8")
 	return tempFilePath
 }
@@ -52,17 +52,17 @@ async function unlinkTempSystemPrompt(systemPromptFile: string | undefined): Pro
 	}
 	await fs.unlink(systemPromptFile).catch(console.log)
 }
-// kilocode_change end
+// bluescode_change end
 
 export async function* runClaudeCode(
 	options: ClaudeCodeOptions & { maxOutputTokens?: number },
 ): AsyncGenerator<ClaudeCodeMessage | string> {
-	const systemPromptFile = await generateTempSystemPrompt(options) // kilocode_change
+	const systemPromptFile = await generateTempSystemPrompt(options) // bluescode_change
 	const claudePath = options.path || "claude"
 	let process
 
 	try {
-		process = runProcess({ ...options, systemPromptFile }) // kilocode_change
+		process = runProcess({ ...options, systemPromptFile }) // bluescode_change
 	} catch (error: any) {
 		// Handle ENOENT errors immediately when spawning the process
 		if (error.code === "ENOENT" || error.message?.includes("ENOENT")) {
@@ -146,11 +146,11 @@ export async function* runClaudeCode(
 		if (!process.killed) {
 			process.kill()
 		}
-		// kilocode_change start
+		// bluescode_change start
 		if (systemPromptFile) {
 			await unlinkTempSystemPrompt(systemPromptFile)
 		}
-		// kilocode_change end
+		// bluescode_change end
 	}
 }
 
@@ -186,19 +186,19 @@ function runProcess({
 	maxOutputTokens,
 }: ClaudeCodeOptions & { maxOutputTokens?: number }) {
 	const claudePath = path || "claude"
-	// const isWindows = os.platform() === "win32" kilocode_change
+	// const isWindows = os.platform() === "win32" bluescode_change
 
 	// Build args based on platform
 	const args = ["-p"]
 
 	// Pass system prompt as flag on non-Windows, via stdin on Windows (avoids cmd length limits)
-	// kilocode_change start
+	// bluescode_change start
 	if (systemPromptFile) {
 		args.push("--system-prompt-file", systemPromptFile)
 	} else {
 		args.push("--system-prompt", systemPrompt)
 	}
-	// kilocode_change end
+	// bluescode_change end
 
 	args.push(
 		"--verbose",
@@ -232,7 +232,7 @@ function runProcess({
 		timeout: CLAUDE_CODE_TIMEOUT,
 	})
 
-	const stdinData = JSON.stringify(messages) // kilocode_change
+	const stdinData = JSON.stringify(messages) // bluescode_change
 
 	// Use setImmediate to ensure process is spawned before writing (prevents stdin race conditions)
 	setImmediate(() => {

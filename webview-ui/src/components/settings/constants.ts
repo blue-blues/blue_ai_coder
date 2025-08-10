@@ -13,9 +13,9 @@ import {
 	openAiNativeModels,
 	vertexModels,
 	xaiModels,
-	// kilocode_change start
+	// bluescode_change start
 	bigModelModels,
-	// kilocode_change end
+	// bluescode_change end
 	groqModels,
 	chutesModels,
 	sambaNovaModels,
@@ -33,10 +33,10 @@ export const MODELS_BY_PROVIDER: Partial<Record<ProviderName, Record<string, Mod
 	doubao: doubaoModels,
 	moonshot: moonshotModels,
 	gemini: geminiModels,
-	// kilocode_change start
+	// bluescode_change start
 	"gemini-cli": geminiCliModels,
 	bigmodel: bigModelModels,
-	// kilocode_change end
+	// bluescode_change end
 	mistral: mistralModels,
 	"openai-native": openAiNativeModels,
 	vertex: vertexModels,
@@ -49,7 +49,7 @@ export const MODELS_BY_PROVIDER: Partial<Record<ProviderName, Record<string, Mod
 }
 
 export const PROVIDERS = [
-	{ value: "kilocode", label: "Kilo Code" },
+	{ value: "bluescode", label: "Blues Code" },
 	{ value: "openrouter", label: "OpenRouter" },
 	{ value: "anthropic", label: "Anthropic" },
 	{ value: "claude-code", label: "Claude Code" },
@@ -58,10 +58,10 @@ export const PROVIDERS = [
 	{ value: "gemini-cli", label: "Gemini CLI" },
 	{ value: "doubao", label: "Doubao" },
 	{ value: "fireworks", label: "Fireworks AI" },
-	// kilocode_change start
+	// bluescode_change start
 	{ value: "bigmodel", label: "BigModel" },
 	{ value: "virtual-quota-fallback", label: "Virtual Quota Fallback" },
-	// kilocode_change end
+	// bluescode_change end
 	{ value: "deepseek", label: "DeepSeek" },
 	{ value: "moonshot", label: "Moonshot" },
 	{ value: "openai-native", label: "OpenAI" },
@@ -84,4 +84,4 @@ export const PROVIDERS = [
 	{ value: "sambanova", label: "SambaNova" },
 	{ value: "zai", label: "Z AI" },
 	{ value: "fireworks", label: "Fireworks AI" },
-] // .sort((a, b) => a.label.localeCompare(b.label)) // kilocode_change: Sort providers with kilocode first
+] // .sort((a, b) => a.label.localeCompare(b.label)) // bluescode_change: Sort providers with bluescode first

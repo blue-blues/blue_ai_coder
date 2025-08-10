@@ -6,7 +6,7 @@ import type {
 	PromptComponent,
 	CustomModePrompts,
 	TodoItem,
-	Experiments, // kilocode_change
+	Experiments, // bluescode_change
 } from "@roo-code/types"
 
 import type { SystemPromptSettings } from "./types"
@@ -34,7 +34,7 @@ import {
 	addCustomInstructions,
 	markdownFormattingSection,
 } from "./sections"
-import { getMorphInstructions } from "./tools/edit-file" // kilocode_change: Morph fast apply
+import { getMorphInstructions } from "./tools/edit-file" // bluescode_change: Morph fast apply
 
 // Helper function to get prompt component, filtering out empty objects
 export function getPromptComponent(
@@ -117,7 +117,7 @@ ${getToolDescriptionsForMode(
 
 ${getToolUseGuidelinesSection(codeIndexManager)}
 
-${getMorphInstructions(experiments) /* kilocode_change: newlines are returned by function */}${mcpServersSection}
+${getMorphInstructions(experiments) /* bluescode_change: newlines are returned by function */}${mcpServersSection}
 
 ${getCapabilitiesSection(cwd, supportsComputerUse, shouldIncludeMcp ? mcpHub : undefined, effectiveDiffStrategy, codeIndexManager)}
 
@@ -132,8 +132,8 @@ ${getObjectiveSection(codeIndexManager, experiments)}
 ${await addCustomInstructions(baseInstructions, globalCustomInstructions || "", cwd, mode, {
 	language: language ?? formatLanguage(vscode.env.language),
 	rooIgnoreInstructions,
-	localRulesToggleState: context.workspaceState.get("localRulesToggles"), // kilocode_change
-	globalRulesToggleState: context.globalState.get("globalRulesToggles"), // kilocode_change
+	localRulesToggleState: context.workspaceState.get("localRulesToggles"), // bluescode_change
+	globalRulesToggleState: context.globalState.get("globalRulesToggles"), // bluescode_change
 	settings,
 })}`
 
@@ -147,12 +147,12 @@ export const SYSTEM_PROMPT = async (
 	mcpHub?: McpHub,
 	diffStrategy?: DiffStrategy,
 	browserViewportSize?: string,
-	inputMode: Mode = defaultModeSlug, // kilocode_change: name changed to inputMode
+	inputMode: Mode = defaultModeSlug, // bluescode_change: name changed to inputMode
 	customModePrompts?: CustomModePrompts,
 	customModes?: ModeConfig[],
 	globalCustomInstructions?: string,
 	diffEnabled?: boolean,
-	experiments?: Experiments, // kilocode_change: type
+	experiments?: Experiments, // bluescode_change: type
 	enableMcpServerCreation?: boolean,
 	language?: string,
 	rooIgnoreInstructions?: string,
@@ -165,7 +165,7 @@ export const SYSTEM_PROMPT = async (
 	}
 
 	const mode =
-		getModeBySlug(inputMode, customModes)?.slug || modes.find((m) => m.slug === inputMode)?.slug || defaultModeSlug // kilocode_change: don't try to use non-existent modes
+		getModeBySlug(inputMode, customModes)?.slug || modes.find((m) => m.slug === inputMode)?.slug || defaultModeSlug // bluescode_change: don't try to use non-existent modes
 
 	// Try to load custom system prompt from file
 	const variablesForPrompt: PromptVariables = {
@@ -208,7 +208,7 @@ export const SYSTEM_PROMPT = async (
 
 ${fileCustomSystemPrompt}
 
-${getMorphInstructions(experiments) /* kilocode_change: Morph fast apply */}${customInstructions}`
+${getMorphInstructions(experiments) /* bluescode_change: Morph fast apply */}${customInstructions}`
 	}
 
 	// If diff is disabled, don't pass the diffStrategy

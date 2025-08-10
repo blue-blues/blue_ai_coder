@@ -29,8 +29,8 @@ export class GhostStatusBar {
 	}
 
 	private init() {
-		this.statusBar.text = t("kilocode:ghost.statusBar.enabled")
-		this.statusBar.tooltip = t("kilocode:ghost.statusBar.tooltip.basic")
+		this.statusBar.text = t("bluescode:ghost.statusBar.enabled")
+		this.statusBar.tooltip = t("bluescode:ghost.statusBar.tooltip.basic")
 		this.show()
 	}
 
@@ -47,8 +47,8 @@ export class GhostStatusBar {
 	}
 
 	private humanFormatCost(cost: number): string {
-		if (cost === 0) return t("kilocode:ghost.statusBar.cost.zero")
-		if (cost > 0 && cost < 0.01) return t("kilocode:ghost.statusBar.cost.lessThanCent") // Less than one cent
+		if (cost === 0) return t("bluescode:ghost.statusBar.cost.zero")
+		if (cost > 0 && cost < 0.01) return t("bluescode:ghost.statusBar.cost.lessThanCent") // Less than one cent
 		return `$${cost.toFixed(2)}`
 	}
 
@@ -63,24 +63,24 @@ export class GhostStatusBar {
 	}
 
 	private renderDisabled() {
-		this.statusBar.text = t("kilocode:ghost.statusBar.disabled")
-		this.statusBar.tooltip = t("kilocode:ghost.statusBar.tooltip.disabled")
+		this.statusBar.text = t("bluescode:ghost.statusBar.disabled")
+		this.statusBar.tooltip = t("bluescode:ghost.statusBar.tooltip.disabled")
 	}
 
 	private renderTokenError() {
-		this.statusBar.text = t("kilocode:ghost.statusBar.warning")
-		this.statusBar.tooltip = t("kilocode:ghost.statusBar.tooltip.tokenError")
+		this.statusBar.text = t("bluescode:ghost.statusBar.warning")
+		this.statusBar.tooltip = t("bluescode:ghost.statusBar.tooltip.tokenError")
 	}
 
 	private renderDefault() {
 		const totalCostFormatted = this.humanFormatCost(this.totalSessionCost || 0)
 		const lastCompletionCostFormatted = this.lastCompletionCost?.toFixed(5) || 0
-		this.statusBar.text = `${t("kilocode:ghost.statusBar.enabled")} (${totalCostFormatted})`
+		this.statusBar.text = `${t("bluescode:ghost.statusBar.enabled")} (${totalCostFormatted})`
 		this.statusBar.tooltip = `\
-${t("kilocode:ghost.statusBar.tooltip.basic")}
-• ${t("kilocode:ghost.statusBar.tooltip.lastCompletion")} $${lastCompletionCostFormatted}
-• ${t("kilocode:ghost.statusBar.tooltip.sessionTotal")} ${totalCostFormatted}
-• ${t("kilocode:ghost.statusBar.tooltip.model")} ${this.model}\
+${t("bluescode:ghost.statusBar.tooltip.basic")}
+• ${t("bluescode:ghost.statusBar.tooltip.lastCompletion")} $${lastCompletionCostFormatted}
+• ${t("bluescode:ghost.statusBar.tooltip.sessionTotal")} ${totalCostFormatted}
+• ${t("bluescode:ghost.statusBar.tooltip.model")} ${this.model}\
 `
 	}
 

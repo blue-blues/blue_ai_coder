@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// bluescode_change - new file
 import * as vscode from "vscode"
 import { CommitMessageProvider } from "./CommitMessageProvider"
 import { t } from "../../i18n"
@@ -14,9 +14,9 @@ export function registerCommitMessageProvider(
 	const commitProvider = new CommitMessageProvider(context, outputChannel)
 
 	commitProvider.activate().catch((error) => {
-		outputChannel.appendLine(t("kilocode:commitMessage.activationFailed", { error: error.message }))
+		outputChannel.appendLine(t("bluescode:commitMessage.activationFailed", { error: error.message }))
 		console.error("Commit message provider activation failed:", error)
 	})
 
-	outputChannel.appendLine(t("kilocode:commitMessage.providerRegistered"))
+	outputChannel.appendLine(t("bluescode:commitMessage.providerRegistered"))
 }

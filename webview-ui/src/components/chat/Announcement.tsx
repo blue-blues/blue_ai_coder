@@ -119,11 +119,11 @@ const DiscordLink = () => (
 
 const RedditLink = () => (
 	<VSCodeLink
-		href="https://reddit.com/r/kilocode"
+		href="https://reddit.com/r/bluescode"
 		onClick={(e) => {
 			e.preventDefault()
 			window.postMessage(
-				{ type: "action", action: "openExternal", data: { url: "https://reddit.com/r/kilocode" } },
+				{ type: "action", action: "openExternal", data: { url: "https://reddit.com/r/bluescode" } },
 				"*",
 			)
 		}}>

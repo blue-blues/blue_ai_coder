@@ -28,15 +28,15 @@ export const handleUri = async (uri: vscode.Uri) => {
 			}
 			break
 		}
-		case "/kilocode": {
+		case "/bluescode": {
 			const token = query.get("token")
 			if (token) {
-				await visibleProvider.handleKiloCodeCallback(token)
+				await visibleProvider.handleBluesCodeCallback(token)
 			}
 			break
 		}
-		// kilocode_change start
-		case "/kilocode/profile": {
+		// bluescode_change start
+		case "/bluescode/profile": {
 			await visibleProvider.postMessageToWebview({
 				type: "action",
 				action: "profileButtonClicked",
@@ -46,7 +46,7 @@ export const handleUri = async (uri: vscode.Uri) => {
 			})
 			break
 		}
-		// kilocode_change end
+		// bluescode_change end
 		case "/requesty": {
 			const code = query.get("code")
 			if (code) {

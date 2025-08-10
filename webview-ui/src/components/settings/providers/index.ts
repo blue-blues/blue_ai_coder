@@ -23,10 +23,10 @@ export { Unbound } from "./Unbound"
 export { Vertex } from "./Vertex"
 export { VSCodeLM } from "./VSCodeLM"
 export { XAI } from "./XAI"
-// kilocode_change start
+// bluescode_change start
 export { BigModel } from "./BigModel"
 export { VirtualQuotaFallbackProvider } from "./VirtualQuotaFallbackProvider"
-// kilocode_change end
+// bluescode_change end
 export { ZAi } from "./ZAi"
 export { LiteLLM } from "./LiteLLM"
 export { Fireworks } from "./Fireworks"

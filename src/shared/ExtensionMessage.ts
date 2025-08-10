@@ -15,11 +15,11 @@ import type {
 import { GitCommit } from "../utils/git"
 
 import { McpServer } from "./mcp"
-import { McpMarketplaceCatalog, McpDownloadResponse } from "./kilocode/mcp"
+import { McpMarketplaceCatalog, McpDownloadResponse } from "./bluescode/mcp"
 import { Mode } from "./modes"
 import { ModelRecord, RouterModels } from "./api"
-import { ProfileDataResponsePayload, BalanceDataResponsePayload } from "./WebviewMessage" // kilocode_change
-import { ClineRulesToggles } from "./cline-rules" // kilocode_change
+import { ProfileDataResponsePayload, BalanceDataResponsePayload } from "./WebviewMessage" // bluescode_change
+import { ClineRulesToggles } from "./cline-rules" // bluescode_change
 import type { MarketplaceItem } from "@roo-code/types"
 
 // Command interface for frontend/backend communication
@@ -95,7 +95,7 @@ export interface ExtensionMessage {
 		| "showHumanRelayDialog"
 		| "humanRelayResponse"
 		| "humanRelayCancel"
-		| "insertTextToChatArea" // kilocode_change
+		| "insertTextToChatArea" // bluescode_change
 		| "browserToolEnabled"
 		| "browserConnectionResult"
 		| "remoteBrowserEnabled"
@@ -104,54 +104,54 @@ export interface ExtensionMessage {
 		| "maxReadFileLine"
 		| "fileSearchResults"
 		| "toggleApiConfigPin"
-		| "mcpMarketplaceCatalog" // kilocode_change
-		| "mcpDownloadDetails" // kilocode_change
-		| "showSystemNotification" // kilocode_change
-		| "openInBrowser" // kilocode_change
+		| "mcpMarketplaceCatalog" // bluescode_change
+		| "mcpDownloadDetails" // bluescode_change
+		| "showSystemNotification" // bluescode_change
+		| "openInBrowser" // bluescode_change
 		| "acceptInput"
-		| "focusChatInput" // kilocode_change
+		| "focusChatInput" // bluescode_change
 		| "setHistoryPreviewCollapsed"
 		| "commandExecutionStatus"
 		| "mcpExecutionStatus"
 		| "vsCodeSetting"
-		| "profileDataResponse" // kilocode_change
-		| "balanceDataResponse" // kilocode_change
-		| "updateProfileData" // kilocode_change
+		| "profileDataResponse" // bluescode_change
+		| "balanceDataResponse" // bluescode_change
+		| "updateProfileData" // bluescode_change
 		| "authenticatedUser"
 		| "condenseTaskContextResponse"
 		| "singleRouterModelFetchResponse"
 		| "indexingStatusUpdate"
 		| "indexCleared"
 		| "codebaseIndexConfig"
-		| "rulesData" // kilocode_change
+		| "rulesData" // bluescode_change
 		| "marketplaceInstallResult"
 		| "marketplaceRemoveResult"
 		| "marketplaceData"
-		| "mermaidFixResponse" // kilocode_change
+		| "mermaidFixResponse" // bluescode_change
 		| "shareTaskSuccess"
 		| "codeIndexSettingsSaved"
 		| "codeIndexSecretStatus"
 		| "showDeleteMessageDialog"
 		| "showEditMessageDialog"
-		| "kilocodeNotificationsResponse" // kilocode_change
-		| "usageDataResponse" // kilocode_change
+		| "bluesCodeNotificationsResponse" // bluescode_change
+		| "usageDataResponse" // bluescode_change
 		| "commands"
 		| "insertTextIntoTextarea"
 	text?: string
-	payload?: ProfileDataResponsePayload | BalanceDataResponsePayload // kilocode_change: Add payload for profile and balance data
+	payload?: ProfileDataResponsePayload | BalanceDataResponsePayload // bluescode_change: Add payload for profile and balance data
 	action?:
 		| "chatButtonClicked"
 		| "mcpButtonClicked"
 		| "settingsButtonClicked"
 		| "historyButtonClicked"
 		| "promptsButtonClicked"
-		| "profileButtonClicked" // kilocode_change
+		| "profileButtonClicked" // bluescode_change
 		| "marketplaceButtonClicked"
 		| "accountButtonClicked"
 		| "didBecomeVisible"
 		| "focusInput"
 		| "switchTab"
-		| "focusChatInput" // kilocode_change
+		| "focusChatInput" // bluescode_change
 	invoke?: "newChat" | "sendMessage" | "primaryButtonClick" | "secondaryButtonClick" | "setChatBoxMessage"
 	state?: ExtensionState
 	images?: string[]
@@ -196,14 +196,14 @@ export interface ExtensionMessage {
 	promptText?: string
 	results?: { path: string; type: "file" | "folder"; label?: string }[]
 	error?: string
-	mcpMarketplaceCatalog?: McpMarketplaceCatalog // kilocode_change
-	mcpDownloadDetails?: McpDownloadResponse // kilocode_change
+	mcpMarketplaceCatalog?: McpMarketplaceCatalog // bluescode_change
+	mcpDownloadDetails?: McpDownloadResponse // bluescode_change
 	notificationOptions?: {
 		title?: string
 		subtitle?: string
 		message: string
-	} // kilocode_change
-	url?: string // kilocode_change
+	} // bluescode_change
+	url?: string // bluescode_change
 	setting?: string
 	value?: any
 	hasContent?: boolean // For checkRulesDirectoryResult
@@ -211,7 +211,7 @@ export interface ExtensionMessage {
 	userInfo?: CloudUserInfo
 	organizationAllowList?: OrganizationAllowList
 	tab?: string
-	// kilocode_change: Rules data
+	// bluescode_change: Rules data
 	globalRules?: ClineRulesToggles
 	localRules?: ClineRulesToggles
 	globalWorkflows?: ClineRulesToggles
@@ -219,14 +219,14 @@ export interface ExtensionMessage {
 	marketplaceItems?: MarketplaceItem[]
 	organizationMcps?: MarketplaceItem[]
 	marketplaceInstalledMetadata?: MarketplaceInstalledMetadata
-	fixedCode?: string | null // For mermaidFixResponse // kilocode_change
+	fixedCode?: string | null // For mermaidFixResponse // bluescode_change
 	errors?: string[]
 	visibility?: ShareVisibility
 	rulesFolderPath?: string
 	settings?: any
 	messageTs?: number
 	context?: string
-	// kilocode_change start: Notifications
+	// bluescode_change start: Notifications
 	notifications?: Array<{
 		id: string
 		title: string
@@ -236,7 +236,7 @@ export interface ExtensionMessage {
 			actionURL: string
 		}
 	}>
-	// kilocode_change end
+	// bluescode_change end
 	commands?: Command[]
 }
 
@@ -269,7 +269,7 @@ export type ExtensionState = Pick<
 	| "allowedMaxCost"
 	| "browserToolEnabled"
 	| "browserViewportSize"
-	| "showAutoApproveMenu" // kilocode_change
+	| "showAutoApproveMenu" // bluescode_change
 	| "screenshotQuality"
 	| "remoteBrowserEnabled"
 	| "remoteBrowserHost"
@@ -283,7 +283,7 @@ export type ExtensionState = Pick<
 	// | "showRooIgnoredFiles" // Optional in GlobalSettings, required here.
 	// | "maxReadFileLine" // Optional in GlobalSettings, required here.
 	| "maxConcurrentFileReads" // Optional in GlobalSettings, required here.
-	| "allowVeryLargeReads" // kilocode_change
+	| "allowVeryLargeReads" // bluescode_change
 	| "terminalOutputLineLimit"
 	| "terminalOutputCharacterLimit"
 	| "terminalShellIntegrationTimeout"
@@ -309,20 +309,20 @@ export type ExtensionState = Pick<
 	| "customModePrompts"
 	| "customSupportPrompts"
 	| "enhancementApiConfigId"
-	| "localWorkflowToggles" // kilocode_change
-	| "globalRulesToggles" // kilocode_change
-	| "localRulesToggles" // kilocode_change
-	| "globalWorkflowToggles" // kilocode_change
-	| "commitMessageApiConfigId" // kilocode_change
-	| "terminalCommandApiConfigId" // kilocode_change
-	| "dismissedNotificationIds" // kilocode_change
-	| "ghostServiceSettings" // kilocode_change
+	| "localWorkflowToggles" // bluescode_change
+	| "globalRulesToggles" // bluescode_change
+	| "localRulesToggles" // bluescode_change
+	| "globalWorkflowToggles" // bluescode_change
+	| "commitMessageApiConfigId" // bluescode_change
+	| "terminalCommandApiConfigId" // bluescode_change
+	| "dismissedNotificationIds" // bluescode_change
+	| "ghostServiceSettings" // bluescode_change
 	| "condensingApiConfigId"
 	| "customCondensingPrompt"
 	| "codebaseIndexConfig"
 	| "codebaseIndexModels"
 	| "profileThresholds"
-	| "systemNotificationsEnabled" // kilocode_change
+	| "systemNotificationsEnabled" // bluescode_change
 	| "includeDiagnosticMessages"
 	| "maxDiagnosticMessages"
 > & {
@@ -331,7 +331,7 @@ export type ExtensionState = Pick<
 	currentTaskItem?: HistoryItem
 	apiConfiguration?: ProviderSettings
 	uriScheme?: string
-	uiKind?: string // kilocode_change
+	uiKind?: string // bluescode_change
 	shouldShowAnnouncement: boolean
 
 	taskHistory: HistoryItem[]
@@ -342,9 +342,9 @@ export type ExtensionState = Pick<
 	enableCheckpoints: boolean
 	maxOpenTabsContext: number // Maximum number of VSCode open tabs to include in context (0-500)
 	maxWorkspaceFiles: number // Maximum number of files to include in current working directory details (0-500)
-	showRooIgnoredFiles: boolean // Whether to show .kilocodeignore'd files in listings
+	showRooIgnoredFiles: boolean // Whether to show .bluescodeignore'd files in listings
 	maxReadFileLine: number // Maximum number of lines to read from a file before truncating
-	showAutoApproveMenu: boolean // kilocode_change: Whether to show the auto-approve menu in the chat view
+	showAutoApproveMenu: boolean // bluescode_change: Whether to show the auto-approve menu in the chat view
 	maxImageFileSize: number // Maximum size of image files to process in MB
 	maxTotalImageSize: number // Maximum total size for all images in a single read operation in MB
 
@@ -365,7 +365,7 @@ export type ExtensionState = Pick<
 	renderContext: "sidebar" | "editor"
 	settingsImportedAt?: number
 	historyPreviewCollapsed?: boolean
-	showTaskTimeline?: boolean // kilocode_change
+	showTaskTimeline?: boolean // bluescode_change
 
 	cloudUserInfo: CloudUserInfo | null
 	cloudIsAuthenticated: boolean
@@ -481,7 +481,7 @@ export interface ClineApiReqInfo {
 	cacheWrites?: number
 	cacheReads?: number
 	cost?: number
-	usageMissing?: boolean // kilocode_change
+	usageMissing?: boolean // bluescode_change
 	cancelReason?: ClineApiReqCancelReason
 	streamingFailedMessage?: string
 	apiProtocol?: "anthropic" | "openai"

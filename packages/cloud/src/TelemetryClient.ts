@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */ /* kilocode_change this file is meant to be a stub */
-import { TelemetryEventName, type TelemetryEvent, type ClineMessage } from "@roo-code/types" // kilocode_change removed rooCodeTelemetryEventSchema because unused
+/* eslint-disable @typescript-eslint/no-unused-vars */ /* bluescode_change this file is meant to be a stub */
+import { TelemetryEventName, type TelemetryEvent, type ClineMessage } from "@roo-code/types" // bluescode_change removed rooCodeTelemetryEventSchema because unused
 import { BaseTelemetryClient } from "@roo-code/telemetry"
 
-// import { getRooCodeApiUrl } from "./config" // kilocode_change
+// import { getRooCodeApiUrl } from "./config" // bluescode_change
 import type { AuthService } from "./auth"
 import type { SettingsService } from "./SettingsService"
 
@@ -21,7 +21,7 @@ export class TelemetryClient extends BaseTelemetryClient {
 		)
 	}
 
-	// kilocode_change
+	// bluescode_change
 	private async fetch(path: string, options: RequestInit) {
 		if (!this.authService.isAuthenticated()) {
 			return
@@ -34,7 +34,7 @@ export class TelemetryClient extends BaseTelemetryClient {
 			return
 		}
 
-		/* kilocode_change
+		/* bluescode_change
 		const response = await fetch(`${getRooCodeApiUrl()}/api/${path}`, {
 			...options,
 			headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
@@ -49,7 +49,7 @@ export class TelemetryClient extends BaseTelemetryClient {
 	}
 
 	public override async capture(event: TelemetryEvent) {
-		/* kilocode_change
+		/* bluescode_change
 
 		if (!this.isTelemetryEnabled() || !this.isEventCapturable(event.event)) {
 			if (this.debug) {
@@ -87,7 +87,7 @@ export class TelemetryClient extends BaseTelemetryClient {
 	}
 
 	public async backfillMessages(messages: ClineMessage[], taskId: string): Promise<void> {
-		/* kilocode_change
+		/* bluescode_change
 		if (!this.authService.isAuthenticated()) {
 			if (this.debug) {
 				console.info(`[TelemetryClient#backfillMessages] Skipping: Not authenticated`)

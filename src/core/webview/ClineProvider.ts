@@ -85,13 +85,13 @@ import { webviewMessageHandler } from "./webviewMessageHandler"
 import { getNonce } from "./getNonce"
 import { getUri } from "./getUri"
 
-//kilocode_change start
-import { McpDownloadResponse, McpMarketplaceCatalog } from "../../shared/kilocode/mcp"
+//bluescode_change start
+import { McpDownloadResponse, McpMarketplaceCatalog } from "../../shared/bluescode/mcp"
 import { McpServer } from "../../shared/mcp"
 import { OpenRouterHandler } from "../../api/providers"
 import { stringifyError } from "../../shared/kilocode/errorUtils"
 import isWsl from "is-wsl"
-// kilocode_change end
+// bluescode_change end
 
 /**
  * https://github.com/microsoft/vscode-webview-ui-toolkit-samples/blob/main/default/weather-webview/src/providers/WeatherViewProvider.ts
@@ -508,7 +508,7 @@ export class ClineProvider
 
 		this.view = webviewView
 
-		// kilocode_change start: extract constant inTabMode
+		// bluescode_change start: extract constant inTabMode
 		// Set panel reference according to webview type
 		const inTabMode = "onDidChangeViewState" in webviewView
 		if (inTabMode) {
@@ -518,13 +518,13 @@ export class ClineProvider
 			// Sidebar Type
 			setPanel(webviewView, "sidebar")
 		}
-		// kilocode_change end
+		// bluescode_change end
 
 		// Initialize out-of-scope variables that need to receive persistent global state values
 		this.getState().then(
 			({
 				terminalShellIntegrationTimeout = Terminal.defaultShellIntegrationTimeout,
-				terminalShellIntegrationDisabled = true, // kilocode_change: default
+				terminalShellIntegrationDisabled = true, // bluescode_change: default
 				terminalCommandDelay = 0,
 				terminalZshClearEolMark = true,
 				terminalZshOhMy = false,
@@ -670,7 +670,7 @@ export class ClineProvider
 		}
 
 		const task = new Task({
-			context: this.context, // kilocode_change
+			context: this.context, // bluescode_change
 			provider: this,
 			apiConfiguration,
 			enableDiff,
@@ -751,7 +751,7 @@ export class ClineProvider
 		} = await this.getState()
 
 		const task = new Task({
-			context: this.context, // kilocode_change
+			context: this.context, // bluescode_change
 			provider: this,
 			apiConfiguration,
 			enableDiff,
@@ -846,7 +846,7 @@ export class ClineProvider
 			"default-src 'none'",
 			`font-src ${webview.cspSource} data:`,
 			`style-src ${webview.cspSource} 'unsafe-inline' https://* http://${localServerUrl} http://0.0.0.0:${localPort}`,
-			`img-src ${webview.cspSource} https://storage.googleapis.com https://img.clerk.com data: https://*.googleusercontent.com https://*.googleapis.com https://*.githubusercontent.com`, // kilocode_change: add https://*.googleusercontent.com and https://*.googleapis.com and https://*.githubusercontent.com
+			`img-src ${webview.cspSource} https://storage.googleapis.com https://img.clerk.com data: https://*.googleusercontent.com https://*.googleapis.com https://*.githubusercontent.com`, // bluescode_change: add https://*.googleusercontent.com and https://*.googleapis.com and https://*.githubusercontent.com
 			`media-src ${webview.cspSource}`,
 			`script-src 'unsafe-eval' ${webview.cspSource} https://* https://*.posthog.com http://${localServerUrl} http://0.0.0.0:${localPort} 'nonce-${nonce}'`,
 			`connect-src ${webview.cspSource} https://* https://*.posthog.com ws://${localServerUrl} ws://0.0.0.0:${localPort} http://${localServerUrl} http://0.0.0.0:${localPort}`,
@@ -866,7 +866,7 @@ export class ClineProvider
 						window.AUDIO_BASE_URI = "${audioUri}"
 						window.MATERIAL_ICONS_BASE_URI = "${materialIconsUri}"
 					</script>
-					<title>Kilo Code</title>
+					<title>Blues Code</title>
 				</head>
 				<body>
 					<div id="root"></div>
@@ -931,7 +931,7 @@ export class ClineProvider
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
             <meta name="theme-color" content="#000000">
-			<!-- kilocode_change: add https://*.googleusercontent.com https://*.googleapis.com https://*.githubusercontent.com to img-src, https://* to connect-src -->
+			<!-- bluescode_change: add https://*.googleusercontent.com https://*.googleapis.com https://*.githubusercontent.com to img-src, https://* to connect-src -->
             <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource} data:; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https://*.googleusercontent.com https://storage.googleapis.com https://*.githubusercontent.com https://img.clerk.com data: https://*.googleapis.com; media-src ${webview.cspSource}; script-src ${webview.cspSource} 'wasm-unsafe-eval' 'nonce-${nonce}' https://us-assets.i.posthog.com 'strict-dynamic'; connect-src ${webview.cspSource} https://* https://openrouter.ai https://api.requesty.ai https://us.i.posthog.com https://us-assets.i.posthog.com;">
             <link rel="stylesheet" type="text/css" href="${stylesUri}">
 			<link href="${codiconsUri}" rel="stylesheet" />
@@ -940,7 +940,7 @@ export class ClineProvider
 				window.AUDIO_BASE_URI = "${audioUri}"
 				window.MATERIAL_ICONS_BASE_URI = "${materialIconsUri}"
 			</script>
-            <title>Kilo Code</title>
+            <title>Blues Code</title>
           </head>
           <body>
             <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -1089,7 +1089,7 @@ export class ClineProvider
 					task.api = buildApiHandler(providerSettings)
 				}
 
-				await TelemetryService.instance.updateIdentity(providerSettings.kilocodeToken ?? "") // kilocode_change
+				await TelemetryService.instance.updateIdentity(providerSettings.bluesCodeToken ?? "") // bluescode_change
 			} else {
 				await this.updateGlobalState("listApiConfigMeta", await this.providerSettingsManager.listConfig())
 			}
@@ -1153,7 +1153,7 @@ export class ClineProvider
 		}
 
 		await this.postStateToWebview()
-		await TelemetryService.instance.updateIdentity(providerSettings.kilocodeToken ?? "") // kilocode_change
+		await TelemetryService.instance.updateIdentity(providerSettings.bluesCodeToken ?? "") // bluescode_change
 	}
 
 	// Task Management
@@ -1213,21 +1213,21 @@ export class ClineProvider
 		// Get platform-specific application data directory
 		let mcpServersDir: string
 		if (process.platform === "win32") {
-			// Windows: %APPDATA%\Kilo-Code\MCP
-			mcpServersDir = path.join(os.homedir(), "AppData", "Roaming", "Kilo-Code", "MCP")
+			// Windows: %APPDATA%\Blues-Code\MCP
+			mcpServersDir = path.join(os.homedir(), "AppData", "Roaming", "Blues-Code", "MCP")
 		} else if (process.platform === "darwin") {
-			// macOS: ~/Documents/Kilo-Code/MCP
-			mcpServersDir = path.join(os.homedir(), "Documents", "Kilo-Code", "MCP")
+			// macOS: ~/Documents/Blues-Code/MCP
+			mcpServersDir = path.join(os.homedir(), "Documents", "Blues-Code", "MCP")
 		} else {
-			// Linux: ~/.local/share/Kilo-Code/MCP
-			mcpServersDir = path.join(os.homedir(), ".local", "share", "Kilo-Code", "MCP")
+			// Linux: ~/.local/share/Blues-Code/MCP
+			mcpServersDir = path.join(os.homedir(), ".local", "share", "Blues-Code", "MCP")
 		}
 
 		try {
 			await fs.mkdir(mcpServersDir, { recursive: true })
 		} catch (error) {
 			// Fallback to a relative path if directory creation fails
-			return path.join(os.homedir(), ".kilocode", "mcp")
+			return path.join(os.homedir(), ".bluescode", "mcp")
 		}
 		return mcpServersDir
 	}
@@ -1316,23 +1316,23 @@ export class ClineProvider
 		await this.upsertProviderProfile(currentApiConfigName, newConfiguration)
 	}
 
-	// kilocode_change:
-	async handleKiloCodeCallback(token: string) {
-		const kilocode: ProviderName = "kilocode"
+	// bluescode_change:
+	async handleBluesCodeCallback(token: string) {
+		const bluescode: ProviderName = "bluescode"
 		let { apiConfiguration, currentApiConfigName } = await this.getState()
 
 		await this.upsertProviderProfile(currentApiConfigName, {
 			...apiConfiguration,
-			apiProvider: "kilocode",
-			kilocodeToken: token,
+			apiProvider: "bluescode",
+			bluesCodeToken: token,
 		})
 
-		vscode.window.showInformationMessage("Kilo Code successfully configured!")
+		vscode.window.showInformationMessage("Blues Code successfully configured!")
 
 		if (this.getCurrentCline()) {
 			this.getCurrentCline()!.api = buildApiHandler({
-				apiProvider: kilocode,
-				kilocodeToken: token,
+				apiProvider: bluescode,
+				bluesCodeToken: token,
 			})
 		}
 	}
@@ -1370,16 +1370,16 @@ export class ClineProvider
 			} else {
 				vscode.window.showErrorMessage(
 					`Task file not found for task ID: ${id} (file ${apiConversationHistoryFilePath})`,
-				) //kilocode_change show extra debugging information to debug task not found issues
+				) //bluescode_change show extra debugging information to debug task not found issues
 			}
 		} else {
-			vscode.window.showErrorMessage(`Task with ID: ${id} not found in history.`) // kilocode_change show extra debugging information to debug task not found issues
+			vscode.window.showErrorMessage(`Task with ID: ${id} not found in history.`) // bluescode_change show extra debugging information to debug task not found issues
 		}
 
 		// if we tried to get a task that doesn't exist, remove it from state
 		// FIXME: this seems to happen sometimes when the json file doesnt save to disk for some reason
-		// await this.deleteTaskFromState(id) // kilocode_change disable confusing behaviour
-		await this.setTaskFileNotFound(id) // kilocode_change
+		// await this.deleteTaskFromState(id) // bluescode_change disable confusing behaviour
+		await this.setTaskFileNotFound(id) // bluescode_change
 		throw new Error("Task not found")
 	}
 
@@ -1420,14 +1420,14 @@ export class ClineProvider
 			// get the task directory full path
 			const { taskDirPath } = await this.getTaskWithId(id)
 
-			// kilocode_change start
+			// bluescode_change start
 			// Check if task is favorited
 			const history = this.getGlobalState("taskHistory") ?? []
 			const task = history.find((item) => item.id === id)
 			if (task?.isFavorited) {
 				throw new Error("Cannot delete a favorited task. Please unfavorite it first.")
 			}
-			// kilocode_change end
+			// bluescode_change end
 
 			// remove task from stack if it's the current task
 			if (id === this.getCurrentCline()?.taskId) {
@@ -1488,7 +1488,7 @@ export class ClineProvider
 		}
 	}
 
-	// kilocode_change start
+	// bluescode_change start
 	async postRulesDataToWebview() {
 		const workspacePath = this.cwd
 		if (workspacePath) {
@@ -1498,7 +1498,7 @@ export class ClineProvider
 			})
 		}
 	}
-	// kilocode_change end
+	// bluescode_change end
 
 	/**
 	 * Fetches marketplace dataon demand to avoid blocking main state updates
@@ -1653,7 +1653,7 @@ export class ClineProvider
 			terminalZshP10k,
 			terminalZdotdir,
 			fuzzyMatchThreshold,
-			// mcpEnabled,  // kilocode_change: always true
+			// mcpEnabled,  // bluescode_change: always true
 			enableMcpServerCreation,
 			alwaysApproveResubmit,
 			requestDelaySeconds,
@@ -1664,8 +1664,8 @@ export class ClineProvider
 			customModePrompts,
 			customSupportPrompts,
 			enhancementApiConfigId,
-			commitMessageApiConfigId, // kilocode_change
-			terminalCommandApiConfigId, // kilocode_change
+			commitMessageApiConfigId, // bluescode_change
+			terminalCommandApiConfigId, // bluescode_change
 			autoApprovalEnabled,
 			customModes,
 			experiments,
@@ -1675,8 +1675,8 @@ export class ClineProvider
 			telemetrySetting,
 			showRooIgnoredFiles,
 			language,
-			showAutoApproveMenu, // kilocode_change
-			showTaskTimeline, // kilocode_change
+			showAutoApproveMenu, // bluescode_change
+			showTaskTimeline, // bluescode_change
 			maxReadFileLine,
 			maxImageFileSize,
 			maxTotalImageSize,
@@ -1688,15 +1688,15 @@ export class ClineProvider
 			organizationAllowList,
 			organizationSettingsVersion,
 			maxConcurrentFileReads,
-			allowVeryLargeReads, // kilocode_change
-			ghostServiceSettings, // kilocode_changes
+			allowVeryLargeReads, // bluescode_change
+			ghostServiceSettings, // bluescode_changes
 			condensingApiConfigId,
 			customCondensingPrompt,
 			codebaseIndexConfig,
 			codebaseIndexModels,
 			profileThresholds,
-			systemNotificationsEnabled, // kilocode_change
-			dismissedNotificationIds, // kilocode_change
+			systemNotificationsEnabled, // bluescode_change
+			dismissedNotificationIds, // bluescode_change
 			alwaysAllowFollowupQuestions,
 			followupAutoApproveTimeoutMs,
 			includeDiagnosticMessages,
@@ -1704,7 +1704,7 @@ export class ClineProvider
 			includeTaskHistoryInEnhance,
 		} = await this.getState()
 
-		const telemetryKey = process.env.KILOCODE_POSTHOG_API_KEY
+		const telemetryKey = process.env.BLUESCODE_POSTHOG_API_KEY
 		const machineId = vscode.env.machineId
 
 		const mergedAllowedCommands = this.mergeAllowedCommands(allowedCommands)
@@ -1735,7 +1735,7 @@ export class ClineProvider
 			autoCondenseContext: autoCondenseContext ?? true,
 			autoCondenseContextPercent: autoCondenseContextPercent ?? 100,
 			uriScheme: vscode.env.uriScheme,
-			uiKind: vscode.UIKind[vscode.env.uiKind], // kilocode_change
+			uiKind: vscode.UIKind[vscode.env.uiKind], // bluescode_change
 			currentTaskItem: this.getCurrentCline()?.taskId
 				? (taskHistory || []).find((item: HistoryItem) => item.id === this.getCurrentCline()?.taskId)
 				: undefined,
@@ -1748,7 +1748,7 @@ export class ClineProvider
 			ttsSpeed: ttsSpeed ?? 1.0,
 			diffEnabled: diffEnabled ?? true,
 			enableCheckpoints: enableCheckpoints ?? true,
-			shouldShowAnnouncement: false, // kilocode_change
+			shouldShowAnnouncement: false, // bluescode_change
 			allowedCommands: mergedAllowedCommands,
 			deniedCommands: mergedDeniedCommands,
 			soundVolume: soundVolume ?? 0.5,
@@ -1761,7 +1761,7 @@ export class ClineProvider
 			terminalOutputLineLimit: terminalOutputLineLimit ?? 500,
 			terminalOutputCharacterLimit: terminalOutputCharacterLimit ?? DEFAULT_TERMINAL_OUTPUT_CHARACTER_LIMIT,
 			terminalShellIntegrationTimeout: terminalShellIntegrationTimeout ?? Terminal.defaultShellIntegrationTimeout,
-			terminalShellIntegrationDisabled: terminalShellIntegrationDisabled ?? true, // kilocode_change: default
+			terminalShellIntegrationDisabled: terminalShellIntegrationDisabled ?? true, // bluescode_change: default
 			terminalCommandDelay: terminalCommandDelay ?? 0,
 			terminalPowershellCounter: terminalPowershellCounter ?? false,
 			terminalZshClearEolMark: terminalZshClearEolMark ?? true,
@@ -1769,7 +1769,7 @@ export class ClineProvider
 			terminalZshP10k: terminalZshP10k ?? false,
 			terminalZdotdir: terminalZdotdir ?? false,
 			fuzzyMatchThreshold: fuzzyMatchThreshold ?? 1.0,
-			mcpEnabled: true, // kilocode_change: always true
+			mcpEnabled: true, // bluescode_change: always true
 			enableMcpServerCreation: enableMcpServerCreation ?? true,
 			alwaysApproveResubmit: alwaysApproveResubmit ?? false,
 			requestDelaySeconds: requestDelaySeconds ?? 10,
@@ -1780,8 +1780,8 @@ export class ClineProvider
 			customModePrompts: customModePrompts ?? {},
 			customSupportPrompts: customSupportPrompts ?? {},
 			enhancementApiConfigId,
-			commitMessageApiConfigId, // kilocode_change
-			terminalCommandApiConfigId, // kilocode_change
+			commitMessageApiConfigId, // bluescode_change
+			terminalCommandApiConfigId, // bluescode_change
 			autoApprovalEnabled: autoApprovalEnabled ?? true,
 			customModes,
 			experiments: experiments ?? experimentDefault,
@@ -1794,15 +1794,15 @@ export class ClineProvider
 			telemetryKey,
 			machineId,
 			showRooIgnoredFiles: showRooIgnoredFiles ?? true,
-			showAutoApproveMenu: showAutoApproveMenu ?? false, // kilocode_change
-			showTaskTimeline: showTaskTimeline ?? true, // kilocode_change
-			language, // kilocode_change
+			showAutoApproveMenu: showAutoApproveMenu ?? false, // bluescode_change
+			showTaskTimeline: showTaskTimeline ?? true, // bluescode_change
+			language, // bluescode_change
 			renderContext: this.renderContext,
 			maxReadFileLine: maxReadFileLine ?? -1,
 			maxImageFileSize: maxImageFileSize ?? 5,
 			maxTotalImageSize: maxTotalImageSize ?? 20,
 			maxConcurrentFileReads: maxConcurrentFileReads ?? 5,
-			allowVeryLargeReads: allowVeryLargeReads ?? false, // kilocode_change
+			allowVeryLargeReads: allowVeryLargeReads ?? false, // bluescode_change
 			settingsImportedAt: this.settingsImportedAt,
 			terminalCompressProgressBar: terminalCompressProgressBar ?? true,
 			hasSystemPromptOverride,
@@ -1811,7 +1811,7 @@ export class ClineProvider
 			cloudIsAuthenticated: cloudIsAuthenticated ?? false,
 			sharingEnabled: sharingEnabled ?? false,
 			organizationAllowList,
-			ghostServiceSettings: ghostServiceSettings ?? {}, // kilocode_change
+			ghostServiceSettings: ghostServiceSettings ?? {}, // bluescode_change
 			organizationSettingsVersion,
 			condensingApiConfigId,
 			customCondensingPrompt,
@@ -1831,8 +1831,8 @@ export class ClineProvider
 			profileThresholds: profileThresholds ?? {},
 			cloudApiUrl: getRooCodeApiUrl(),
 			hasOpenedModeSelector: this.getGlobalState("hasOpenedModeSelector") ?? false,
-			systemNotificationsEnabled: systemNotificationsEnabled ?? false, // kilocode_change
-			dismissedNotificationIds: dismissedNotificationIds ?? [], // kilocode_change
+			systemNotificationsEnabled: systemNotificationsEnabled ?? false, // bluescode_change
+			dismissedNotificationIds: dismissedNotificationIds ?? [], // bluescode_change
 			alwaysAllowFollowupQuestions: alwaysAllowFollowupQuestions ?? false,
 			followupAutoApproveTimeoutMs: followupAutoApproveTimeoutMs ?? 60000,
 			includeDiagnosticMessages: includeDiagnosticMessages ?? true,
@@ -1852,7 +1852,7 @@ export class ClineProvider
 		const customModes = await this.customModesManager.getCustomModes()
 
 		// Determine apiProvider with the same logic as before.
-		const apiProvider: ProviderName = stateValues.apiProvider ? stateValues.apiProvider : "kilocode" // kilocode_change: fall back to kilocode
+		const apiProvider: ProviderName = stateValues.apiProvider ? stateValues.apiProvider : "bluescode" // bluescode_change: fall back to bluescode
 
 		// Build the apiConfiguration object combining state values and secrets.
 		const providerSettings = this.contextProxy.getProviderSettings()
@@ -1932,7 +1932,7 @@ export class ClineProvider
 			alwaysAllowModeSwitch: stateValues.alwaysAllowModeSwitch ?? true,
 			alwaysAllowSubtasks: stateValues.alwaysAllowSubtasks ?? true,
 			alwaysAllowFollowupQuestions: stateValues.alwaysAllowFollowupQuestions ?? false,
-			alwaysAllowUpdateTodoList: stateValues.alwaysAllowUpdateTodoList ?? true, // kilocode_change
+			alwaysAllowUpdateTodoList: stateValues.alwaysAllowUpdateTodoList ?? true, // bluescode_change
 			followupAutoApproveTimeoutMs: stateValues.followupAutoApproveTimeoutMs ?? 60000,
 			diagnosticsEnabled: stateValues.diagnosticsEnabled ?? true,
 			allowedMaxRequests: stateValues.allowedMaxRequests,
@@ -1960,7 +1960,7 @@ export class ClineProvider
 				stateValues.terminalOutputCharacterLimit ?? DEFAULT_TERMINAL_OUTPUT_CHARACTER_LIMIT,
 			terminalShellIntegrationTimeout:
 				stateValues.terminalShellIntegrationTimeout ?? Terminal.defaultShellIntegrationTimeout,
-			terminalShellIntegrationDisabled: stateValues.terminalShellIntegrationDisabled ?? true, // kilocode_change: default
+			terminalShellIntegrationDisabled: stateValues.terminalShellIntegrationDisabled ?? true, // bluescode_change: default
 			terminalCommandDelay: stateValues.terminalCommandDelay ?? 0,
 			terminalPowershellCounter: stateValues.terminalPowershellCounter ?? false,
 			terminalZshClearEolMark: stateValues.terminalZshClearEolMark ?? true,
@@ -1970,7 +1970,7 @@ export class ClineProvider
 			terminalCompressProgressBar: stateValues.terminalCompressProgressBar ?? true,
 			mode: stateValues.mode ?? defaultModeSlug,
 			language: stateValues.language ?? formatLanguage(vscode.env.language),
-			mcpEnabled: true, // kilocode_change: always true
+			mcpEnabled: true, // bluescode_change: always true
 			enableMcpServerCreation: stateValues.enableMcpServerCreation ?? true,
 			alwaysApproveResubmit: stateValues.alwaysApproveResubmit ?? false,
 			requestDelaySeconds: Math.max(5, stateValues.requestDelaySeconds ?? 10),
@@ -1981,9 +1981,9 @@ export class ClineProvider
 			customModePrompts: stateValues.customModePrompts ?? {},
 			customSupportPrompts: stateValues.customSupportPrompts ?? {},
 			enhancementApiConfigId: stateValues.enhancementApiConfigId,
-			commitMessageApiConfigId: stateValues.commitMessageApiConfigId, // kilocode_change
-			terminalCommandApiConfigId: stateValues.terminalCommandApiConfigId, // kilocode_change
-			ghostServiceSettings: stateValues.ghostServiceSettings ?? {}, // kilocode_change
+			commitMessageApiConfigId: stateValues.commitMessageApiConfigId, // bluescode_change
+			terminalCommandApiConfigId: stateValues.terminalCommandApiConfigId, // bluescode_change
+			ghostServiceSettings: stateValues.ghostServiceSettings ?? {}, // bluescode_change
 			experiments: stateValues.experiments ?? experimentDefault,
 			autoApprovalEnabled: stateValues.autoApprovalEnabled ?? true,
 			customModes,
@@ -1993,15 +1993,15 @@ export class ClineProvider
 			browserToolEnabled: stateValues.browserToolEnabled ?? true,
 			telemetrySetting: stateValues.telemetrySetting || "unset",
 			showRooIgnoredFiles: stateValues.showRooIgnoredFiles ?? true,
-			showAutoApproveMenu: stateValues.showAutoApproveMenu ?? false, // kilocode_change
-			showTaskTimeline: stateValues.showTaskTimeline ?? true, // kilocode_change
+			showAutoApproveMenu: stateValues.showAutoApproveMenu ?? false, // bluescode_change
+			showTaskTimeline: stateValues.showTaskTimeline ?? true, // bluescode_change
 			maxReadFileLine: stateValues.maxReadFileLine ?? -1,
 			maxImageFileSize: stateValues.maxImageFileSize ?? 5,
 			maxTotalImageSize: stateValues.maxTotalImageSize ?? 20,
 			maxConcurrentFileReads: stateValues.maxConcurrentFileReads ?? 5,
-			allowVeryLargeReads: stateValues.allowVeryLargeReads ?? false, // kilocode_change
-			systemNotificationsEnabled: stateValues.systemNotificationsEnabled ?? true, // kilocode_change
-			dismissedNotificationIds: stateValues.dismissedNotificationIds ?? [], // kilocode_change
+			allowVeryLargeReads: stateValues.allowVeryLargeReads ?? false, // bluescode_change
+			systemNotificationsEnabled: stateValues.systemNotificationsEnabled ?? true, // bluescode_change
+			dismissedNotificationIds: stateValues.dismissedNotificationIds ?? [], // bluescode_change
 			historyPreviewCollapsed: stateValues.historyPreviewCollapsed ?? false,
 			cloudUserInfo,
 			cloudIsAuthenticated,
@@ -2097,12 +2097,12 @@ export class ClineProvider
 			return
 		}
 
-		// Logout from Kilo Code provider before resetting (same approach as ProfileView logout)
+		// Logout from Blues Code provider before resetting (same approach as ProfileView logout)
 		const { apiConfiguration, currentApiConfigName } = await this.getState()
-		if (apiConfiguration.kilocodeToken) {
+		if (apiConfiguration.bluesCodeToken) {
 			await this.upsertProviderProfile(currentApiConfigName, {
 				...apiConfiguration,
-				kilocodeToken: "",
+				bluesCodeToken: "",
 			})
 		}
 
@@ -2165,7 +2165,7 @@ export class ClineProvider
 			mode,
 			apiConfiguration,
 			language,
-			experiments, // kilocode_change
+			experiments, // bluescode_change
 		} = await this.getState()
 		const task = this.getCurrentCline()
 
@@ -2186,7 +2186,7 @@ export class ClineProvider
 		// Get git repository information
 		const gitInfo = await getWorkspaceGitInfo()
 
-		// kilocode_change start
+		// bluescode_change start
 		async function getModelId() {
 			try {
 				if (task?.api instanceof OpenRouterHandler) {
@@ -2225,7 +2225,7 @@ export class ClineProvider
 				}
 			}
 		}
-		// kilocode_change end
+		// bluescode_change end
 
 		// Calculate todo list statistics
 		const todoList = task?.todoList
@@ -2245,16 +2245,16 @@ export class ClineProvider
 			appName: packageJSON?.name ?? Package.name,
 			appVersion: packageJSON?.version ?? Package.version,
 			vscodeVersion: vscode.version,
-			platform: isWsl ? "wsl" /* kilocode_change */ : process.platform,
+			platform: isWsl ? "wsl" /* bluescode_change */ : process.platform,
 			editorName: vscode.env.appName,
 			language,
 			mode,
 			apiProvider: apiConfiguration?.apiProvider,
-			// kilocode_change start
+			// bluescode_change start
 			...(await getModelId()),
 			...getMemory(),
 			...getFastApply(),
-			// kilocode_change end
+			// bluescode_change end
 			diffStrategy: task?.diffStrategy?.getName(),
 			isSubtask: task ? !!task.parentTask : undefined,
 			cloudIsAuthenticated,
@@ -2263,7 +2263,7 @@ export class ClineProvider
 		}
 	}
 
-	// kilocode_change:
+	// bluescode_change:
 	// MCP Marketplace
 	private async fetchMcpMarketplaceFromApi(silent: boolean = false): Promise<McpMarketplaceCatalog | undefined> {
 		try {
@@ -2431,9 +2431,9 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 			})
 		}
 	}
-	// end kilocode_change
+	// end bluescode_change
 
-	// kilocode_change start
+	// bluescode_change start
 	// Add new methods for favorite functionality
 	async toggleTaskFavorite(id: string) {
 		const history = this.getGlobalState("taskHistory") ?? []
@@ -2478,7 +2478,7 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 		await this.postStateToWebview()
 	}
 
-	// kilocode_change end
+	// bluescode_change end
 	/**
 	 * Gets the CodeIndexManager for the current active workspace
 	 * @returns CodeIndexManager instance for the current workspace or the default one

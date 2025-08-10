@@ -41,8 +41,8 @@ import {
 	CodeActionProvider,
 } from "./activate"
 import { initializeI18n } from "./i18n"
-import { registerGhostProvider } from "./services/ghost" // kilocode_change
-import { TerminalWelcomeService } from "./services/terminal-welcome/TerminalWelcomeService" // kilocode_change
+import { registerGhostProvider } from "./services/ghost" // bluescode_change
+import { TerminalWelcomeService } from "./services/terminal-welcome/TerminalWelcomeService" // bluescode_change
 
 /**
  * Built using https://github.com/microsoft/vscode-webview-ui-toolkit
@@ -59,7 +59,7 @@ let extensionContext: vscode.ExtensionContext
 // Your extension is activated the very first time the command is executed.
 export async function activate(context: vscode.ExtensionContext) {
 	extensionContext = context
-	outputChannel = vscode.window.createOutputChannel("Kilo-Code")
+	outputChannel = vscode.window.createOutputChannel("Blues-Code")
 	context.subscriptions.push(outputChannel)
 	outputChannel.appendLine(`${Package.name} extension activated - ${JSON.stringify(Package)}`)
 
@@ -93,7 +93,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	const mdmService = await MdmService.createInstance(cloudLogger)
 
 	// Initialize i18n for internationalization support
-	initializeI18n(context.globalState.get("language") ?? "en-US") // kilocode_change
+	initializeI18n(context.globalState.get("language") ?? "en-US") // bluescode_change
 
 	// Initialize terminal shell execution handlers.
 	TerminalRegistry.initialize()
@@ -106,11 +106,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		context.globalState.update("allowedCommands", defaultCommands)
 	}
 
-	// kilocode_change start
+	// bluescode_change start
 	if (!context.globalState.get("firstInstallCompleted")) {
 		context.globalState.update("telemetrySetting", "enabled")
 	}
-	// kilocode_change end
+	// bluescode_change end
 
 	const contextProxy = await ContextProxy.getInstance(context)
 
@@ -142,19 +142,19 @@ export async function activate(context: vscode.ExtensionContext) {
 		}),
 	)
 
-	// kilocode_change start
+	// bluescode_change start
 	if (!context.globalState.get("firstInstallCompleted")) {
-		outputChannel.appendLine("First installation detected, opening Kilo Code sidebar!")
+		outputChannel.appendLine("First installation detected, opening Blues Code sidebar!")
 		try {
-			await vscode.commands.executeCommand("kilo-code.SidebarProvider.focus")
-
-			outputChannel.appendLine("Opening Kilo Code walkthrough")
+			await vscode.commands.executeCommand("blues-code.SidebarProvider.focus")
+	
+			outputChannel.appendLine("Opening Blues Code walkthrough")
 
 			// this can crash, see:
 			// https://discord.com/channels/1349288496988160052/1395865796026040470
 			await vscode.commands.executeCommand(
 				"workbench.action.openWalkthrough",
-				"kilocode.kilo-code#kiloCodeWalkthrough",
+				"bluescode.blues-code#bluesCodeWalkthrough",
 				false,
 			)
 		} catch (error) {
@@ -163,7 +163,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			context.globalState.update("firstInstallCompleted", true)
 		}
 	}
-	// kilocode_change end
+	// bluescode_change end
 
 	// Auto-import configuration if specified in settings
 	try {
@@ -215,16 +215,16 @@ export async function activate(context: vscode.ExtensionContext) {
 		}),
 	)
 
-	registerGhostProvider(context, provider) // kilocode_change
-	registerCommitMessageProvider(context, outputChannel) // kilocode_change
+	registerGhostProvider(context, provider) // bluescode_change
+	registerCommitMessageProvider(context, outputChannel) // bluescode_change
 	registerCodeActions(context)
 	registerTerminalActions(context)
 
-	// Allows other extensions to activate once Kilo Code is ready.
+	// Allows other extensions to activate once Blues Code is ready.
 	vscode.commands.executeCommand(`${Package.name}.activationCompleted`)
 
 	// Implements the `RooCodeAPI` interface.
-	const socketPath = process.env.KILO_IPC_SOCKET_PATH ?? process.env.ROO_CODE_IPC_SOCKET_PATH // kilocode_change
+	const socketPath = process.env.BLUES_IPC_SOCKET_PATH ?? process.env.ROO_CODE_IPC_SOCKET_PATH // bluescode_change
 	const enableLogging = typeof socketPath === "string"
 
 	// Watch the core files and automatically reload the extension host.
@@ -254,7 +254,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		})
 	}
 
-	await checkAndRunAutoLaunchingTask(context) // kilocode_change
+	await checkAndRunAutoLaunchingTask(context) // bluescode_change
 
 	return new API(outputChannel, provider, socketPath, enableLogging)
 }

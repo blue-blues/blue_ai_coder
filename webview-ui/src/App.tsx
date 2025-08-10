@@ -14,13 +14,13 @@ import { ExtensionStateContextProvider, useExtensionState } from "./context/Exte
 import ChatView, { ChatViewRef } from "./components/chat/ChatView"
 import HistoryView from "./components/history/HistoryView"
 import SettingsView, { SettingsViewRef } from "./components/settings/SettingsView"
-import WelcomeView from "./components/kilocode/Welcome/WelcomeView" // kilocode_change
-import ProfileView from "./components/kilocode/profile/ProfileView" // kilocode_change
+import WelcomeView from "./components/kilocode/Welcome/WelcomeView" // bluescode_change
+import ProfileView from "./components/kilocode/profile/ProfileView" // bluescode_change
 import McpView from "./components/mcp/McpView"
 // import { MarketplaceView } from "./components/marketplace/MarketplaceView" // kilocode_change: rendered in settings
 import ModesView from "./components/modes/ModesView"
 import { HumanRelayDialog } from "./components/human-relay/HumanRelayDialog"
-import BottomControls from "./components/kilocode/BottomControls" // kilocode_change
+import BottomControls from "./components/kilocode/BottomControls" // bluescode_change
 import { MemoryService } from "./services/MemoryService" // kilocode_change
 import { DeleteMessageDialog, EditMessageDialog } from "./components/chat/MessageModificationConfirmationDialog"
 import ErrorBoundary from "./components/ErrorBoundary"
@@ -201,7 +201,7 @@ const App = () => {
 	}, [shouldShowAnnouncement])
 
 	// kilocode_change start
-	const telemetryDistinctId = useKiloIdentity(apiConfiguration?.kilocodeToken ?? "", machineId ?? "")
+	const telemetryDistinctId = useKiloIdentity(apiConfiguration?.bluesCodeToken ?? "", machineId ?? "")
 	useEffect(() => {
 		if (didHydrateState) {
 			telemetryClient.updateTelemetryState(telemetrySetting, telemetryKey, telemetryDistinctId)

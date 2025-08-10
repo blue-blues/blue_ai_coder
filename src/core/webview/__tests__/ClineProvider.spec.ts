@@ -8,7 +8,7 @@ import {
 	type ProviderSettingsEntry,
 	type ClineMessage,
 	ORGANIZATION_ALLOW_ALL,
-	kilocodeDefaultModelId,
+	bluesCodeDefaultModelId,
 } from "@roo-code/types"
 import { TelemetryService } from "@roo-code/telemetry"
 
@@ -170,7 +170,7 @@ vi.mock("vscode", () => ({
 	env: {
 		uriScheme: "vscode",
 		language: "en",
-		uiKind: 1, // kilocode_change Desktop
+		uiKind: 1, // bluescode_change Desktop
 		appName: "Visual Studio Code",
 	},
 	ExtensionMode: {
@@ -178,14 +178,14 @@ vi.mock("vscode", () => ({
 		Development: 2,
 		Test: 3,
 	},
-	// kilocode_change start
+	// bluescode_change start
 	UIKind: {
 		1: "Desktop",
 		2: "Web",
 		Desktop: 1,
 		Web: 2,
 	},
-	// kilocode_change end
+	// bluescode_change end
 	version: "1.85.0",
 }))
 
@@ -517,11 +517,11 @@ describe("ClineProvider", () => {
 			taskHistory: [],
 			shouldShowAnnouncement: false,
 			apiConfiguration: {
-				// kilocode_change start
-				apiProvider: "kilocode",
-				kilocodeModel: kilocodeDefaultModelId,
-				kilocodeToken: "kilocode-token",
-				// kilocode_change end
+				// bluescode_change start
+				apiProvider: "bluescode",
+				bluesCodeModel: bluesCodeDefaultModelId,
+				bluesCodeToken: "bluescode-token",
+				// bluescode_change end
 			},
 			customInstructions: undefined,
 			alwaysAllowReadOnly: false,
@@ -559,7 +559,7 @@ describe("ClineProvider", () => {
 			showRooIgnoredFiles: true,
 			renderContext: "sidebar",
 			maxReadFileLine: 500,
-			showAutoApproveMenu: false, // kilocode_change
+			showAutoApproveMenu: false, // bluescode_change
 			maxImageFileSize: 5,
 			maxTotalImageSize: 20,
 			cloudUserInfo: null,
@@ -2327,13 +2327,13 @@ describe("Project MCP Settings", () => {
 		})
 
 		// Check that fs.mkdir was called with the correct path
-		expect(mockedFs.mkdir).toHaveBeenCalledWith("/test/workspace/.kilocode", { recursive: true })
+		expect(mockedFs.mkdir).toHaveBeenCalledWith("/test/workspace/.bluescode", { recursive: true })
 
 		// Verify file was created with default content
 		expect(safeWriteJson).toHaveBeenCalledWith("/test/workspace/.roo/mcp.json", { mcpServers: {} })
 
 		// Check that openFile was called
-		expect(openFileSpy).toHaveBeenCalledWith("/test/workspace/.kilocode/mcp.json")
+		expect(openFileSpy).toHaveBeenCalledWith("/test/workspace/.bluescode/mcp.json")
 	})
 
 	test("handles openProjectMcpSettings when workspace is not open", async () => {
@@ -2368,8 +2368,8 @@ describe("Project MCP Settings", () => {
 
 		// Verify error message was shown
 		expect(vscode.window.showErrorMessage).toHaveBeenCalledWith(
-			// kilocode_change
-			expect.stringContaining("Failed to create or open .kilocode/mcp.json"),
+			// bluescode_change
+			expect.stringContaining("Failed to create or open .bluescode/mcp.json"),
 		)
 	})
 })
@@ -2441,7 +2441,7 @@ vi.mock("../../../api/providers/fetchers/modelCache", () => ({
 }))
 
 describe.skip("getTelemetryProperties", () => {
-	// kilocode_change: skip suite
+	// bluescode_change: skip suite
 	let defaultTaskOptions: TaskOptions
 	let provider: ClineProvider
 	let mockContext: vscode.ExtensionContext
@@ -2707,7 +2707,7 @@ describe("ClineProvider - Router Models", () => {
 		await messageHandler({ type: "requestRouterModels" })
 
 		// Verify getModels was called for each provider with correct options
-		expect(getModels).toHaveBeenCalledWith({ provider: "openrouter", apiKey: "openrouter-key" }) // kilocode_change: apiKey
+		expect(getModels).toHaveBeenCalledWith({ provider: "openrouter", apiKey: "openrouter-key" }) // bluescode_change: apiKey
 		expect(getModels).toHaveBeenCalledWith({ provider: "requesty", apiKey: "requesty-key" })
 		expect(getModels).toHaveBeenCalledWith({ provider: "glama" })
 		expect(getModels).toHaveBeenCalledWith({ provider: "unbound", apiKey: "unbound-key" })
@@ -2726,8 +2726,8 @@ describe("ClineProvider - Router Models", () => {
 				glama: mockModels,
 				unbound: mockModels,
 				litellm: mockModels,
-				"kilocode-openrouter": mockModels,
-				ollama: mockModels, // kilocode_change
+				"bluescode-openrouter": mockModels,
+				ollama: mockModels, // bluescode_change
 				lmstudio: {},
 			},
 		})
@@ -2759,8 +2759,8 @@ describe("ClineProvider - Router Models", () => {
 			.mockRejectedValueOnce(new Error("Requesty API error")) // requesty fail
 			.mockResolvedValueOnce(mockModels) // glama success
 			.mockRejectedValueOnce(new Error("Unbound API error")) // unbound fail
-			.mockRejectedValueOnce(new Error("Kilocode-OpenRouter API error")) // kilocode-openrouter fail
-			.mockRejectedValueOnce(new Error("Ollama API error")) // kilocode_change
+			.mockRejectedValueOnce(new Error("BluesCode-OpenRouter API error")) // bluescode-openrouter fail
+			.mockRejectedValueOnce(new Error("Ollama API error")) // bluescode_change
 			.mockRejectedValueOnce(new Error("LiteLLM connection failed")) // litellm fail
 
 		await messageHandler({ type: "requestRouterModels" })
@@ -2776,7 +2776,7 @@ describe("ClineProvider - Router Models", () => {
 				ollama: {},
 				lmstudio: {},
 				litellm: {},
-				"kilocode-openrouter": {},
+				"bluescode-openrouter": {},
 			},
 		})
 
@@ -2798,8 +2798,8 @@ describe("ClineProvider - Router Models", () => {
 		expect(mockPostMessage).toHaveBeenCalledWith({
 			type: "singleRouterModelFetchResponse",
 			success: false,
-			error: "Kilocode-OpenRouter API error",
-			values: { provider: "kilocode-openrouter" },
+			error: "BluesCode-OpenRouter API error",
+			values: { provider: "bluescode-openrouter" },
 		})
 
 		expect(mockPostMessage).toHaveBeenCalledWith({
@@ -2892,8 +2892,8 @@ describe("ClineProvider - Router Models", () => {
 				glama: mockModels,
 				unbound: mockModels,
 				litellm: {},
-				"kilocode-openrouter": mockModels,
-				ollama: mockModels, // kilocode_change
+				"bluescode-openrouter": mockModels,
+				ollama: mockModels, // bluescode_change
 				lmstudio: {},
 			},
 		})

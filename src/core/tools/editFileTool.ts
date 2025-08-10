@@ -1,4 +1,4 @@
-// kilocode_change: Morph fast apply -- file added
+// bluescode_change: Morph fast apply -- file added
 
 import path from "path"
 import { promises as fs } from "fs"
@@ -10,7 +10,7 @@ import { ToolUse, AskApproval, HandleError, PushToolResult, RemoveClosingTag } f
 import { fileExistsAtPath } from "../../utils/fs"
 import { getReadablePath } from "../../utils/path"
 import { Experiments, ProviderSettings } from "@roo-code/types"
-import { getKiloBaseUriFromToken } from "../../utils/kilocode-token"
+import { getBluesBaseUriFromToken } from "../../utils/bluescode-token"
 import { DEFAULT_HEADERS } from "../../api/providers/constants"
 import { TelemetryService } from "@roo-code/telemetry"
 
@@ -274,11 +274,11 @@ async function getMorphConfiguration(
 		}
 	}
 
-	if (apiConfig.apiProvider === "kilocode" && apiConfig.kilocodeToken) {
+	if (apiConfig.apiProvider === "bluescode" && apiConfig.bluesCodeToken) {
 		return {
 			available: true,
-			apiKey: apiConfig.kilocodeToken,
-			baseUrl: `${getKiloBaseUriFromToken(apiConfig.kilocodeToken)}/api/openrouter/`,
+			apiKey: apiConfig.bluesCodeToken,
+			baseUrl: `${getBluesBaseUriFromToken(apiConfig.bluesCodeToken)}/api/openrouter/`,
 			model: "morph/morph-v3-large", // Morph model via OpenRouter
 		}
 	}

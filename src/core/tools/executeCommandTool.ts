@@ -149,7 +149,7 @@ export async function executeCommand(
 		executionId,
 		command,
 		customCwd,
-		terminalShellIntegrationDisabled = true, // kilocode_change: default
+		terminalShellIntegrationDisabled = true, // bluescode_change: default
 		terminalOutputLineLimit = 500,
 		terminalOutputCharacterLimit = DEFAULT_TERMINAL_OUTPUT_CHARACTER_LIMIT,
 		commandExecutionTimeout = 0,

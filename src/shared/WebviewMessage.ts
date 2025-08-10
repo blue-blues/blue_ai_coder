@@ -17,7 +17,7 @@ export type ClineAskResponse =
 	| "noButtonClicked"
 	| "messageResponse"
 	| "objectResponse"
-	| "retry_clicked" // kilocode_change: Added retry_clicked for payment required dialog
+	| "retry_clicked" // bluescode_change: Added retry_clicked for payment required dialog
 
 export type PromptMode = Mode | "enhance"
 
@@ -151,9 +151,9 @@ export interface WebviewMessage {
 		| "copySystemPrompt"
 		| "systemPrompt"
 		| "enhancementApiConfigId"
-		| "commitMessageApiConfigId" // kilocode_change
-		| "terminalCommandApiConfigId" // kilocode_change
-		| "ghostServiceSettings" // kilocode_change
+		| "commitMessageApiConfigId" // bluescode_change
+		| "terminalCommandApiConfigId" // bluescode_change
+		| "ghostServiceSettings" // bluescode_change
 		| "includeTaskHistoryInEnhance"
 		| "updateExperimental"
 		| "autoApprovalEnabled"
@@ -168,7 +168,7 @@ export interface WebviewMessage {
 		| "maxWorkspaceFiles"
 		| "humanRelayResponse"
 		| "humanRelayCancel"
-		| "insertTextToChatArea" // kilocode_change
+		| "insertTextToChatArea" // bluescode_change
 		| "browserToolEnabled"
 		| "codebaseIndexEnabled"
 		| "telemetrySetting"
@@ -181,33 +181,33 @@ export interface WebviewMessage {
 		| "maxImageFileSize"
 		| "maxTotalImageSize"
 		| "maxConcurrentFileReads"
-		| "allowVeryLargeReads" // kilocode_change
+		| "allowVeryLargeReads" // bluescode_change
 		| "includeDiagnosticMessages"
 		| "maxDiagnosticMessages"
 		| "searchFiles"
 		| "setHistoryPreviewCollapsed"
-		| "showFeedbackOptions" // kilocode_change
+		| "showFeedbackOptions" // bluescode_change
 		| "toggleApiConfigPin"
-		| "fetchMcpMarketplace" // kilocode_change
-		| "silentlyRefreshMcpMarketplace" // kilocode_change
-		| "fetchLatestMcpServersFromHub" // kilocode_change
-		| "downloadMcp" // kilocode_change
-		| "showSystemNotification" // kilocode_change
-		| "showAutoApproveMenu" // kilocode_change
-		| "reportBug" // kilocode_change
-		| "profileButtonClicked" // kilocode_change
-		| "fetchProfileDataRequest" // kilocode_change
-		| "profileDataResponse" // kilocode_change
-		| "fetchBalanceDataRequest" // kilocode_change
-		| "shopBuyCredits" // kilocode_change
-		| "balanceDataResponse" // kilocode_change
-		| "updateProfileData" // kilocode_change
-		| "condense" // kilocode_change
-		| "toggleWorkflow" // kilocode_change
-		| "refreshRules" // kilocode_change
-		| "toggleRule" // kilocode_change
-		| "createRuleFile" // kilocode_change
-		| "deleteRuleFile" // kilocode_change
+		| "fetchMcpMarketplace" // bluescode_change
+		| "silentlyRefreshMcpMarketplace" // bluescode_change
+		| "fetchLatestMcpServersFromHub" // bluescode_change
+		| "downloadMcp" // bluescode_change
+		| "showSystemNotification" // bluescode_change
+		| "showAutoApproveMenu" // bluescode_change
+		| "reportBug" // bluescode_change
+		| "profileButtonClicked" // bluescode_change
+		| "fetchProfileDataRequest" // bluescode_change
+		| "profileDataResponse" // bluescode_change
+		| "fetchBalanceDataRequest" // bluescode_change
+		| "shopBuyCredits" // bluescode_change
+		| "balanceDataResponse" // bluescode_change
+		| "updateProfileData" // bluescode_change
+		| "condense" // bluescode_change
+		| "toggleWorkflow" // bluescode_change
+		| "refreshRules" // bluescode_change
+		| "toggleRule" // bluescode_change
+		| "createRuleFile" // bluescode_change
+		| "deleteRuleFile" // bluescode_change
 		| "hasOpenedModeSelector"
 		| "accountButtonClicked"
 		| "rooCloudSignIn"
@@ -221,14 +221,14 @@ export interface WebviewMessage {
 		| "focusPanelRequest"
 		| "profileThresholds"
 		| "setHistoryPreviewCollapsed"
-		| "clearUsageData" // kilocode_change
-		| "getUsageData" // kilocode_change
-		| "usageDataResponse" // kilocode_change
-		| "showTaskTimeline" // kilocode_change
-		| "toggleTaskFavorite" // kilocode_change
-		| "fixMermaidSyntax" // kilocode_change
-		| "mermaidFixResponse" // kilocode_change
-		| "openGlobalKeybindings" // kilocode_change
+		| "clearUsageData" // bluescode_change
+		| "getUsageData" // bluescode_change
+		| "usageDataResponse" // bluescode_change
+		| "showTaskTimeline" // bluescode_change
+		| "toggleTaskFavorite" // bluescode_change
+		| "fixMermaidSyntax" // bluescode_change
+		| "mermaidFixResponse" // bluescode_change
+		| "openGlobalKeybindings" // bluescode_change
 		| "openExternal"
 		| "filterMarketplaceItems"
 		| "mcpButtonClicked"
@@ -241,9 +241,9 @@ export interface WebviewMessage {
 		| "fetchMarketplaceData"
 		| "switchTab"
 		| "profileThresholds"
-		| "editMessage" // kilocode_change
-		| "systemNotificationsEnabled" // kilocode_change
-		| "dismissNotificationId" // kilocode_change
+		| "editMessage" // bluescode_change
+		| "systemNotificationsEnabled" // bluescode_change
+		| "dismissNotificationId" // bluescode_change
 		| "shareTaskSuccess"
 		| "exportMode"
 		| "exportModeResult"
@@ -253,7 +253,7 @@ export interface WebviewMessage {
 		| "checkRulesDirectoryResult"
 		| "saveCodeIndexSettingsAtomic"
 		| "requestCodeIndexSecretStatus"
-		| "fetchKilocodeNotifications"
+		| "fetchBluesCodeNotifications"
 		| "requestCommands"
 		| "openCommandFile"
 		| "deleteCommand"
@@ -272,7 +272,7 @@ export interface WebviewMessage {
 	value?: number
 	commands?: string[]
 	audioType?: AudioType
-	// kilocode_change begin
+	// bluescode_change begin
 	notificationOptions?: {
 		title?: string
 		subtitle?: string
@@ -281,14 +281,14 @@ export interface WebviewMessage {
 	mcpId?: string
 	toolNames?: string[]
 	autoApprove?: boolean
-	workflowPath?: string // kilocode_change
-	enabled?: boolean // kilocode_change
-	rulePath?: string // kilocode_change
-	isGlobal?: boolean // kilocode_change
-	filename?: string // kilocode_change
-	ruleType?: string // kilocode_change
-	notificationId?: string // kilocode_change
-	// kilocode_change end
+	workflowPath?: string // bluescode_change
+	enabled?: boolean // bluescode_change
+	rulePath?: string // bluescode_change
+	isGlobal?: boolean // bluescode_change
+	filename?: string // bluescode_change
+	ruleType?: string // bluescode_change
+	notificationId?: string // bluescode_change
+	// bluescode_change end
 	serverName?: string
 	toolName?: string
 	alwaysAllow?: boolean
@@ -340,9 +340,9 @@ export interface WebviewMessage {
 	}
 }
 
-// kilocode_change begin
+// bluescode_change begin
 export type ProfileData = {
-	kilocodeToken: string
+	bluesCodeToken: string
 	user: {
 		id: string
 		name: string
@@ -363,7 +363,7 @@ export interface BalanceDataResponsePayload {
 	data?: any // Replace 'any' with a more specific type if known for balance
 	error?: string
 }
-// kilocode_change end
+// bluescode_change end
 
 export const checkoutDiffPayloadSchema = z.object({
 	ts: z.number(),
@@ -406,7 +406,7 @@ export type WebViewMessagePayload =
 	| CheckpointRestorePayload
 	| IndexingStatusPayload
 	| IndexClearedPayload
-	| ProfileDataResponsePayload // kilocode_change
-	| BalanceDataResponsePayload // kilocode_change
+	| ProfileDataResponsePayload // bluescode_change
+	| BalanceDataResponsePayload // bluescode_change
 	| InstallMarketplaceItemWithParametersPayload
 	| UpdateTodoListPayload

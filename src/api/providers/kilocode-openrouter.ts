@@ -4,11 +4,11 @@ import { getModelParams } from "../transform/model-params"
 import { getModels } from "./fetchers/modelCache"
 import {
 	DEEP_SEEK_DEFAULT_TEMPERATURE,
-	kilocodeDefaultModelId,
+	bluesCodeDefaultModelId,
 	openRouterDefaultModelId,
 	openRouterDefaultModelInfo,
 } from "@roo-code/types"
-import { getKiloBaseUriFromToken } from "../../utils/kilocode-token"
+import { getBluesBaseUriFromToken } from "../../utils/bluescode-token"
 import { ApiHandlerCreateMessageMetadata } from ".."
 import OpenAI from "openai"
 import { getModelEndpoints } from "./fetchers/modelEndpointCache"
@@ -17,7 +17,7 @@ import { getModelEndpoints } from "./fetchers/modelEndpointCache"
  * A custom OpenRouter handler that overrides the getModel function
  * to provide custom model information and fetches models from the KiloCode OpenRouter endpoint.
  */
-export class KilocodeOpenrouterHandler extends OpenRouterHandler {
+export class BluesCodeOpenrouterHandler extends OpenRouterHandler {
 	protected override models: ModelRecord = {}
 
 	constructor(options: ApiHandlerOptions) {
@@ -25,7 +25,7 @@ export class KilocodeOpenrouterHandler extends OpenRouterHandler {
 		options = {
 			...options,
 			openRouterBaseUrl: `${baseUri}/api/openrouter/`,
-			openRouterApiKey: options.kilocodeToken,
+			openRouterApiKey: options.bluescodeToken,
 		}
 
 		super(options)
@@ -42,7 +42,7 @@ export class KilocodeOpenrouterHandler extends OpenRouterHandler {
 	}
 
 	override getTotalCost(lastUsage: CompletionUsage): number {
-		// https://github.com/Kilo-Org/kilocode-backend/blob/eb3d382df1e933a089eea95b9c4387db0c676e35/src/lib/processUsage.ts#L281
+		// https://github.com/Kilo-Org/bluescode-backend/blob/eb3d382df1e933a089eea95b9c4387db0c676e35/src/lib/processUsage.ts#L281
 		if (lastUsage.is_byok) {
 			return lastUsage.cost_details?.upstream_inference_cost || 0
 		}
@@ -50,7 +50,7 @@ export class KilocodeOpenrouterHandler extends OpenRouterHandler {
 	}
 
 	override getModel() {
-		let id = this.options.kilocodeModel ?? kilocodeDefaultModelId
+		let id = this.options.bluescodeModel ?? bluesCodeDefaultModelId
 		let info = this.models[id]
 		let defaultTemperature = 0
 
@@ -78,18 +78,18 @@ export class KilocodeOpenrouterHandler extends OpenRouterHandler {
 	}
 
 	public override async fetchModel() {
-		if (!this.options.kilocodeToken || !this.options.openRouterBaseUrl) {
-			throw new Error("KiloCode token + baseUrl is required to fetch models")
+		if (!this.options.bluescodeToken || !this.options.openRouterBaseUrl) {
+			throw new Error("Blues Code token + baseUrl is required to fetch models")
 		}
 
 		const [models, endpoints] = await Promise.all([
 			getModels({
-				provider: "kilocode-openrouter",
-				kilocodeToken: this.options.kilocodeToken,
+				provider: "bluescode-openrouter",
+				bluescodeToken: this.options.bluescodeToken,
 			}),
 			getModelEndpoints({
 				router: "openrouter",
-				modelId: this.options.kilocodeModel,
+				modelId: this.options.bluescodeModel,
 				endpoint: this.options.openRouterSpecificProvider,
 			}),
 		])
@@ -101,5 +101,5 @@ export class KilocodeOpenrouterHandler extends OpenRouterHandler {
 }
 
 function getKiloBaseUri(options: ApiHandlerOptions) {
-	return getKiloBaseUriFromToken(options.kilocodeToken ?? "")
+	return getBluesBaseUriFromToken(options.bluescodeToken ?? "")
 }

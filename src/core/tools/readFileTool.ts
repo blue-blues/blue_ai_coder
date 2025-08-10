@@ -14,7 +14,7 @@ import { readLines } from "../../integrations/misc/read-lines"
 import { extractTextFromFile, addLineNumbers, getSupportedBinaryFormats } from "../../integrations/misc/extract-text"
 import { parseSourceCodeDefinitionsForFile } from "../../services/tree-sitter"
 import { parseXml } from "../../utils/xml"
-import { blockFileReadWhenTooLarge } from "./kilocode"
+import { blockFileReadWhenTooLarge } from "./bluescode"
 import {
 	DEFAULT_MAX_IMAGE_FILE_SIZE_MB,
 	DEFAULT_MAX_TOTAL_IMAGE_SIZE_MB,
@@ -598,13 +598,13 @@ export async function readFileTool(
 				// Handle normal file read
 				const content = await extractTextFromFile(fullPath)
 
-				// kilocode_change start: limit output size based on token count
+				// bluescode_change start: limit output size based on token count
 				const blockResult = await blockFileReadWhenTooLarge(cline, relPath, content)
 				if (blockResult) {
 					updateFileResult(relPath, blockResult)
 					continue
 				}
-				// kilocode_change end
+				// bluescode_change end
 
 				const lineRangeAttr = ` lines="1-${totalLines}"`
 				let xmlInfo = totalLines > 0 ? `<content${lineRangeAttr}>\n${content}</content>\n` : `<content/>`

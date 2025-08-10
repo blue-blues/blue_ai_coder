@@ -1,10 +1,10 @@
 import axios from "axios"
 import * as yaml from "yaml"
 import { z } from "zod"
-// import { getRooCodeApiUrl } from "@roo-code/cloud" kilocode_change: use our own api
+// import { getRooCodeApiUrl } from "@roo-code/cloud" bluescode_change: use our own api
 import type { MarketplaceItem, MarketplaceItemType } from "@roo-code/types"
 import { modeMarketplaceItemSchema, mcpMarketplaceItemSchema } from "@roo-code/types"
-import { getKiloCodeApiUrl } from "../../shared/kilocode/api"
+import { getBluesCodeApiUrl } from "../../shared/kilocode/api"
 
 // Response schemas for YAML API responses
 const modeMarketplaceResponse = z.object({
@@ -21,7 +21,7 @@ export class RemoteConfigLoader {
 	private cacheDuration = 5 * 60 * 1000 // 5 minutes
 
 	constructor() {
-		this.apiBaseUrl = getKiloCodeApiUrl()
+		this.apiBaseUrl = getBluesCodeApiUrl()
 	}
 
 	async loadAllItems(hideMarketplaceMcps = false): Promise<MarketplaceItem[]> {

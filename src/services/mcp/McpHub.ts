@@ -350,7 +350,7 @@ export class McpHub {
 		}
 
 		const workspaceFolder = vscode.workspace.workspaceFolders[0]
-		const projectMcpPattern = new vscode.RelativePattern(workspaceFolder, ".kilocode/mcp.json")
+		const projectMcpPattern = new vscode.RelativePattern(workspaceFolder, ".bluescode/mcp.json")
 
 		// Create a file system watcher for the project MCP file pattern
 		this.projectMcpWatcher = vscode.workspace.createFileSystemWatcher(projectMcpPattern)
@@ -556,17 +556,17 @@ export class McpHub {
 		}
 
 		const workspaceFolder = vscode.workspace.workspaceFolders[0]
-		// kilocode_change
-		// First, we try the standard location: .kilocode/mcp.json
+		// bluescode_change
+		// First, we try the standard location: .bluescode/mcp.json
 		// If not found, fall back to .mcp.json in the project root
-		const projectMcpDir = path.join(workspaceFolder.uri.fsPath, ".kilocode")
+		const projectMcpDir = path.join(workspaceFolder.uri.fsPath, ".bluescode")
 		const projectMcpPath = path.join(projectMcpDir, "mcp.json")
 
 		try {
 			await fs.access(projectMcpPath)
 			return projectMcpPath
 		} catch {
-			// If not found in .kilocode/, fall back to .mcp.json in root directory
+			// If not found in .bluescode/, fall back to .mcp.json in root directory
 			const rootMcpPath = path.join(workspaceFolder.uri.fsPath, ".mcp.json")
 			try {
 				await fs.access(rootMcpPath)

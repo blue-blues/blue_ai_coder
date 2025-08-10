@@ -72,10 +72,10 @@ describe("RooIgnoreController", () => {
 
 	describe("initialization", () => {
 		/**
-		 * Tests the controller initialization when .kilocodeignore exists
+		 * Tests the controller initialization when .bluescodeignore exists
 		 */
-		it("should load .kilocodeignore patterns on initialization when file exists", async () => {
-			// Setup mocks to simulate existing .kilocodeignore file
+		it("should load .bluescodeignore patterns on initialization when file exists", async () => {
+			// Setup mocks to simulate existing .bluescodeignore file
 			mockFileExists.mockResolvedValue(true)
 			mockReadFile.mockResolvedValue("node_modules\n.git\nsecrets.json")
 
@@ -83,8 +83,8 @@ describe("RooIgnoreController", () => {
 			await controller.initialize()
 
 			// Verify file was checked and read
-			expect(mockFileExists).toHaveBeenCalledWith(path.join(TEST_CWD, ".kilocodeignore"))
-			expect(mockReadFile).toHaveBeenCalledWith(path.join(TEST_CWD, ".kilocodeignore"), "utf8")
+			expect(mockFileExists).toHaveBeenCalledWith(path.join(TEST_CWD, ".bluescodeignore"))
+			expect(mockReadFile).toHaveBeenCalledWith(path.join(TEST_CWD, ".bluescodeignore"), "utf8")
 
 			// Verify content was stored
 			expect(controller.rooIgnoreContent).toBe("node_modules\n.git\nsecrets.json")
@@ -97,10 +97,10 @@ describe("RooIgnoreController", () => {
 		})
 
 		/**
-		 * Tests the controller behavior when .kilocodeignore doesn't exist
+		 * Tests the controller behavior when .bluescodeignore doesn't exist
 		 */
-		it("should allow all access when .kilocodeignore doesn't exist", async () => {
-			// Setup mocks to simulate missing .kilocodeignore file
+		it("should allow all access when .bluescodeignore doesn't exist", async () => {
+			// Setup mocks to simulate missing .bluescodeignore file
 			mockFileExists.mockResolvedValue(false)
 
 			// Initialize controller
@@ -117,12 +117,12 @@ describe("RooIgnoreController", () => {
 		/**
 		 * Tests the file watcher setup
 		 */
-		it("should set up file watcher for .kilocodeignore changes", async () => {
+		it("should set up file watcher for .bluescodeignore changes", async () => {
 			// Check that watcher was created with correct pattern
 			expect(vscode.workspace.createFileSystemWatcher).toHaveBeenCalledWith(
 				expect.objectContaining({
 					base: TEST_CWD,
-					pattern: ".kilocodeignore",
+					pattern: ".bluescodeignore",
 				}),
 			)
 
@@ -135,7 +135,7 @@ describe("RooIgnoreController", () => {
 		/**
 		 * Tests error handling during initialization
 		 */
-		it("should handle errors when loading .kilocodeignore", async () => {
+		it("should handle errors when loading .bluescodeignore", async () => {
 			// Setup mocks to simulate error
 			mockFileExists.mockResolvedValue(true)
 			mockReadFile.mockRejectedValue(new Error("Test file read error"))
@@ -147,7 +147,7 @@ describe("RooIgnoreController", () => {
 			await controller.initialize()
 
 			// Verify error was logged
-			expect(consoleSpy).toHaveBeenCalledWith("Unexpected error loading .kilocodeignore:", expect.any(Error))
+			expect(consoleSpy).toHaveBeenCalledWith("Unexpected error loading .bluescodeignore:", expect.any(Error))
 
 			// Cleanup
 			consoleSpy.mockRestore()
@@ -156,7 +156,7 @@ describe("RooIgnoreController", () => {
 
 	describe("validateAccess", () => {
 		beforeEach(async () => {
-			// Setup .kilocodeignore content
+			// Setup .bluescodeignore content
 			mockFileExists.mockResolvedValue(true)
 			mockReadFile.mockResolvedValue("node_modules\n.git\nsecrets/**\n*.log")
 			await controller.initialize()
@@ -204,10 +204,10 @@ describe("RooIgnoreController", () => {
 		})
 
 		/**
-		 * Tests the default behavior when no .kilocodeignore exists
+		 * Tests the default behavior when no .bluescodeignore exists
 		 */
-		it("should allow all access when no .kilocodeignore content", async () => {
-			// Create a new controller with no .kilocodeignore
+		it("should allow all access when no .bluescodeignore content", async () => {
+			// Create a new controller with no .bluescodeignore
 			mockFileExists.mockResolvedValue(false)
 			const emptyController = new RooIgnoreController(TEST_CWD)
 			await emptyController.initialize()
@@ -221,7 +221,7 @@ describe("RooIgnoreController", () => {
 
 	describe("validateCommand", () => {
 		beforeEach(async () => {
-			// Setup .kilocodeignore content
+			// Setup .bluescodeignore content
 			mockFileExists.mockResolvedValue(true)
 			mockReadFile.mockResolvedValue("node_modules\n.git\nsecrets/**\n*.log")
 			await controller.initialize()
@@ -276,10 +276,10 @@ describe("RooIgnoreController", () => {
 		})
 
 		/**
-		 * Tests behavior when no .kilocodeignore exists
+		 * Tests behavior when no .bluescodeignore exists
 		 */
-		it("should allow all commands when no .kilocodeignore exists", async () => {
-			// Create a new controller with no .kilocodeignore
+		it("should allow all commands when no .bluescodeignore exists", async () => {
+			// Create a new controller with no .bluescodeignore
 			mockFileExists.mockResolvedValue(false)
 			const emptyController = new RooIgnoreController(TEST_CWD)
 			await emptyController.initialize()
@@ -292,7 +292,7 @@ describe("RooIgnoreController", () => {
 
 	describe("filterPaths", () => {
 		beforeEach(async () => {
-			// Setup .kilocodeignore content
+			// Setup .bluescodeignore content
 			mockFileExists.mockResolvedValue(true)
 			mockReadFile.mockResolvedValue("node_modules\n.git\nsecrets/**\n*.log")
 			await controller.initialize()
@@ -355,10 +355,10 @@ describe("RooIgnoreController", () => {
 
 	describe("getInstructions", () => {
 		/**
-		 * Tests instructions generation with .kilocodeignore
+		 * Tests instructions generation with .bluescodeignore
 		 */
-		it("should generate formatted instructions when .kilocodeignore exists", async () => {
-			// Setup .kilocodeignore content
+		it("should generate formatted instructions when .bluescodeignore exists", async () => {
+			// Setup .bluescodeignore content
 			mockFileExists.mockResolvedValue(true)
 			mockReadFile.mockResolvedValue("node_modules\n.git\nsecrets/**")
 			await controller.initialize()
@@ -366,7 +366,7 @@ describe("RooIgnoreController", () => {
 			const instructions = controller.getInstructions()
 
 			// Verify instruction format
-			expect(instructions).toContain("# .kilocodeignore")
+			expect(instructions).toContain("# .bluescodeignore")
 			expect(instructions).toContain(LOCK_TEXT_SYMBOL)
 			expect(instructions).toContain("node_modules")
 			expect(instructions).toContain(".git")
@@ -374,10 +374,10 @@ describe("RooIgnoreController", () => {
 		})
 
 		/**
-		 * Tests behavior when no .kilocodeignore exists
+		 * Tests behavior when no .bluescodeignore exists
 		 */
-		it("should return undefined when no .kilocodeignore exists", async () => {
-			// Setup no .kilocodeignore
+		it("should return undefined when no .bluescodeignore exists", async () => {
+			// Setup no .bluescodeignore
 			mockFileExists.mockResolvedValue(false)
 			await controller.initialize()
 
@@ -410,10 +410,10 @@ describe("RooIgnoreController", () => {
 
 	describe("file watcher", () => {
 		/**
-		 * Tests behavior when .kilocodeignore is created
+		 * Tests behavior when .bluescodeignore is created
 		 */
-		it("should reload .kilocodeignore when file is created", async () => {
-			// Setup initial state without .kilocodeignore
+		it("should reload .bluescodeignore when file is created", async () => {
+			// Setup initial state without .bluescodeignore
 			mockFileExists.mockResolvedValue(false)
 			await controller.initialize()
 
@@ -424,7 +424,7 @@ describe("RooIgnoreController", () => {
 			// Setup for the test
 			mockFileExists.mockResolvedValue(false) // Initially no file exists
 
-			// Create and initialize controller with no .kilocodeignore
+			// Create and initialize controller with no .bluescodeignore
 			controller = new RooIgnoreController(TEST_CWD)
 			await controller.initialize()
 
@@ -435,7 +435,7 @@ describe("RooIgnoreController", () => {
 			mockFileExists.mockResolvedValue(true)
 			mockReadFile.mockResolvedValue("node_modules")
 
-			// Force reload of .kilocodeignore content manually
+			// Force reload of .bluescodeignore content manually
 			await controller.initialize()
 
 			// Now verify content was updated
@@ -446,10 +446,10 @@ describe("RooIgnoreController", () => {
 		})
 
 		/**
-		 * Tests behavior when .kilocodeignore is changed
+		 * Tests behavior when .bluescodeignore is changed
 		 */
-		it("should reload .kilocodeignore when file is changed", async () => {
-			// Setup initial state with .kilocodeignore
+		it("should reload .bluescodeignore when file is changed", async () => {
+			// Setup initial state with .bluescodeignore
 			mockFileExists.mockResolvedValue(true)
 			mockReadFile.mockResolvedValue("node_modules")
 			await controller.initialize()
@@ -474,10 +474,10 @@ describe("RooIgnoreController", () => {
 		})
 
 		/**
-		 * Tests behavior when .kilocodeignore is deleted
+		 * Tests behavior when .bluescodeignore is deleted
 		 */
-		it("should reset when .kilocodeignore is deleted", async () => {
-			// Setup initial state with .kilocodeignore
+		it("should reset when .bluescodeignore is deleted", async () => {
+			// Setup initial state with .bluescodeignore
 			mockFileExists.mockResolvedValue(true)
 			mockReadFile.mockResolvedValue("node_modules")
 			await controller.initialize()

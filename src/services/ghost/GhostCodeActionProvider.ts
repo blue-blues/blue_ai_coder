@@ -14,11 +14,11 @@ export class GhostCodeActionProvider implements vscode.CodeActionProvider {
 		token: vscode.CancellationToken,
 	): vscode.ProviderResult<(vscode.CodeAction | vscode.Command)[]> {
 		const action = new vscode.CodeAction(
-			t("kilocode:ghost.codeAction.title"),
+			t("bluescode:ghost.codeAction.title"),
 			this.providedCodeActionKinds["quickfix"],
 		)
 		action.command = {
-			command: "kilo-code.ghost.generateSuggestions",
+			command: "blues-code.ghost.generateSuggestions",
 			title: "",
 			arguments: [document.uri, range],
 		}

@@ -18,7 +18,7 @@ export type TelemetrySetting = z.infer<typeof telemetrySettingsSchema>
  */
 
 export enum TelemetryEventName {
-	// kilocode_change start
+	// bluescode_change start
 	COMMIT_MSG_GENERATED = "Commit Message Generated",
 	INLINE_ASSIST_QUICK_TASK = "Inline Assist Quick Task",
 	INLINE_ASSIST_AUTO_TASK = "Inline Assist Auto Task",
@@ -28,7 +28,7 @@ export enum TelemetryEventName {
 	EXCESSIVE_RECURSION = "Excessive Recursion",
 	NOTIFICATION_CLICKED = "Notification Clicked",
 	WEBVIEW_MEMORY_USAGE = "Webview Memory Usage",
-	// kilocode_change end
+	// bluescode_change end
 
 	TASK_CREATED = "Task Created",
 	TASK_RESTARTED = "Task Reopened",
@@ -143,14 +143,14 @@ export type TelemetryEvent = {
 export const rooCodeTelemetryEventSchema = z.discriminatedUnion("type", [
 	z.object({
 		type: z.enum([
-			// kilocode_change start
-			TelemetryEventName.COMMIT_MSG_GENERATED, // kilocode_change
-			TelemetryEventName.INLINE_ASSIST_QUICK_TASK, // kilocode_change
-			TelemetryEventName.INLINE_ASSIST_AUTO_TASK, // kilocode_change
-			TelemetryEventName.INLINE_ASSIST_ACCEPT_SUGGESTION, // kilocode_change
-			TelemetryEventName.INLINE_ASSIST_REJECT_SUGGESTION, // kilocode_change
-			TelemetryEventName.WEBVIEW_MEMORY_USAGE, // kilocode_change
-			// kilocode_change end
+			// bluescode_change start
+			TelemetryEventName.COMMIT_MSG_GENERATED, // bluescode_change
+			TelemetryEventName.INLINE_ASSIST_QUICK_TASK, // bluescode_change
+			TelemetryEventName.INLINE_ASSIST_AUTO_TASK, // bluescode_change
+			TelemetryEventName.INLINE_ASSIST_ACCEPT_SUGGESTION, // bluescode_change
+			TelemetryEventName.INLINE_ASSIST_REJECT_SUGGESTION, // bluescode_change
+			TelemetryEventName.WEBVIEW_MEMORY_USAGE, // bluescode_change
+			// bluescode_change end
 
 			TelemetryEventName.TASK_CREATED,
 			TelemetryEventName.TASK_RESTARTED,
@@ -240,10 +240,10 @@ export interface TelemetryClient {
 	setProvider(provider: TelemetryPropertiesProvider): void
 	capture(options: TelemetryEvent): Promise<void>
 	updateTelemetryState(didUserOptIn: boolean): void
-	// kilocode_change start
+	// bluescode_change start
 	captureException(error: Error, properties?: Record<string | number, unknown>): void
-	updateIdentity(kilocodeToken: string): Promise<void>
-	// kilocode_change end
+	updateIdentity(bluesCodeToken: string): Promise<void>
+	// bluescode_change end
 	isTelemetryEnabled(): boolean
 	shutdown(): Promise<void>
 }

@@ -6,14 +6,14 @@ import { FileContextTracker } from "../context-tracking/FileContextTracker"
 import { GlobalFileNames } from "../../shared/globalFileNames"
 import { ensureLocalKilorulesDirExists } from "../context/instructions/kilo-rules"
 import { parseKiloSlashCommands } from "../slash-commands/kilo"
-import { refreshWorkflowToggles } from "../context/instructions/workflows" // kilocode_change
+import { refreshWorkflowToggles } from "../context/instructions/workflows" // bluescode_change
 
-import * as vscode from "vscode" // kilocode_change
+import * as vscode from "vscode" // bluescode_change
 
 // This function is a duplicate of processUserContentMentions, but it adds a check for the newrules command
 // and processes Kilo-specific slash commands. It should be merged with processUserContentMentions in the future.
 export async function processKiloUserContentMentions({
-	context, // kilocode_change
+	context, // bluescode_change
 	userContent,
 	cwd,
 	urlContentFetcher,
@@ -24,7 +24,7 @@ export async function processKiloUserContentMentions({
 	maxDiagnosticMessages = 50,
 	maxReadFileLine,
 }: {
-	context: vscode.ExtensionContext // kilocode_change
+	context: vscode.ExtensionContext // bluescode_change
 	userContent: Anthropic.Messages.ContentBlockParam[]
 	cwd: string
 	urlContentFetcher: UrlContentFetcher
@@ -53,7 +53,7 @@ export async function processKiloUserContentMentions({
 		// these tags so they can effectively be used as markers for when we
 		// should parse mentions).
 
-		const { localWorkflowToggles, globalWorkflowToggles } = await refreshWorkflowToggles(context, cwd) // kilocode_change
+		const { localWorkflowToggles, globalWorkflowToggles } = await refreshWorkflowToggles(context, cwd) // bluescode_change
 
 		return await Promise.all(
 			userContent.map(async (block) => {
@@ -61,7 +61,7 @@ export async function processKiloUserContentMentions({
 
 				if (block.type === "text") {
 					if (shouldProcessMentions(block.text)) {
-						// kilocode_change begin: pull slash commands from Cline
+						// bluescode_change begin: pull slash commands from Cline
 						const parsedText = await parseMentions(
 							block.text,
 							cwd,
@@ -77,8 +77,8 @@ export async function processKiloUserContentMentions({
 						// when parsing slash commands, we still want to allow the user to provide their desired context
 						const { processedText, needsRulesFileCheck: needsCheck } = await parseKiloSlashCommands(
 							parsedText,
-							localWorkflowToggles, // kilocode_change
-							globalWorkflowToggles, // kilocode_change
+							localWorkflowToggles, // bluescode_change
+							globalWorkflowToggles, // bluescode_change
 						)
 
 						if (needsCheck) {
@@ -89,7 +89,7 @@ export async function processKiloUserContentMentions({
 							...block,
 							text: processedText,
 						}
-						// kilocode_change end
+						// bluescode_change end
 					}
 
 					return block

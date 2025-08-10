@@ -1,4 +1,4 @@
-// kilocode_change whole file
+// bluescode_change whole file
 
 import * as path from "path"
 import { ClineRulesToggles } from "../../../shared/cline-rules"
