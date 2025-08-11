@@ -259,6 +259,18 @@ export interface WebviewMessage {
 		| "deleteCommand"
 		| "createCommand"
 		| "insertTextIntoTextarea"
+		| "indexingChoice"
+		| "requestIndexingConfiguration"
+		| "saveIndexingConfiguration"
+		| "requestPerformanceMetrics"
+		| "requestWorkspaceAnalysis"
+		| "refreshWorkspaceAnalysis"
+		| "applyOptimization"
+		| "dismissOptimizationSuggestion"
+		| "exportPerformanceReport"
+		| "retryIndexing"
+		| "indexingPauseResume"
+		| "requestIndexingDetailedProgress"
 	text?: string
 	editedMessageContent?: string
 	tab?: "settings" | "history" | "mcp" | "modes" | "chat" | "marketplace" | "account"
@@ -338,6 +350,35 @@ export interface WebviewMessage {
 		codebaseIndexGeminiApiKey?: string
 		codebaseIndexMistralApiKey?: string
 	}
+	indexingChoice?: "start" | "skip" | "wait" | "cancel"
+	taskId?: string
+	// Indexing configuration
+	indexingConfig?: {
+		maxConcurrentFiles: number
+		batchSize: number
+		memoryLimit: number
+		timeoutMs: number
+		enableDeepAnalysis: boolean
+		skipBinaryFiles: boolean
+		skipLargeFiles: boolean
+		maxFileSize: number
+		enableCaching: boolean
+		cacheSize: number
+		enableIncrementalIndexing: boolean
+		enableParallelProcessing: boolean
+		includePatterns: string[]
+		excludePatterns: string[]
+		fileExtensions: string[]
+		logLevel: "error" | "warn" | "info" | "debug"
+		enableTelemetry: boolean
+		autoOptimize: boolean
+		retryAttempts: number
+	}
+	// Optimization and performance
+	suggestionId?: string
+	actionType?: "setting" | "restart" | "config"
+	strategy?: string
+	paused?: boolean
 }
 
 // bluescode_change begin

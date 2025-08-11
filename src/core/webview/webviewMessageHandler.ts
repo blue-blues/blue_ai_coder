@@ -367,6 +367,312 @@ export const webviewMessageHandler = async (
 		case "askResponse":
 			provider.getCurrentCline()?.handleWebviewAskResponse(message.askResponse!, message.text, message.images)
 			break
+		case "indexingChoice":
+			provider.getCurrentCline()?.handleIndexingChoice(message.indexingChoice!, message.taskId)
+			break
+		// Enhanced indexing services integration
+		case "requestIndexingStatus":
+			try {
+				const indexingValidator = provider.getIndexingValidator()
+				const schematicAnalyzer = provider.getSchematicAnalyzer()
+				const backgroundIndexingService = provider.getBackgroundIndexingService()
+				const performanceMonitor = provider.getPerformanceMonitor()
+
+				if (!indexingValidator || !schematicAnalyzer || !backgroundIndexingService || !performanceMonitor) {
+					await provider.postMessageToWebview({
+						type: "indexingStatusResponse",
+						success: false,
+						error: "Enhanced indexing services not initialized",
+					})
+					break
+				}
+
+				const validationResult = await indexingValidator.validateIndexingState()
+				const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace()
+				const queueStatus = backgroundIndexingService.getQueueStatus()
+				const performanceMetrics = performanceMonitor.getCurrentMetrics()
+
+				await provider.postMessageToWebview({
+					type: "indexingStatusResponse",
+					success: true,
+					data: {
+						validation: validationResult,
+						workspaceAnalysis,
+						queueStatus,
+						performanceMetrics,
+					},
+				})
+			} catch (error) {
+				provider.log(`Error getting indexing status: ${error instanceof Error ? error.message : String(error)}`)
+				await provider.postMessageToWebview({
+					type: "indexingStatusResponse",
+					success: false,
+					error: error instanceof Error ? error.message : "Failed to get indexing status",
+				})
+			}
+			break
+		case "startEnhancedIndexing":
+			try {
+				const indexingValidator = provider.getIndexingValidator()
+				const schematicAnalyzer = provider.getSchematicAnalyzer()
+				const backgroundIndexingService = provider.getBackgroundIndexingService()
+				const performanceMonitor = provider.getPerformanceMonitor()
+
+				if (!indexingValidator || !schematicAnalyzer || !backgroundIndexingService || !performanceMonitor) {
+					await provider.postMessageToWebview({
+						type: "enhancedIndexingResponse",
+						success: false,
+						error: "Enhanced indexing services not initialized",
+					})
+					break
+				}
+
+				// Start performance monitoring
+				performanceMonitor.startMonitoring()
+
+				// Get optimal processing order from schematic analyzer
+				const prioritizedFiles = await schematicAnalyzer.getOptimalProcessingOrder()
+
+				// Queue files for background processing
+				for (const file of prioritizedFiles) {
+					await backgroundIndexingService.queueFile(file.path, file.priority)
+				}
+
+				// Start background processing
+				backgroundIndexingService.startProcessing()
+
+				await provider.postMessageToWebview({
+					type: "enhancedIndexingResponse",
+					success: true,
+					message: "Enhanced indexing started successfully",
+				})
+			} catch (error) {
+				provider.log(
+					`Error starting enhanced indexing: ${error instanceof Error ? error.message : String(error)}`,
+				)
+				await provider.postMessageToWebview({
+					type: "enhancedIndexingResponse",
+					success: false,
+					error: error instanceof Error ? error.message : "Failed to start enhanced indexing",
+				})
+			}
+			break
+		case "pauseBackgroundIndexing":
+			try {
+				const backgroundIndexingService = provider.getBackgroundIndexingService()
+				if (!backgroundIndexingService) {
+					await provider.postMessageToWebview({
+						type: "backgroundIndexingResponse",
+						success: false,
+						error: "Background indexing service not initialized",
+					})
+					break
+				}
+
+				backgroundIndexingService.pauseProcessing()
+				await provider.postMessageToWebview({
+					type: "backgroundIndexingResponse",
+					success: true,
+					message: "Background indexing paused",
+				})
+			} catch (error) {
+				provider.log(
+					`Error pausing background indexing: ${error instanceof Error ? error.message : String(error)}`,
+				)
+				await provider.postMessageToWebview({
+					type: "backgroundIndexingResponse",
+					success: false,
+					error: error instanceof Error ? error.message : "Failed to pause background indexing",
+				})
+			}
+			break
+		case "resumeBackgroundIndexing":
+			try {
+				const backgroundIndexingService = provider.getBackgroundIndexingService()
+				if (!backgroundIndexingService) {
+					await provider.postMessageToWebview({
+						type: "backgroundIndexingResponse",
+						success: false,
+						error: "Background indexing service not initialized",
+					})
+					break
+				}
+
+				backgroundIndexingService.resumeProcessing()
+				await provider.postMessageToWebview({
+					type: "backgroundIndexingResponse",
+					success: true,
+					message: "Background indexing resumed",
+				})
+			} catch (error) {
+				provider.log(
+					`Error resuming background indexing: ${error instanceof Error ? error.message : String(error)}`,
+				)
+				await provider.postMessageToWebview({
+					type: "backgroundIndexingResponse",
+					success: false,
+					error: error instanceof Error ? error.message : "Failed to resume background indexing",
+				})
+			}
+			break
+		case "getPerformanceMetrics":
+			try {
+				const performanceMonitor = provider.getPerformanceMonitor()
+				if (!performanceMonitor) {
+					await provider.postMessageToWebview({
+						type: "performanceMetricsResponse",
+						success: false,
+						error: "Performance monitor not initialized",
+					})
+					break
+				}
+
+				const metrics = performanceMonitor.getCurrentMetrics()
+				const trends = performanceMonitor.getPerformanceTrends()
+				const suggestions = performanceMonitor.getOptimizationSuggestions()
+
+				await provider.postMessageToWebview({
+					type: "performanceMetricsResponse",
+					success: true,
+					data: {
+						metrics,
+						trends,
+						suggestions,
+					},
+				})
+			} catch (error) {
+				provider.log(
+					`Error getting performance metrics: ${error instanceof Error ? error.message : String(error)}`,
+				)
+				await provider.postMessageToWebview({
+					type: "performanceMetricsResponse",
+					success: false,
+					error: error instanceof Error ? error.message : "Failed to get performance metrics",
+				})
+			}
+			break
+		case "analyzeWorkspaceStructure":
+			try {
+				const schematicAnalyzer = provider.getSchematicAnalyzer()
+				if (!schematicAnalyzer) {
+					await provider.postMessageToWebview({
+						type: "workspaceAnalysisResponse",
+						success: false,
+						error: "Schematic analyzer not initialized",
+					})
+					break
+				}
+
+				const analysis = await schematicAnalyzer.analyzeWorkspace()
+				const filesByCategory = await schematicAnalyzer.getFilesByCategory()
+				const dependencyGraph = await schematicAnalyzer.buildDependencyGraph()
+
+				await provider.postMessageToWebview({
+					type: "workspaceAnalysisResponse",
+					success: true,
+					data: {
+						analysis,
+						filesByCategory,
+						dependencyGraph,
+					},
+				})
+			} catch (error) {
+				provider.log(
+					`Error analyzing workspace structure: ${error instanceof Error ? error.message : String(error)}`,
+				)
+				await provider.postMessageToWebview({
+					type: "workspaceAnalysisResponse",
+					success: false,
+					error: error instanceof Error ? error.message : "Failed to analyze workspace structure",
+				})
+			}
+			break
+		case "validateIndexingComplete":
+			try {
+				const indexingValidator = provider.getIndexingValidator()
+				if (!indexingValidator) {
+					await provider.postMessageToWebview({
+						type: "indexingValidationResponse",
+						success: false,
+						error: "Indexing validator not initialized",
+					})
+					break
+				}
+
+				const validationResult = await indexingValidator.validateIndexingState()
+				const isComplete = validationResult.isValid && validationResult.completionPercentage >= 100
+
+				await provider.postMessageToWebview({
+					type: "indexingValidationResponse",
+					success: true,
+					data: {
+						isComplete,
+						validationResult,
+					},
+				})
+			} catch (error) {
+				provider.log(
+					`Error validating indexing completion: ${error instanceof Error ? error.message : String(error)}`,
+				)
+				await provider.postMessageToWebview({
+					type: "indexingValidationResponse",
+					success: false,
+					error: error instanceof Error ? error.message : "Failed to validate indexing completion",
+				})
+			}
+			break
+		case "optimizeIndexingPerformance":
+			try {
+				const performanceMonitor = provider.getPerformanceMonitor()
+				const backgroundIndexingService = provider.getBackgroundIndexingService()
+
+				if (!performanceMonitor || !backgroundIndexingService) {
+					await provider.postMessageToWebview({
+						type: "indexingOptimizationResponse",
+						success: false,
+						error: "Performance services not initialized",
+					})
+					break
+				}
+
+				const suggestions = performanceMonitor.getOptimizationSuggestions()
+
+				// Apply automatic optimizations
+				for (const suggestion of suggestions) {
+					if (suggestion.autoApplicable) {
+						switch (suggestion.type) {
+							case "adjust_batch_size":
+								backgroundIndexingService.adjustBatchSize(suggestion.value)
+								break
+							case "adjust_concurrency":
+								backgroundIndexingService.adjustConcurrency(suggestion.value)
+								break
+							case "adjust_priority_threshold":
+								backgroundIndexingService.adjustPriorityThreshold(suggestion.value)
+								break
+						}
+					}
+				}
+
+				await provider.postMessageToWebview({
+					type: "indexingOptimizationResponse",
+					success: true,
+					data: {
+						appliedOptimizations: suggestions.filter((s) => s.autoApplicable),
+						manualSuggestions: suggestions.filter((s) => !s.autoApplicable),
+					},
+				})
+			} catch (error) {
+				provider.log(
+					`Error optimizing indexing performance: ${error instanceof Error ? error.message : String(error)}`,
+				)
+				await provider.postMessageToWebview({
+					type: "indexingOptimizationResponse",
+					success: false,
+					error: error instanceof Error ? error.message : "Failed to optimize indexing performance",
+				})
+			}
+			break
 		case "autoCondenseContext":
 			await updateGlobalState("autoCondenseContext", message.bool)
 			await provider.postStateToWebview()

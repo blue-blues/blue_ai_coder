@@ -26,6 +26,9 @@ import { DIFF_VIEW_URI_SCHEME } from "./integrations/editor/DiffViewProvider"
 import { TerminalRegistry } from "./integrations/terminal/TerminalRegistry"
 import { McpServerManager } from "./services/mcp/McpServerManager"
 import { CodeIndexManager } from "./services/code-index/manager"
+import { SchematicAnalyzer } from "./services/code-index/SchematicAnalyzer"
+import { BackgroundIndexingService } from "./services/code-index/BackgroundIndexingService"
+import { PerformanceMonitor } from "./services/code-index/PerformanceMonitor"
 import { registerCommitMessageProvider } from "./services/commit-message"
 import { MdmService } from "./services/mdm/MdmService"
 import { migrateSettings } from "./utils/migrateSettings"
@@ -43,6 +46,9 @@ import {
 import { initializeI18n } from "./i18n"
 import { registerGhostProvider } from "./services/ghost" // bluescode_change
 import { TerminalWelcomeService } from "./services/terminal-welcome/TerminalWelcomeService" // bluescode_change
+import { runEnhancedIndexingIntegrationTests } from "./test-enhanced-indexing-integration"
+import { StartupIndexingCoordinator } from "./services/startup-indexing/StartupIndexingCoordinator"
+import { StartupIndexingCompatibility } from "./services/startup-indexing/StartupIndexingCompatibility"
 
 /**
  * Built using https://github.com/microsoft/vscode-webview-ui-toolkit
@@ -114,21 +120,106 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	const contextProxy = await ContextProxy.getInstance(context)
 
-	// Initialize code index managers for all workspace folders
+	// Initialize startup indexing coordinator for enhanced startup experience
+	let startupIndexingCoordinator: StartupIndexingCoordinator | null = null
 	const codeIndexManagers: CodeIndexManager[] = []
+	const schematicAnalyzers: SchematicAnalyzer[] = []
+	const backgroundIndexingServices: BackgroundIndexingService[] = []
+	const performanceMonitors: PerformanceMonitor[] = []
+
 	if (vscode.workspace.workspaceFolders) {
+		// Initialize compatibility layer
+		const compatibilityLayer = new StartupIndexingCompatibility(outputChannel)
+
+		// Check if startup indexing should be enabled based on compatibility
+		const shouldEnable = compatibilityLayer.shouldEnableStartupIndexing()
+
+		if (shouldEnable) {
+			// Initialize startup indexing coordinator
+			startupIndexingCoordinator = new StartupIndexingCoordinator(context, outputChannel)
+			context.subscriptions.push(startupIndexingCoordinator)
+
+			// Migrate legacy settings if needed
+			await compatibilityLayer.migrateLegacySettings()
+		} else {
+			outputChannel.appendLine("[StartupIndexing] Startup indexing disabled by compatibility settings")
+		}
+
+		// Initialize code index managers and enhanced indexing services for all workspace folders
 		for (const folder of vscode.workspace.workspaceFolders) {
 			const manager = CodeIndexManager.getInstance(context, folder.uri.fsPath)
 			if (manager) {
 				codeIndexManagers.push(manager)
 				try {
 					await manager.initialize(contextProxy)
+
+					// Initialize enhanced indexing services for this workspace
+					const schematicAnalyzer = new SchematicAnalyzer(manager.codeParser, folder.uri.fsPath)
+					const performanceMonitor = new PerformanceMonitor()
+					const backgroundIndexingService = new BackgroundIndexingService(
+						folder.uri.fsPath,
+						manager.codeParser,
+						schematicAnalyzer,
+						performanceMonitor,
+						manager.cacheManager,
+						manager.orchestrator,
+						manager.configManager,
+					)
+
+					schematicAnalyzers.push(schematicAnalyzer)
+					backgroundIndexingServices.push(backgroundIndexingService)
+					performanceMonitors.push(performanceMonitor)
+
+					// Add to subscriptions for proper cleanup
+					context.subscriptions.push(backgroundIndexingService)
+					context.subscriptions.push(performanceMonitor)
+
+					outputChannel.appendLine(
+						`[EnhancedIndexing] Initialized enhanced indexing services for ${folder.uri.fsPath}`,
+					)
 				} catch (error) {
 					outputChannel.appendLine(
 						`[CodeIndexManager] Error during background CodeIndexManager configuration/indexing for ${folder.uri.fsPath}: ${error.message || error}`,
 					)
 				}
 				context.subscriptions.push(manager)
+			}
+		}
+
+		// Coordinate startup indexing to ensure maximum context before user interaction
+		if (startupIndexingCoordinator) {
+			try {
+				outputChannel.appendLine("[StartupIndexing] Starting coordinated startup indexing...")
+
+				// Validate backward compatibility before proceeding
+				const compatibilityResult = await compatibilityLayer.validateBackwardCompatibility(codeIndexManagers)
+				if (!compatibilityResult.isCompatible) {
+					outputChannel.appendLine(
+						`[StartupIndexing] Compatibility issues detected: ${compatibilityResult.issues.join(", ")}`,
+					)
+					if (compatibilityLayer.shouldFallbackToLegacyOnError()) {
+						outputChannel.appendLine("[StartupIndexing] Falling back to legacy indexing behavior")
+						// Continue without startup indexing
+					}
+				} else {
+					// This will block user interaction until critical and high-priority files are indexed
+					await startupIndexingCoordinator.coordinateStartupIndexing(
+						codeIndexManagers,
+						schematicAnalyzers,
+						backgroundIndexingServices,
+					)
+
+					outputChannel.appendLine("[StartupIndexing] Startup indexing coordination completed successfully")
+				}
+			} catch (error) {
+				outputChannel.appendLine(`[StartupIndexing] Startup indexing coordination failed: ${error.message}`)
+
+				// Check if we should fallback to legacy behavior
+				if (compatibilityLayer.shouldFallbackToLegacyOnError()) {
+					outputChannel.appendLine("[StartupIndexing] Falling back to legacy indexing behavior")
+				}
+
+				// Continue with extension activation even if startup indexing fails
 			}
 		}
 	}
@@ -147,7 +238,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		outputChannel.appendLine("First installation detected, opening Blues Code sidebar!")
 		try {
 			await vscode.commands.executeCommand("blues-code.SidebarProvider.focus")
-	
+
 			outputChannel.appendLine("Opening Blues Code walkthrough")
 
 			// this can crash, see:
@@ -179,6 +270,22 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 
 	registerCommands({ context, outputChannel, provider })
+
+	// Register enhanced indexing integration test command
+	context.subscriptions.push(
+		vscode.commands.registerCommand("blues-code.testEnhancedIndexingIntegration", async () => {
+			try {
+				outputChannel.appendLine("[EnhancedIndexing] Starting integration tests...")
+				await runEnhancedIndexingIntegrationTests(context)
+				outputChannel.appendLine("[EnhancedIndexing] Integration tests completed successfully!")
+				vscode.window.showInformationMessage("Enhanced indexing integration tests passed!")
+			} catch (error) {
+				const errorMessage = `Enhanced indexing integration tests failed: ${error.message || error}`
+				outputChannel.appendLine(`[EnhancedIndexing] ${errorMessage}`)
+				vscode.window.showErrorMessage(errorMessage)
+			}
+		}),
+	)
 
 	/**
 	 * We use the text document content provider API to show the left side for diff

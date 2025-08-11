@@ -85,6 +85,27 @@ import { webviewMessageHandler } from "./webviewMessageHandler"
 import { getNonce } from "./getNonce"
 import { getUri } from "./getUri"
 
+// Import validation types for pre-chat indexing validation
+import {
+	IndexValidationResult,
+	IndexRecommendation,
+	IndexingEstimate,
+	IndexHealthStatus,
+	IndexingChoice,
+	PendingTaskData,
+	IndexingContext,
+	CachedIndexStatus,
+	VALIDATION_CONSTANTS,
+	ValidationError,
+	ERROR_CODES,
+} from "../../types/indexing-validation"
+
+// Import enhanced indexing services
+import { IndexingValidator } from "../../services/indexing-validation/IndexingValidator"
+import { SchematicAnalyzer, FileAnalysis, ImportanceLevel } from "../../services/code-index/SchematicAnalyzer"
+import { BackgroundIndexingService, ProcessingPriority } from "../../services/code-index/BackgroundIndexingService"
+import { PerformanceMonitor, IndexingPerformanceMetrics } from "../../services/code-index/PerformanceMonitor"
+
 //bluescode_change start
 import { McpDownloadResponse, McpMarketplaceCatalog } from "../../shared/bluescode/mcp"
 import { McpServer } from "../../shared/mcp"
@@ -121,6 +142,12 @@ export class ClineProvider
 	protected mcpHub?: McpHub // Change from private to protected
 	private marketplaceManager: MarketplaceManager
 	private mdmService?: MdmService
+
+	// Enhanced indexing services
+	private indexingValidator?: IndexingValidator
+	private schematicAnalyzer?: SchematicAnalyzer
+	private backgroundIndexingService?: BackgroundIndexingService
+	private performanceMonitor?: PerformanceMonitor
 
 	public isViewLaunched = false
 	public settingsImportedAt?: number
@@ -170,10 +197,113 @@ export class ClineProvider
 
 		this.marketplaceManager = new MarketplaceManager(this.context, this.customModesManager)
 
+		// Initialize enhanced indexing services
+		this.initializeEnhancedIndexingServices().catch((error) => {
+			this.log(`Failed to initialize enhanced indexing services: ${error}`)
+		})
+
 		// Initialize Roo Code Cloud profile sync.
 		this.initializeCloudProfileSync().catch((error) => {
 			this.log(`Failed to initialize cloud profile sync: ${error}`)
 		})
+	}
+
+	/**
+	 * Initialize enhanced indexing services
+	 */
+	private async initializeEnhancedIndexingServices() {
+		try {
+			const codeIndexManager = this.getCurrentWorkspaceCodeIndexManager()
+			if (!codeIndexManager) {
+				this.log("No code index manager available for enhanced indexing services")
+				return
+			}
+
+			// Initialize IndexingValidator
+			this.indexingValidator = new IndexingValidator(codeIndexManager)
+
+			// Initialize SchematicAnalyzer if we have the required dependencies
+			const workspacePath = this.cwd
+			if (workspacePath && codeIndexManager.codeParser) {
+				this.schematicAnalyzer = new SchematicAnalyzer(codeIndexManager.codeParser, workspacePath)
+			}
+
+			// Initialize BackgroundIndexingService if we have all dependencies
+			if (
+				this.schematicAnalyzer &&
+				codeIndexManager.codeParser &&
+				codeIndexManager.embedder &&
+				codeIndexManager.vectorStore &&
+				codeIndexManager.cacheManager
+			) {
+				this.backgroundIndexingService = new BackgroundIndexingService(
+					this.schematicAnalyzer,
+					codeIndexManager.codeParser,
+					codeIndexManager.embedder,
+					codeIndexManager.vectorStore,
+					codeIndexManager.cacheManager,
+					workspacePath,
+				)
+
+				// Set up event listeners for background processing
+				this.backgroundIndexingService.on("jobCompleted", (job, status, processingTime) => {
+					this.postMessageToWebview({
+						type: "backgroundProcessingUpdate",
+						jobId: job.id,
+						status: "completed",
+						processingTime,
+					} as any)
+				})
+
+				this.backgroundIndexingService.on("jobFailed", (job, error) => {
+					this.postMessageToWebview({
+						type: "backgroundProcessingUpdate",
+						jobId: job.id,
+						status: "failed",
+						error: error.message,
+					} as any)
+				})
+
+				this.backgroundIndexingService.on("statsUpdated", (stats) => {
+					this.postMessageToWebview({
+						type: "backgroundProcessingStats",
+						stats,
+					} as any)
+				})
+			}
+
+			// Initialize PerformanceMonitor
+			this.performanceMonitor = new PerformanceMonitor({
+				enabled: true,
+				enableTelemetry: true,
+				enableOptimizationSuggestions: true,
+			})
+
+			// Set up performance monitoring event listeners
+			this.performanceMonitor.on("performanceAlert", (alert, metricValue) => {
+				this.postMessageToWebview({
+					type: "performanceAlert",
+					alert,
+					metricValue,
+				} as any)
+			})
+
+			this.performanceMonitor.on("metricsUpdated", (metrics) => {
+				this.postMessageToWebview({
+					type: "performanceMetrics",
+					metrics,
+				} as any)
+			})
+
+			// Start performance monitoring
+			this.performanceMonitor.start()
+
+			this.log("Enhanced indexing services initialized successfully")
+		} catch (error) {
+			this.log(
+				`Error initializing enhanced indexing services: ${error instanceof Error ? error.message : String(error)}`,
+			)
+		}
 	}
 
 	/**
@@ -396,6 +526,22 @@ export class ClineProvider
 		this.mcpHub = undefined
 		this.marketplaceManager?.cleanup()
 		this.customModesManager?.dispose()
+
+		// Dispose enhanced indexing services
+		if (this.performanceMonitor) {
+			this.performanceMonitor.dispose()
+			this.performanceMonitor = undefined
+		}
+
+		if (this.backgroundIndexingService) {
+			this.backgroundIndexingService.dispose()
+			this.backgroundIndexingService = undefined
+		}
+
+		// Clear references to other services
+		this.indexingValidator = undefined
+		this.schematicAnalyzer = undefined
+
 		this.log("Disposed all disposables")
 		ClineProvider.activeInstances.delete(this)
 
@@ -694,6 +840,381 @@ export class ClineProvider
 		)
 
 		return task
+	}
+
+	/**
+	 * Enhanced task initialization with indexing validation
+	 * This method validates indexing state before task initialization and provides
+	 * user options for handling unindexed workspaces
+	 */
+	public async initClineWithTaskValidated(
+		text?: string,
+		images?: string[],
+		parentTask?: Task,
+		options: Partial<
+			Pick<
+				TaskOptions,
+				"enableDiff" | "enableCheckpoints" | "fuzzyMatchThreshold" | "consecutiveMistakeLimit" | "experiments"
+			>
+		> = {},
+		skipIndexValidation: boolean = false,
+	): Promise<Task> {
+		// Skip validation for subtasks or when explicitly disabled
+		if (skipIndexValidation || parentTask || this.isValidationDisabled()) {
+			return this.initClineWithTask(text, images, parentTask, options)
+		}
+
+		try {
+			// Perform indexing validation
+			const validationResult = await this.validateIndexingState()
+
+			if (validationResult.isValid) {
+				// Index is ready, proceed with task
+				return this.initClineWithTask(text, images, parentTask, options)
+			}
+
+			// Index validation failed, handle based on status
+			await this.handleIndexingValidation(validationResult, {
+				text,
+				images,
+				parentTask,
+				options: options as any,
+				timestamp: Date.now(),
+			})
+
+			// This will be resolved when user makes a choice
+			throw new ValidationError("Indexing validation required user interaction", ERROR_CODES.USER_CANCELLED)
+		} catch (error) {
+			if (error instanceof ValidationError && error.code === ERROR_CODES.USER_CANCELLED) {
+				throw error
+			}
+
+			// Log validation error but continue with task
+			this.log(`Indexing validation failed: ${error instanceof Error ? error.message : String(error)}`)
+			return this.initClineWithTask(text, images, parentTask, options)
+		}
+	}
+
+	// --- Indexing Validation Methods ---
+
+	/**
+	 * Validates indexing state before task initialization with enhanced services
+	 * @returns Promise<IndexValidationResult>
+	 */
+	private async validateIndexingState(): Promise<IndexValidationResult> {
+		const startTime = Date.now()
+
+		try {
+			// Use enhanced IndexingValidator if available
+			if (this.indexingValidator) {
+				const enhancedResult = await this.indexingValidator.validateIndexingStateEnhanced()
+
+				// Record performance metrics if available
+				if (this.performanceMonitor) {
+					const duration = Date.now() - startTime
+					this.performanceMonitor.recordFileProcessed(duration, 0, true)
+				}
+
+				return enhancedResult
+			}
+
+			// Fallback to original validation logic
+			const codeIndexManager = this.getCurrentWorkspaceCodeIndexManager()
+
+			if (!codeIndexManager) {
+				return {
+					isValid: false,
+					status: "Standby",
+					recommendation: {
+						shouldIndex: false,
+						reason: "No workspace available for indexing",
+						priority: "low",
+						workspaceSize: 0,
+						fileCount: 0,
+					},
+				}
+			}
+
+			// Check if feature is enabled and configured
+			if (!codeIndexManager.isFeatureEnabled || !codeIndexManager.isFeatureConfigured) {
+				return {
+					isValid: false,
+					status: "Standby",
+					recommendation: {
+						shouldIndex: false,
+						reason: "Code indexing is not enabled or configured",
+						priority: "low",
+						workspaceSize: 0,
+						fileCount: 0,
+					},
+				}
+			}
+
+			// Get current status and recommendation
+			const currentStatus = codeIndexManager.getCurrentStatus()
+			const recommendation = await codeIndexManager.getIndexingRecommendation()
+			const estimate = await codeIndexManager.estimateIndexingTime()
+
+			// Determine if current state is valid for task execution
+			const isValid =
+				currentStatus.systemStatus === "Indexed" ||
+				!recommendation.shouldIndex ||
+				currentStatus.systemStatus === "Indexing"
+
+			const result: IndexValidationResult = {
+				isValid,
+				status: currentStatus.systemStatus,
+				recommendation,
+				estimate,
+				error: currentStatus.systemStatus === "Error" ? currentStatus.systemMessage : undefined,
+			}
+
+			// Performance check
+			const duration = Date.now() - startTime
+			if (duration > VALIDATION_CONSTANTS.PERFORMANCE_TARGET_MS) {
+				this.log(
+					`Indexing validation took ${duration}ms (target: ${VALIDATION_CONSTANTS.PERFORMANCE_TARGET_MS}ms)`,
+				)
+			}
+
+			return result
+		} catch (error) {
+			// Record error in performance monitor if available
+			if (this.performanceMonitor) {
+				const duration = Date.now() - startTime
+				this.performanceMonitor.recordFileProcessed(duration, 0, false)
+			}
+
+			return {
+				isValid: false,
+				status: "Error",
+				recommendation: {
+					shouldIndex: false,
+					reason: "Validation failed",
+					priority: "low",
+					workspaceSize: 0,
+					fileCount: 0,
+				},
+				error: error instanceof Error ? error.message : String(error),
+			}
+		}
+	}
+
+	/**
+	 * Handles indexing validation results by showing appropriate UI
+	 * @param validationResult - Result of indexing validation
+	 * @param pendingTaskData - Task data to execute after validation
+	 */
+	private async handleIndexingValidation(
+		validationResult: IndexValidationResult,
+		pendingTaskData: PendingTaskData,
+	): Promise<void> {
+		// Generate unique task ID for this validation session
+		const taskId = `validation-${Date.now()}`
+
+		// Send validation result to webview for user interaction
+		await this.postMessageToWebview({
+			type: "showIndexingValidation",
+			validation: validationResult,
+			taskId,
+		} as any)
+
+		// Store pending task data for later execution
+		this.storePendingTaskData(taskId, pendingTaskData)
+	}
+
+	/**
+	 * Handles user choice from indexing validation dialog
+	 * @param choice - User's indexing choice
+	 * @param taskId - Task ID for this validation session
+	 */
+	public async handleIndexingChoice(choice: IndexingChoice, taskId: string): Promise<void> {
+		const pendingTaskData = this.getPendingTaskData(taskId)
+
+		if (!pendingTaskData) {
+			throw new ValidationError(
+				"No pending task data found for validation session",
+				ERROR_CODES.VALIDATION_TIMEOUT,
+			)
+		}
+
+		try {
+			switch (choice) {
+				case "start":
+					await this.startIndexingAndWait(taskId)
+					break
+
+				case "skip":
+					await this.proceedWithoutIndexing(pendingTaskData)
+					break
+
+				case "wait":
+					await this.waitForIndexingCompletion(taskId)
+					break
+
+				case "cancel":
+					this.clearPendingTaskData(taskId)
+					throw new ValidationError("User cancelled task initialization", ERROR_CODES.USER_CANCELLED)
+			}
+		} finally {
+			this.clearPendingTaskData(taskId)
+		}
+	}
+
+	/**
+	 * Starts enhanced indexing with intelligent prioritization and waits for completion
+	 */
+	private async startIndexingAndWait(taskId: string): Promise<void> {
+		const codeIndexManager = this.getCurrentWorkspaceCodeIndexManager()
+
+		if (!codeIndexManager) {
+			throw new ValidationError("Code index manager not available", ERROR_CODES.INDEX_MANAGER_UNAVAILABLE)
+		}
+
+		try {
+			// Use enhanced indexing if available
+			if (this.indexingValidator) {
+				await this.indexingValidator.startEnhancedIndexing()
+			} else {
+				await codeIndexManager.startIndexing()
+			}
+
+			// Start background processing if available
+			if (this.backgroundIndexingService && this.schematicAnalyzer) {
+				// Get workspace files for intelligent processing
+				const workspaceFiles = await vscode.workspace.findFiles("**/*", "**/node_modules/**")
+				const filePaths = workspaceFiles.map((uri) => uri.fsPath)
+
+				// Get prioritized file order
+				const prioritizedFiles = await this.schematicAnalyzer.getFilesByPriority(filePaths)
+
+				// Add files to background processing queue with intelligent batching
+				await this.backgroundIndexingService.addBatchToQueue(prioritizedFiles, ProcessingPriority.HIGH)
+
+				// Start background processing
+				this.backgroundIndexingService.startProcessing()
+			}
+
+			// Show enhanced progress dialog with background processing info
+			await this.postMessageToWebview({
+				type: "indexingProgress",
+				progress: {
+					filesProcessed: 0,
+					totalFiles: 0,
+					currentFile: "",
+					elapsedTimeMs: 0,
+					estimatedRemainingMs: 0,
+					percentage: 0,
+				},
+				backgroundProcessing: this.backgroundIndexingService
+					? {
+							enabled: true,
+							queueSize: this.backgroundIndexingService.getQueueStatus().total,
+							activeJobs: this.backgroundIndexingService.getQueueStatus().active,
+						}
+					: { enabled: false },
+				canSkip: true,
+				canCancel: true,
+			} as any)
+
+			// Wait for completion or user action
+			await this.waitForIndexingCompletion(taskId)
+		} catch (error) {
+			// Record error in performance monitor
+			if (this.performanceMonitor) {
+				this.performanceMonitor.recordFileProcessed(0, 0, false)
+			}
+			throw error
+		}
+	}
+
+	/**
+	 * Proceeds with task initialization without indexing
+	 */
+	private async proceedWithoutIndexing(pendingTaskData: PendingTaskData): Promise<void> {
+		const task = await this.initClineWithTask(
+			pendingTaskData.text,
+			pendingTaskData.images,
+			pendingTaskData.parentTask,
+			pendingTaskData.options,
+		)
+
+		// Add indexing context to indicate task was started without index
+		const indexingContext: IndexingContext = ({
+			hasIndex: false,
+			indexQuality: 0,
+			userChoice: "skip",
+			validationTimestamp: pendingTaskData.timestamp,
+		}(
+			// Store context for potential use by task
+			task as any,
+		)._indexingContext = indexingContext)
+	}
+
+	/**
+	 * Waits for indexing completion
+	 */
+	private async waitForIndexingCompletion(taskId: string): Promise<void> {
+		const codeIndexManager = this.getCurrentWorkspaceCodeIndexManager()
+
+		if (!codeIndexManager) {
+			throw new ValidationError("Code index manager not available", ERROR_CODES.INDEX_MANAGER_UNAVAILABLE)
+		}
+
+		return new Promise((resolve, reject) => {
+			const timeout = setTimeout(() => {
+				reject(new ValidationError("Indexing validation timeout", ERROR_CODES.VALIDATION_TIMEOUT))
+			}, VALIDATION_CONSTANTS.DEFAULT_VALIDATION_TIMEOUT)
+
+			const subscription = codeIndexManager.onProgressUpdate((update) => {
+				// Send progress updates to webview
+				this.postMessageToWebview({
+					type: "indexingProgress",
+					progress: update,
+					canSkip: true,
+					canCancel: true,
+				} as any)
+
+				// Check if indexing completed
+				const status = codeIndexManager.getCurrentStatus()
+				if (status.systemStatus === "Indexed") {
+					clearTimeout(timeout)
+					subscription.dispose()
+					resolve()
+				} else if (status.systemStatus === "Error") {
+					clearTimeout(timeout)
+					subscription.dispose()
+					reject(
+						new ValidationError(
+							`Indexing failed: ${status.systemMessage}`,
+							ERROR_CODES.CONFIGURATION_ERROR,
+						),
+					)
+				}
+			})
+		})
+	}
+
+	// --- Validation Helper Methods ---
+
+	private pendingTaskDataMap = new Map<string, PendingTaskData>()
+
+	private storePendingTaskData(taskId: string, data: PendingTaskData): void {
+		this.pendingTaskDataMap.set(taskId, data)
+	}
+
+	private getPendingTaskData(taskId: string): PendingTaskData | undefined {
+		return this.pendingTaskDataMap.get(taskId)
+	}
+
+	private clearPendingTaskData(taskId: string): void {
+		this.pendingTaskDataMap.delete(taskId)
+	}
+
+	private isValidationDisabled(): boolean {
+		// Check if validation is disabled via configuration
+		// This could be extended to check user preferences
+		return false
 	}
 
 	public async initClineWithHistoryItem(historyItem: HistoryItem & { rootTask?: Task; parentTask?: Task }) {
@@ -2532,6 +3053,174 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 				values: currentManager.getCurrentStatus(),
 			})
 		}
+	}
+
+	// --- Enhanced Indexing Service Access Methods ---
+
+	/**
+	 * Gets the IndexingValidator instance
+	 */
+	public getIndexingValidator(): IndexingValidator | undefined {
+		return this.indexingValidator
+	}
+
+	/**
+	 * Gets the SchematicAnalyzer instance
+	 */
+	public getSchematicAnalyzer(): SchematicAnalyzer | undefined {
+		return this.schematicAnalyzer
+	}
+
+	/**
+	 * Gets the BackgroundIndexingService instance
+	 */
+	public getBackgroundIndexingService(): BackgroundIndexingService | undefined {
+		return this.backgroundIndexingService
+	}
+
+	/**
+	 * Gets the PerformanceMonitor instance
+	 */
+	public getPerformanceMonitor(): PerformanceMonitor | undefined {
+		return this.performanceMonitor
+	}
+
+	/**
+	 * Gets enhanced indexing status including all service states
+	 */
+	public getEnhancedIndexingStatus(): {
+		servicesAvailable: {
+			indexingValidator: boolean
+			schematicAnalyzer: boolean
+			backgroundIndexingService: boolean
+			performanceMonitor: boolean
+		}
+		backgroundProcessing?: {
+			isProcessing: boolean
+			queueSize: number
+			activeJobs: number
+			stats: any
+		}
+		performance?: {
+			metrics: IndexingPerformanceMetrics
+			suggestions: any[]
+		}
+		validation?: {
+			isValid: boolean
+			capabilities: string[]
+			issues: string[]
+		}
+	} {
+		const status = {
+			servicesAvailable: {
+				indexingValidator: !!this.indexingValidator,
+				schematicAnalyzer: !!this.schematicAnalyzer,
+				backgroundIndexingService: !!this.backgroundIndexingService,
+				performanceMonitor: !!this.performanceMonitor,
+			},
+		} as any
+
+		// Add background processing status
+		if (this.backgroundIndexingService) {
+			const queueStatus = this.backgroundIndexingService.getQueueStatus()
+			const stats = this.backgroundIndexingService.getStats()
+
+			status.backgroundProcessing = {
+				isProcessing: stats.activeJobs > 0,
+				queueSize: queueStatus.total,
+				activeJobs: queueStatus.active,
+				stats,
+			}
+		}
+
+		// Add performance metrics
+		if (this.performanceMonitor) {
+			status.performance = {
+				metrics: this.performanceMonitor.getCurrentMetrics(),
+				suggestions: this.performanceMonitor.getOptimizationSuggestions(),
+			}
+		}
+
+		// Add validation capabilities
+		if (this.indexingValidator) {
+			this.indexingValidator
+				.validateEnhancedServices()
+				.then((validation) => {
+					status.validation = validation
+				})
+				.catch(() => {
+					status.validation = {
+						isValid: false,
+						capabilities: [],
+						issues: ["Failed to validate enhanced services"],
+					}
+				})
+		}
+
+		return status
+	}
+
+	/**
+	 * Adds a file to background processing queue if available
+	 */
+	public async addFileToBackgroundQueue(filePath: string, priority?: ProcessingPriority): Promise<string | null> {
+		if (!this.backgroundIndexingService) {
+			return null
+		}
+
+		try {
+			return await this.backgroundIndexingService.addToQueue(filePath, undefined, priority)
+		} catch (error) {
+			this.log(
+				`Failed to add file to background queue: ${error instanceof Error ? error.message : String(error)}`,
+			)
+			return null
+		}
+	}
+
+	/**
+	 * Gets file analysis if SchematicAnalyzer is available
+	 */
+	public async getFileAnalysis(filePath: string): Promise<FileAnalysis | null> {
+		if (!this.schematicAnalyzer) {
+			return null
+		}
+
+		try {
+			return await this.schematicAnalyzer.analyzeFile(filePath)
+		} catch (error) {
+			this.log(`Failed to analyze file: ${error instanceof Error ? error.message : String(error)}`)
+			return null
+		}
+	}
+
+	/**
+	 * Pauses background processing if available
+	 */
+	public pauseBackgroundProcessing(): void {
+		if (this.backgroundIndexingService) {
+			this.backgroundIndexingService.pauseProcessing()
+		}
+	}
+
+	/**
+	 * Resumes background processing if available
+	 */
+	public resumeBackgroundProcessing(): void {
+		if (this.backgroundIndexingService) {
+			this.backgroundIndexingService.resumeProcessing()
+		}
+	}
+
+	/**
+	 * Gets performance optimization suggestions
+	 */
+	public getPerformanceOptimizationSuggestions(): any[] {
+		if (!this.performanceMonitor) {
+			return []
+		}
+
+		return this.performanceMonitor.getOptimizationSuggestions()
 	}
 }
 

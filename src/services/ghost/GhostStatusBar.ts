@@ -78,9 +78,9 @@ export class GhostStatusBar {
 		this.statusBar.text = `${t("bluescode:ghost.statusBar.enabled")} (${totalCostFormatted})`
 		this.statusBar.tooltip = `\
 ${t("bluescode:ghost.statusBar.tooltip.basic")}
-• ${t("bluescode:ghost.statusBar.tooltip.lastCompletion")} $${lastCompletionCostFormatted}
-• ${t("bluescode:ghost.statusBar.tooltip.sessionTotal")} ${totalCostFormatted}
-• ${t("bluescode:ghost.statusBar.tooltip.model")} ${this.model}\
+- ${t("bluescode:ghost.statusBar.tooltip.lastCompletion")} $${lastCompletionCostFormatted}
+- ${t("bluescode:ghost.statusBar.tooltip.sessionTotal")} ${totalCostFormatted}
+- ${t("bluescode:ghost.statusBar.tooltip.model")} ${this.model}\
 `
 	}
 

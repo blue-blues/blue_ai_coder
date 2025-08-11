@@ -197,7 +197,7 @@ export class CustomModesManager {
 				// Show user-friendly error for .roomodes files
 				if (filePath.endsWith(ROOMODES_FILENAME)) {
 					const issues = result.error.issues
-						.map((issue) => `• ${issue.path.join(".")}: ${issue.message}`)
+						.map((issue) => `- ${issue.path.join(".")}: ${issue.message}`)
 						.join("\n")
 
 					vscode.window.showErrorMessage(t("common:customModes.errors.schemaValidationError", { issues }))

@@ -106,6 +106,13 @@ import { restoreTodoListForTask } from "../tools/updateTodoListTool"
 import { reportExcessiveRecursion, yieldPromise } from "../bluescode" // bluescode_change
 import { AutoApprovalHandler } from "./AutoApprovalHandler"
 
+// Import indexing validation types
+import { IndexingContext } from "../../types/indexing-validation"
+import { IndexingValidator } from "../../services/indexing-validation/IndexingValidator"
+import { SchematicAnalyzer } from "../../services/code-index/SchematicAnalyzer"
+import { BackgroundIndexingService } from "../../services/code-index/BackgroundIndexingService"
+import { PerformanceMonitor } from "../../services/code-index/PerformanceMonitor"
+
 const MAX_EXPONENTIAL_BACKOFF_SECONDS = 600 // 10 minutes
 
 export type TaskOptions = {
@@ -125,6 +132,7 @@ export type TaskOptions = {
 	parentTask?: Task
 	taskNumber?: number
 	onCreated?: (task: Task) => void
+	indexingContext?: IndexingContext // Pre-chat indexing validation context
 }
 
 type UserContent = Array<Anthropic.ContentBlockParam> // bluescode_change
@@ -141,6 +149,9 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 	readonly parentTask: Task | undefined
 	readonly taskNumber: number
 	readonly workspacePath: string
+
+	// Indexing validation context
+	readonly indexingContext?: IndexingContext
 
 	/**
 	 * The mode associated with this task. Persisted across sessions
@@ -281,6 +292,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		parentTask,
 		taskNumber = -1,
 		onCreated,
+		indexingContext,
 	}: TaskOptions) {
 		super()
 		this.context = context // bluescode_change
@@ -324,6 +336,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		this.rootTask = rootTask
 		this.parentTask = parentTask
 		this.taskNumber = taskNumber
+		this.indexingContext = indexingContext
 
 		// Store the task's mode when it's created.
 		// For history items, use the stored mode; for new tasks, we'll set it
@@ -954,6 +967,97 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 	// Start / Abort / Resume
 
 	private async startTask(task?: string, images?: string[]): Promise<void> {
+		// Perform enhanced indexing validation if not a subtask and indexing context is not already set
+		if (!this.indexingContext) {
+			const provider = this.providerRef.deref()
+			const codeIndexManager = provider?.getCurrentWorkspaceCodeIndexManager()
+
+			if (codeIndexManager) {
+				const validator = new IndexingValidator(codeIndexManager)
+
+				if (validator.isAvailable()) {
+					// Initialize enhanced indexing services
+					const schematicAnalyzer = new SchematicAnalyzer(this.cwd)
+					const performanceMonitor = new PerformanceMonitor()
+					const backgroundIndexingService = new BackgroundIndexingService(
+						this.cwd,
+						schematicAnalyzer,
+						performanceMonitor,
+					)
+
+					// Start performance monitoring
+					performanceMonitor.startOperation("task_indexing_validation")
+
+					try {
+						const validationResult = await validator.validateIndexingState()
+
+						// If indexing is recommended but not complete, handle validation with enhanced services
+						if (!validationResult.isValid && validationResult.recommendation.shouldIndex) {
+							// Use schematic analyzer to prioritize files for indexing
+							const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace()
+							const prioritizedFiles = schematicAnalyzer.getFilesByPriority()
+
+							await this.say(
+								"text",
+								`🔍 Analyzing workspace structure: ${workspaceAnalysis.totalFiles} files found`,
+							)
+							await this.say(
+								"text",
+								`📊 Prioritized ${prioritizedFiles.length} files for intelligent indexing`,
+							)
+
+							// Start background indexing with prioritized files
+							if (prioritizedFiles.length > 0) {
+								backgroundIndexingService.addBatch(
+									prioritizedFiles.map((file) => ({
+										filePath: file.path,
+										priority:
+											file.importance === "high"
+												? "high"
+												: file.importance === "medium"
+													? "medium"
+													: "low",
+									})),
+								)
+
+								await this.say("text", "⚡ Starting intelligent background indexing...")
+							}
+
+							// This will trigger the validation workflow in ClineProvider
+							await provider.handleIndexingValidation(validationResult, this.taskId)
+							return // Exit early - task will be resumed after indexing validation
+						}
+
+						// Create indexing context for the task with enhanced services info
+						this.indexingContext = validator.createIndexingContext(
+							validationResult.isValid ? "skip" : "wait",
+							Date.now(),
+						)
+
+						// If indexing is valid, still start background processing for optimization
+						if (validationResult.isValid) {
+							const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace()
+							if (workspaceAnalysis.totalFiles > 0) {
+								await this.say(
+									"text",
+									`✅ Code indexing complete. Workspace: ${workspaceAnalysis.totalFiles} files analyzed`,
+								)
+
+								// Start background optimization
+								backgroundIndexingService.startBackgroundProcessing()
+							}
+						}
+					} finally {
+						// Record performance metrics
+						const metrics = performanceMonitor.endOperation("task_indexing_validation")
+						if (metrics) {
+							await this.say("text", `⏱️ Indexing validation completed in ${metrics.duration}ms`)
+						}
+					}
+				}
+			}
+		}
+
 		// `conversationHistory` (for API) and `clineMessages` (for webview)
 		// need to be in sync.
 		// If the extension process were killed, then on restart the
@@ -978,6 +1082,126 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			},
 			...imageBlocks,
 		])
+	}
+
+	/**
+	 * Ensures indexing is complete before proceeding with task execution using enhanced services
+	 * @param timeoutMs - Maximum time to wait for indexing completion
+	 * @returns Promise<boolean> - true if indexing is complete, false if timed out
+	 */
+	async ensureIndexingComplete(timeoutMs: number = 300000): Promise<boolean> {
+		const provider = this.providerRef.deref()
+		const codeIndexManager = provider?.getCurrentWorkspaceCodeIndexManager()
+
+		if (!codeIndexManager) {
+			return true // No index manager available, proceed without indexing
+		}
+
+		// Initialize enhanced indexing services
+		const validator = new IndexingValidator(codeIndexManager)
+		const schematicAnalyzer = new SchematicAnalyzer(this.cwd)
+		const performanceMonitor = new PerformanceMonitor()
+		const backgroundIndexingService = new BackgroundIndexingService(this.cwd, schematicAnalyzer, performanceMonitor)
+
+		// Start performance monitoring
+		performanceMonitor.startOperation("ensure_indexing_complete")
+
+		try {
+			// Check if indexing is already complete
+			const currentStatus = validator.getCurrentStatus()
+			if (currentStatus.systemStatus === "Indexed") {
+				// Even if indexed, analyze workspace for optimization opportunities
+				const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace()
+				await this.say("text", `✅ Code indexing complete. Analyzed ${workspaceAnalysis.totalFiles} files`)
+
+				// Start background optimization if beneficial
+				if (workspaceAnalysis.totalFiles > 100) {
+					backgroundIndexingService.startBackgroundProcessing()
+					await this.say("text", "🔄 Started background optimization for large workspace")
+				}
+
+				return true
+			}
+
+			// If indexing is in progress, wait for completion with enhanced monitoring
+			if (currentStatus.systemStatus === "Indexing") {
+				await this.say("text", "⏳ Waiting for code indexing to complete with intelligent monitoring...")
+
+				// Use schematic analyzer to provide progress insights
+				const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace()
+				const prioritizedFiles = schematicAnalyzer.getFilesByPriority()
+
+				await this.say(
+					"text",
+					`📊 Monitoring ${workspaceAnalysis.totalFiles} files (${prioritizedFiles.length} prioritized)`,
+				)
+
+				// Wait for completion with performance tracking
+				const completed = await validator.waitForIndexingCompletion(timeoutMs)
+
+				if (completed) {
+					await this.say("text", "✅ Code indexing completed successfully with enhanced monitoring")
+
+					// Start background processing for continued optimization
+					backgroundIndexingService.startBackgroundProcessing()
+					return true
+				} else {
+					await this.say("text", "⚠️ Code indexing timed out, proceeding with partial index")
+
+					// Even on timeout, start background processing to continue indexing
+					if (prioritizedFiles.length > 0) {
+						backgroundIndexingService.addBatch(
+							prioritizedFiles.map((file) => ({
+								filePath: file.path,
+								priority:
+									file.importance === "high"
+										? "high"
+										: file.importance === "medium"
+											? "medium"
+											: "low",
+							})),
+						)
+						backgroundIndexingService.startBackgroundProcessing()
+						await this.say("text", "🔄 Started background indexing for remaining files")
+					}
+
+					return false
+				}
+			}
+
+			// If indexing is in error state or standby, try to start enhanced indexing
+			if (currentStatus.systemStatus === "Error" || currentStatus.systemStatus === "Standby") {
+				await this.say("text", "🔧 Attempting to restart indexing with enhanced services...")
+
+				const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace()
+				const prioritizedFiles = schematicAnalyzer.getFilesByPriority()
+
+				if (prioritizedFiles.length > 0) {
+					// Add prioritized files to background processing
+					backgroundIndexingService.addBatch(
+						prioritizedFiles.map((file) => ({
+							filePath: file.path,
+							priority:
+								file.importance === "high" ? "high" : file.importance === "medium" ? "medium" : "low",
+						})),
+					)
+					backgroundIndexingService.startBackgroundProcessing()
+
+					await this.say(
+						"text",
+						`🚀 Started enhanced background indexing for ${prioritizedFiles.length} prioritized files`,
+					)
+				}
+			}
+
+			return true
+		} finally {
+			// Record performance metrics
+			const metrics = performanceMonitor.endOperation("ensure_indexing_complete")
+			if (metrics) {
+				await this.say("text", `⏱️ Enhanced indexing check completed in ${metrics.duration}ms`)
+			}
+		}
 	}
 
 	public async resumePausedTask(lastMessage: string) {

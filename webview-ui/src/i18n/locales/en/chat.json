@@ -351,7 +351,188 @@
 		"indexing": "Indexing {{percentage}}%",
 		"indexed": "Indexed",
 		"error": "Index error",
-		"status": "Index status"
+		"status": "Index status",
+		"paused": "Paused",
+		"completed": "Completed",
+		"standby": "Standby"
+	},
+	"indexing": {
+		"modal": {
+			"title": "Indexing Progress",
+			"hideDetails": "Hide Details",
+			"showDetails": "Show Details"
+		},
+		"progress": {
+			"overall": "Overall Progress",
+			"complete": "complete",
+			"remaining": "Time remaining",
+			"currentFile": "Currently Processing",
+			"recentFiles": "Recently Processed",
+			"errors": "errors",
+			"warnings": "warnings"
+		},
+		"actions": {
+			"wait": "Wait for Completion",
+			"skip": "Skip and Continue",
+			"cancel": "Cancel",
+			"pause": "Pause",
+			"resume": "Resume",
+			"retry": "Retry"
+		},
+		"status": {
+			"indexing": "Indexing",
+			"paused": "Paused",
+			"completed": "Completed",
+			"error": "Error",
+			"standby": "Standby"
+		},
+		"performance": {
+			"title": "Performance Metrics",
+			"loading": "Loading performance data...",
+			"unavailable": "Performance data unavailable",
+			"throughput": "Throughput",
+			"memory": "Memory Usage",
+			"success": "Success Rate",
+			"filesPerSecond": "files/sec",
+			"memoryUsage": "Memory Usage",
+			"successRate": "Success Rate",
+			"cacheHitRate": "Cache Hit Rate",
+			"timing": "Timing Metrics",
+			"resources": "Resource Usage",
+			"avgFileTime": "Avg. File Time",
+			"avgBatchTime": "Avg. Batch Time",
+			"queueWaitTime": "Queue Wait Time",
+			"cpuUsage": "CPU Usage",
+			"diskIO": "Disk I/O",
+			"concurrency": "Concurrency",
+			"elapsed": "Elapsed Time",
+			"optimizations": "Optimization Suggestions",
+			"suggestions": "suggestions",
+			"impact": "Impact",
+			"dismiss": "Dismiss",
+			"export": "Export Report"
+		},
+		"error": {
+			"title": "Indexing Error",
+			"configIssues": "Configuration Issues",
+			"suggestions": "Suggested Solutions",
+			"showDetails": "Show Technical Details",
+			"hideDetails": "Hide Technical Details",
+			"memoryUsage": "Memory Usage",
+			"diskSpace": "Available Disk Space",
+			"technicalDetails": "Technical Details",
+			"stackTrace": "Stack Trace",
+			"copyDetails": "Copy Error Details",
+			"copied": "Copied!",
+			"getHelp": "Get Help",
+			"dismiss": "Dismiss",
+			"configure": "Configure Settings",
+			"retrySafe": "Retry (Safe Mode)",
+			"retryForce": "Force Retry"
+		},
+		"errors": {
+			"insufficientMemory": "Insufficient memory available for indexing",
+			"diskSpaceLow": "Low disk space detected",
+			"permissionDenied": "Permission denied accessing files",
+			"networkError": "Network connection error",
+			"configInvalid": "Invalid configuration settings",
+			"serviceUnavailable": "Indexing service unavailable",
+			"timeout": "Operation timed out",
+			"parseError": "Error parsing files",
+			"unknownError": "An unknown error occurred"
+		},
+		"recovery": {
+			"restartService": "Restart the indexing service",
+			"checkConfig": "Check configuration settings",
+			"freeMemory": "Free up system memory",
+			"checkPermissions": "Check file permissions",
+			"checkNetwork": "Check network connectivity",
+			"updateSettings": "Update indexing settings",
+			"contactSupport": "Contact support for assistance"
+		},
+		"config": {
+			"title": "Indexing Configuration",
+			"saved": "Configuration saved",
+			"saveError": "Failed to save configuration",
+			"saving": "Saving...",
+			"save": "Save Configuration",
+			"resetDefaults": "Reset to Defaults",
+			"resetOriginal": "Reset Changes",
+			"sections": {
+				"performance": "Performance",
+				"quality": "Quality",
+				"filters": "Filters",
+				"advanced": "Advanced"
+			},
+			"performance": {
+				"title": "Performance Settings",
+				"maxConcurrentFiles": "Max Concurrent Files",
+				"maxConcurrentFilesTooltip": "Maximum number of files to process simultaneously",
+				"batchSize": "Batch Size",
+				"batchSizeTooltip": "Number of files to process in each batch",
+				"memoryLimit": "Memory Limit",
+				"memoryLimitTooltip": "Maximum memory usage in MB",
+				"timeout": "Timeout",
+				"timeoutTooltip": "Maximum time to wait for operations in milliseconds",
+				"enableParallelProcessing": "Enable Parallel Processing",
+				"enableCaching": "Enable Caching",
+				"enableIncrementalIndexing": "Enable Incremental Indexing"
+			},
+			"quality": {
+				"title": "Quality Settings",
+				"enableDeepAnalysis": "Enable Deep Analysis",
+				"skipBinaryFiles": "Skip Binary Files",
+				"skipLargeFiles": "Skip Large Files",
+				"maxFileSize": "Max File Size",
+				"maxFileSizeTooltip": "Maximum file size to process in MB",
+				"cacheSize": "Cache Size",
+				"cacheSizeTooltip": "Cache size in MB"
+			},
+			"filters": {
+				"title": "File Filters",
+				"includePatterns": "Include Patterns",
+				"excludePatterns": "Exclude Patterns",
+				"addPattern": "Add Pattern"
+			},
+			"advanced": {
+				"title": "Advanced Settings",
+				"logLevel": "Log Level",
+				"retryAttempts": "Retry Attempts",
+				"enableTelemetry": "Enable Telemetry",
+				"autoOptimize": "Auto-Optimize Performance"
+			},
+			"validation": {
+				"concurrentFilesRange": "Must be between 1 and 50",
+				"batchSizeRange": "Must be between 1 and 1000",
+				"memoryLimitRange": "Must be between 64 and 4096 MB",
+				"maxFileSizeRange": "Must be between 1 and 100 MB",
+				"cacheSizeRange": "Must be between 10 and 1000 MB"
+			}
+		},
+		"analysis": {
+			"title": "Workspace Analysis",
+			"loading": "Analyzing workspace...",
+			"unavailable": "Analysis unavailable",
+			"lastAnalyzed": "Last analyzed",
+			"refresh": "Refresh Analysis",
+			"overview": "Overview",
+			"files": "Files",
+			"directories": "Directories",
+			"recommendations": "Recommendations",
+			"totalFiles": "Total Files",
+			"totalSize": "Total Size",
+			"languages": "Languages",
+			"estimate": "Estimated Time",
+			"languageDistribution": "Language Distribution",
+			"indexingEstimate": "Indexing Estimate",
+			"estimatedTime": "Time",
+			"estimatedMemory": "Memory",
+			"confidence": "Confidence",
+			"highPriorityFiles": "High Priority Files",
+			"directoryStructure": "Directory Structure",
+			"noRecommendations": "No recommendations at this time. Your workspace looks well-organized!",
+			"affectedFiles": "Affected files"
+		}
 	},
 	"versionIndicator": {
 		"ariaLabel": "Version {{version}} - Click to view release notes"

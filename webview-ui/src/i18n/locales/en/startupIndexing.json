@@ -1,0 +1,80 @@
+{
+	"title": "Startup Indexing",
+	"subtitle": "Preparing workspace for optimal AI assistance",
+	"progress": "Progress",
+	"elapsed": "Elapsed",
+	"remaining": "Remaining",
+	"currentFile": "Current file",
+	"files": "files",
+	"complexity": "complexity",
+	"total": "Total",
+	"complete": "complete",
+	"workspaceSummary": "Workspace Summary",
+	"cancel": "Cancel",
+	"skip": "Skip for Now",
+	"continue": "Continue",
+	"skipHelp": "You can skip startup indexing, but some AI features may have limited context until background indexing completes.",
+	"phases": {
+		"initializing": "Initializing...",
+		"analyzingWorkspace": "Analyzing Workspace",
+		"indexingCritical": "Indexing Critical Files",
+		"indexingHighPriority": "Indexing High Priority Files",
+		"enablingInteraction": "Enabling Interaction",
+		"backgroundCompletion": "Background Completion",
+		"completed": "Completed",
+		"error": "Error"
+	},
+	"status": {
+		"initializing": "Initializing startup indexing...",
+		"analyzing": "Analyzing workspace structure...",
+		"indexingCritical": "Indexing critical files...",
+		"indexingHigh": "Indexing high priority files...",
+		"enabling": "Enabling user interaction...",
+		"completing": "Completing background indexing...",
+		"completed": "Startup indexing completed",
+		"error": "Startup indexing error",
+		"processing": "Processing..."
+	},
+	"blocking": {
+		"label": "Blocking",
+		"tooltip": "User interaction is blocked until critical indexing completes",
+		"message": "Please wait while we prepare your workspace for optimal AI assistance. This ensures maximum context availability."
+	},
+	"nonBlocking": {
+		"tooltip": "Background indexing in progress",
+		"message": "Background indexing is continuing to improve AI context."
+	},
+	"recommendations": {
+		"skip": "Indexing not recommended for this workspace",
+		"optional": "Indexing is optional but may improve AI assistance",
+		"recommended": "Indexing is recommended for better AI context",
+		"mandatory": "Indexing is required for optimal AI assistance"
+	},
+	"complexity": {
+		"low": "Low complexity workspace",
+		"medium": "Medium complexity workspace",
+		"high": "High complexity workspace"
+	},
+	"errors": {
+		"configurationError": "Startup indexing configuration error",
+		"workspaceError": "Workspace analysis error",
+		"indexingError": "Indexing process error",
+		"timeoutError": "Indexing timeout - continuing with limited context",
+		"unknownError": "Unknown startup indexing error"
+	},
+	"settings": {
+		"title": "Startup Indexing Settings",
+		"enabled": "Enable startup indexing",
+		"enabledDescription": "Automatically index workspace files during extension startup for maximum AI context",
+		"mandatoryForLarge": "Mandatory for large workspaces",
+		"mandatoryForLargeDescription": "Require indexing completion for workspaces with many files",
+		"maxAutoStart": "Auto-start threshold",
+		"maxAutoStartDescription": "Maximum number of files to automatically start indexing without user confirmation",
+		"showProgress": "Show progress UI",
+		"showProgressDescription": "Display detailed progress information during startup indexing",
+		"allowSkip": "Allow skip after timeout",
+		"allowSkipDescription": "Allow users to skip indexing after a timeout period",
+		"performanceOptimizations": "Enable performance optimizations",
+		"performanceOptimizationsDescription": "Use advanced performance optimizations during startup indexing"
+	}
+}

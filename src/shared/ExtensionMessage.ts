@@ -123,6 +123,17 @@ export interface ExtensionMessage {
 		| "indexingStatusUpdate"
 		| "indexCleared"
 		| "codebaseIndexConfig"
+		| "showIndexingValidation"
+		| "indexingProgress"
+		| "indexingChoice"
+		| "indexingDetailedProgress"
+		| "performanceMetrics"
+		| "optimizationSuggestions"
+		| "workspaceAnalysis"
+		| "indexingConfiguration"
+		| "indexingConfigurationSaved"
+		| "indexingError"
+		| "indexingComplete"
 		| "rulesData" // bluescode_change
 		| "marketplaceInstallResult"
 		| "marketplaceRemoveResult"
@@ -238,6 +249,130 @@ export interface ExtensionMessage {
 	}>
 	// bluescode_change end
 	commands?: Command[]
+	// Indexing validation message payloads
+	validation?: any // IndexValidationResult from indexing-validation types
+	progress?: {
+		filesProcessed: number
+		totalFiles: number
+		currentFile: string
+		elapsedTimeMs: number
+		estimatedRemainingMs: number
+		percentage: number
+		filesPerSecond?: number
+		category?: string
+		phase?: string
+		errorCount?: number
+		warningCount?: number
+		isPaused?: boolean
+	}
+	canSkip?: boolean
+	canCancel?: boolean
+	taskId?: string
+	// Enhanced indexing progress data
+	detailedProgress?: {
+		currentFile?: string
+		elapsedTimeMs: number
+		estimatedRemainingMs: number
+		filesPerSecond: number
+		category?: string
+		phase?: string
+		errorCount?: number
+		warningCount?: number
+		isPaused?: boolean
+		recentFiles?: string[]
+		batchInfo?: {
+			currentBatch: number
+			totalBatches: number
+			batchSize: number
+		}
+	}
+	// Performance metrics
+	performanceMetrics?: {
+		filesPerSecond: number
+		blocksPerSecond: number
+		bytesPerSecond: number
+		averageFileProcessingTime: number
+		averageBatchProcessingTime: number
+		totalIndexingTime: number
+		successRate: number
+		errorRate: number
+		retryRate: number
+		memoryUsage: number
+		cpuUsage: number
+		diskIORate: number
+		averageQueueWaitTime: number
+		queueEfficiency: number
+		concurrencyUtilization: number
+		cacheHitRate: number
+		duplicateDetectionRate: number
+		incrementalIndexingEfficiency: number
+	}
+	// Optimization suggestions
+	optimizationSuggestions?: Array<{
+		id: string
+		type: "performance" | "resource" | "configuration"
+		severity: "low" | "medium" | "high"
+		title: string
+		description: string
+		impact: string
+		action?: string
+		actionType?: "setting" | "restart" | "config"
+	}>
+	// Workspace analysis
+	workspaceAnalysis?: {
+		totalFiles: number
+		totalSize: number
+		languages: Record<string, { count: number; size: number; complexity: number }>
+		directories: Array<{
+			path: string
+			fileCount: number
+			totalSize: number
+			languages: Record<string, number>
+			avgComplexity: number
+			priority: "high" | "medium" | "low"
+			subdirectories: any[]
+		}>
+		highPriorityFiles: Array<{
+			path: string
+			size: number
+			lines: number
+			language: string
+			complexity: number
+			priority: "high" | "medium" | "low"
+			issues: string[]
+			dependencies: string[]
+			lastModified: number
+		}>
+		recommendations: Array<{
+			type: "optimization" | "structure" | "quality"
+			severity: "low" | "medium" | "high"
+			title: string
+			description: string
+			files?: string[]
+		}>
+		indexingEstimate: {
+			estimatedTimeMs: number
+			estimatedMemoryMB: number
+			confidence: number
+		}
+		lastAnalyzed: number
+	}
+	// Indexing error details
+	indexingError?: {
+		code: string
+		message: string
+		details?: string
+		stack?: string
+		timestamp: number
+		recoverable: boolean
+		suggestions?: string[]
+		configIssues?: string[]
+		systemInfo?: {
+			memoryUsage: number
+			diskSpace: number
+			nodeVersion: string
+		}
+	}
 }
 
 export type ExtensionState = Pick<

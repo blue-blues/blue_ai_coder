@@ -232,16 +232,16 @@ function runPerformanceTest(
 
 	// Output metrics
 	console.log(`- Time Statistics (in ms):`)
-	console.log(`  • Mean: ${stats.mean.toFixed(3)}`)
-	console.log(`  • Median: ${stats.median.toFixed(3)}`)
-	console.log(`  • Min: ${stats.min.toFixed(3)}`)
-	console.log(`  • Max: ${stats.max.toFixed(3)}`)
-	console.log(`  • P95: ${stats.p95.toFixed(3)}`)
-	console.log(`  • P99: ${stats.p99.toFixed(3)}`)
+	console.log(`  - Mean: ${stats.mean.toFixed(3)}`)
+	console.log(`  - Median: ${stats.median.toFixed(3)}`)
+	console.log(`  - Min: ${stats.min.toFixed(3)}`)
+	console.log(`  - Max: ${stats.max.toFixed(3)}`)
+	console.log(`  - P95: ${stats.p95.toFixed(3)}`)
+	console.log(`  - P99: ${stats.p99.toFixed(3)}`)
 	console.log(`- Throughput:`)
-	console.log(`  • Average: ${averageThroughput} MB/s`)
-	console.log(`  • Peak: ${peakThroughput} MB/s`)
-	console.log(`  • Reliable (P95): ${reliableThroughput} MB/s`)
+	console.log(`  - Average: ${averageThroughput} MB/s`)
+	console.log(`  - Peak: ${peakThroughput} MB/s`)
+	console.log(`  - Reliable (P95): ${reliableThroughput} MB/s`)
 	console.log(
 		`- Output size: ${resultSize} MB (${reduction}% ${parseFloat(reduction) < 0 ? "increase" : "reduction"})`,
 	)
