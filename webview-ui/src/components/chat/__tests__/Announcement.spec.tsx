@@ -1,6 +1,6 @@
 import { render, screen } from "@/utils/test-utils"
 
-import { Package } from "@roo/package"
+import { Package } from "@blues/package"
 
 import Announcement from "../Announcement"
 

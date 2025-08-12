@@ -1,5 +1,12 @@
 import "@testing-library/jest-dom"
 import "@testing-library/jest-dom/vitest"
+import React from "react"
+
+// Make React available globally for tests
+globalThis.React = React
+
+// Ensure React hooks are available
+Object.assign(globalThis, React)
 
 // Force React into development mode for tests
 // This is needed to enable act(...) function in React Testing Library

@@ -2,7 +2,7 @@ import EventEmitter from "events"
 
 import * as vscode from "vscode"
 
-import type { CloudUserInfo } from "@roo-code/types"
+import type { CloudUserInfo } from "@blues-code/types"
 
 import type { AuthService, AuthServiceEvents, AuthState } from "./AuthService"
 

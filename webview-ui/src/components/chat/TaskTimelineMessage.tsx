@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import type { ClineMessage } from "@roo-code/types"
+import type { ClineMessage } from "@blues-code/types"
 import { cn } from "@/lib/utils"
 import { getMessageTypeDescription } from "@/utils/messageColors"
 import { MAX_HEIGHT_PX, type MessageSizeData } from "@/utils/timeline/calculateTaskTimelineSizes"

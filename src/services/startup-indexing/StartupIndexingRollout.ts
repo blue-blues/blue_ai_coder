@@ -1,6 +1,6 @@
 import * as vscode from "vscode"
-import { TelemetryService } from "@roo-code/telemetry"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { TelemetryEventName } from "@blues-code/types"
 import { StartupIndexingConfig } from "./StartupIndexingCoordinator"
 import { StartupIndexingCompatibility } from "./StartupIndexingCompatibility"
 

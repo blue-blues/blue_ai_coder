@@ -1,7 +1,7 @@
 // kilocode_change: Morph fast apply - file added
 
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
-import { ProviderSettings } from "@roo-code/types"
+import { ProviderSettings } from "@blues-code/types"
 import { useAppTranslation } from "@/i18n/TranslationContext"
 
 export const MorphSettings = ({

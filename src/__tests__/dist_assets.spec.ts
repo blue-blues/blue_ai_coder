@@ -52,8 +52,10 @@ describe("dist assets", () => {
 			"tree-sitter-zig.wasm",
 		]
 
-		test.each(treeSitterFiles)("should have %s file", (filename) => {
-			expect(fs.existsSync(path.join(distPath, filename))).toBe(true)
+		treeSitterFiles.forEach((filename: string) => {
+			test(`should have ${filename} file`, () => {
+				expect(fs.existsSync(path.join(distPath, filename))).toBe(true)
+			})
 		})
 	})
 })

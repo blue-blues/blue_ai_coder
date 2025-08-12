@@ -5,7 +5,7 @@ import { fileURLToPath } from "url"
 import process from "node:process"
 import * as console from "node:console"
 
-import { copyPaths, copyWasms, copyLocales, setupLocaleWatcher } from "@roo-code/build"
+import { copyPaths, copyWasms, copyLocales, setupLocaleWatcher } from "../packages/build/dist/index.js"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -43,6 +43,47 @@ async function main() {
 	 * @type {import('esbuild').Plugin[]}
 	 */
 	const plugins = [
+		{
+			name: "workspace-resolver",
+			setup(build) {
+				build.onResolve({ filter: /^@blues-code\// }, (args) => {
+					const packageName = args.path
+					const packagePath = path.resolve(__dirname, "..", "packages", packageName.replace("@blues-code/", ""))
+					
+					// Check if it's a TypeScript source package (no build step)
+					const srcIndexPath = path.join(packagePath, "src", "index.ts")
+					if (fs.existsSync(srcIndexPath)) {
+						return { path: srcIndexPath }
+					}
+					
+					// Check for built package
+					const distIndexPath = path.join(packagePath, "dist", "index.js")
+					if (fs.existsSync(distIndexPath)) {
+						return { path: distIndexPath }
+					}
+					
+					// Fallback to package.json main/exports
+					const packageJsonPath = path.join(packagePath, "package.json")
+					if (fs.existsSync(packageJsonPath)) {
+						const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"))
+						if (packageJson.exports && typeof packageJson.exports === "string") {
+							const exportPath = path.resolve(packagePath, packageJson.exports)
+							if (fs.existsSync(exportPath)) {
+								return { path: exportPath }
+							}
+						}
+						if (packageJson.main) {
+							const mainPath = path.resolve(packagePath, packageJson.main)
+							if (fs.existsSync(mainPath)) {
+								return { path: mainPath }
+							}
+						}
+					}
+					
+					return null
+				})
+			},
+		},
 		{
 			name: "copyFiles",
 			setup(build) {

@@ -8,8 +8,8 @@ import type {
 	OrganizationSettings,
 	ClineMessage,
 	ShareVisibility,
-} from "@roo-code/types"
-import { TelemetryService } from "@roo-code/telemetry"
+} from "@blues-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
 
 import { CloudServiceEvents } from "./types"
 import { TaskNotFoundError } from "./errors"

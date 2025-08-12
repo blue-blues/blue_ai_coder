@@ -1,5 +1,5 @@
 import React from "react"
-import { Mode } from "@roo/modes"
+import { Mode } from "@blues/modes"
 import { Button, StandardTooltip } from "@/components/ui"
 import { Image, SendHorizontal } from "lucide-react"
 import { cn } from "@/lib/utils"

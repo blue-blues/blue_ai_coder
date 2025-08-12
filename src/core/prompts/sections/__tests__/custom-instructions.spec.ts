@@ -8,7 +8,7 @@ vi.mock("path", async () => ({
 	...(await vi.importActual("path")),
 	resolve: vi.fn().mockImplementation((...args) => {
 		// On Windows, use backslashes; on Unix, use forward slashes
-		const separator = process.platform === "win32" ? "\\" : "/"
+		const separator = (process.platform as string) === "win32" ? "\\" : "/"
 		// Filter out empty strings and normalize separators
 		const cleanArgs = args
 			.filter((arg) => arg && arg.trim() !== "")
@@ -29,7 +29,7 @@ vi.mock("path", async () => ({
 		}
 	}),
 	join: vi.fn().mockImplementation((...args) => {
-		const separator = process.platform === "win32" ? "\\" : "/"
+		const separator = (process.platform as string) === "win32" ? "\\" : "/"
 		// Filter out empty strings and normalize separators
 		const cleanArgs = args
 			.filter((arg) => arg && arg.trim() !== "")
@@ -38,7 +38,7 @@ vi.mock("path", async () => ({
 	}),
 	relative: vi.fn().mockImplementation((from, to) => to),
 	dirname: vi.fn().mockImplementation((path) => {
-		const separator = process.platform === "win32" ? "\\" : "/"
+		const separator = (process.platform as string) === "win32" ? "\\" : "/"
 		const parts = path.split(/[/\\]/)
 		return parts.slice(0, -1).join(separator)
 	}),
@@ -1213,7 +1213,11 @@ describe("Directory existence checks", () => {
 
 // Indirectly test readTextFilesFromDirectory and formatDirectoryContent through loadRuleFiles
 describe("Rules directory reading", () => {
-	it.skipIf(process.platform === "win32")("should follow symbolic links in the rules directory", async () => {
+	it("should follow symbolic links in the rules directory", async () => {
+		if (process.platform === "win32") {
+			// Skip this test on Windows
+			return
+		}
 		// Simulate .roo/rules directory exists
 		statMock.mockResolvedValueOnce({
 			isDirectory: vi.fn().mockReturnValue(true),
@@ -1313,19 +1317,19 @@ describe("Rules directory reading", () => {
 
 		// Verify both regular file and symlink target content are included
 		const expectedRegularPath =
-			process.platform === "win32"
+			(process.platform as string) === "win32"
 				? "\\fake\\path\\.bluescode\\rules\\regular.txt"
 				: "/fake/path/.bluescode/rules/regular.txt"
 		const expectedSymlinkPath =
-			process.platform === "win32"
+			(process.platform as string) === "win32"
 				? "\\fake\\path\\.bluescode\\symlink-target.txt"
 				: "/fake/path/.bluescode/symlink-target.txt"
 		const expectedSubdirPath =
-			process.platform === "win32"
+			(process.platform as string) === "win32"
 				? "\\fake\\path\\.bluescode\\rules\\symlink-target-dir\\subdir_link.txt"
 				: "/fake/path/.bluescode/rules/symlink-target-dir/subdir_link.txt"
 		const expectedNestedPath =
-			process.platform === "win32"
+			(process.platform as string) === "win32"
 				? "\\fake\\path\\.bluescode\\nested-symlink-target.txt"
 				: "/fake/path/.bluescode/nested-symlink-target.txt"
 
@@ -1355,7 +1359,11 @@ describe("Rules directory reading", () => {
 		vi.clearAllMocks()
 	})
 
-	it.skipIf(process.platform === "win32")("should correctly format multiple files from directory", async () => {
+	it("should correctly format multiple files from directory", async () => {
+		if (process.platform === "win32") {
+			// Skip this test on Windows
+			return
+		}
 		// Simulate .roo/rules directory exists
 		statMock.mockResolvedValueOnce({
 			isDirectory: vi.fn().mockReturnValue(true),
@@ -1401,15 +1409,15 @@ describe("Rules directory reading", () => {
 		const result = await loadRuleFiles("/fake/path")
 
 		const expectedFile1Path =
-			process.platform === "win32"
+			(process.platform as string) === "win32"
 				? "\\fake\\path\\.bluescode\\rules\\file1.txt"
 				: "/fake/path/.bluescode/rules/file1.txt"
 		const expectedFile2Path =
-			process.platform === "win32"
+			(process.platform as string) === "win32"
 				? "\\fake\\path\\.bluescode\\rules\\file2.txt"
 				: "/fake/path/.bluescode/rules/file2.txt"
 		const expectedFile3Path =
-			process.platform === "win32"
+			(process.platform as string) === "win32"
 				? "\\fake\\path\\.bluescode\\rules\\file3.txt"
 				: "/fake/path/.bluescode/rules/file3.txt"
 

@@ -1,6 +1,6 @@
 import { Anthropic } from "@anthropic-ai/sdk"
 import { Message, Ollama } from "ollama"
-import { ModelInfo, openAiModelInfoSaneDefaults } from "@roo-code/types"
+import { ModelInfo, openAiModelInfoSaneDefaults } from "@blues-code/types"
 import { ApiStream } from "../transform/stream"
 import { BaseProvider } from "./base-provider"
 import { ModelRecord } from "../../shared/api"

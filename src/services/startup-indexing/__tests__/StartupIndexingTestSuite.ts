@@ -249,9 +249,37 @@ export class StartupIndexingTestSuite {
 		// Verify error handling
 		const errorStats = fixture.coordinator.getErrorStatistics()
 		assert.ok(
-			errorStats.errorCounts.get(StartupIndexingErrorType.CRITICAL_FILES_TIMEOUT) > 0,
+			errorStats.errorCounts.get(StartupIndexingErrorType.CRITICAL_FILES_TIMEOUT)! > 0,
 			"Should record timeout error",
 		)
+	}
+
+	/**
+	 * Tests high priority timeout scenario
+	 * DIAGNOSTIC: Adding missing testHighPriorityTimeout method implementation
+	 * This method was called in switch statement but never implemented
+	 */
+	private async testHighPriorityTimeout(fixture: StartupIndexingTestFixture): Promise<void> {
+		// Setup: Slow high priority file processing
+		this.setupSlowProcessing(fixture, "high")
+
+		// Execute and expect timeout handling
+		const results = await fixture.coordinator.coordinateStartupIndexing(
+			fixture.mockManagers,
+			fixture.mockAnalyzers,
+			fixture.mockServices,
+		)
+
+		// Verify error handling for high priority timeout
+		const errorStats = fixture.coordinator.getErrorStatistics()
+		assert.ok(
+			errorStats.errorCounts.get(StartupIndexingErrorType.HIGH_PRIORITY_TIMEOUT)! > 0,
+			"Should record high priority timeout error",
+		)
+
+		// Verify that critical files were still processed despite high priority timeout
+		const status = fixture.coordinator.getStatus()
+		assert.strictEqual((status as any).criticalFilesIndexed, true, "Critical files should still be indexed")
 	}
 
 	/**
@@ -275,7 +303,7 @@ export class StartupIndexingTestSuite {
 		// Verify error recovery
 		const errorStats = fixture.coordinator.getErrorStatistics()
 		assert.ok(
-			errorStats.errorCounts.get(StartupIndexingErrorType.SERVICE_UNAVAILABLE) > 0,
+			errorStats.errorCounts.get(StartupIndexingErrorType.SERVICE_UNAVAILABLE)! > 0,
 			"Should record service error",
 		)
 	}
@@ -486,13 +514,15 @@ export class StartupIndexingTestSuite {
 	private setupMemoryPressure(fixture: StartupIndexingTestFixture): void {
 		// Mock high memory usage
 		const originalMemoryUsage = process.memoryUsage
-		process.memoryUsage = sinon.stub().returns({
+		const mockMemoryUsage = sinon.stub().returns({
 			rss: 2000 * 1024 * 1024, // 2GB
 			heapTotal: 1500 * 1024 * 1024, // 1.5GB
 			heapUsed: 1400 * 1024 * 1024, // 1.4GB
 			external: 100 * 1024 * 1024,
 			arrayBuffers: 50 * 1024 * 1024,
-		})
+		} as NodeJS.MemoryUsage)
+
+		process.memoryUsage = mockMemoryUsage as unknown as NodeJS.MemoryUsageFn
 	}
 
 	private setupLegacySettings(fixture: StartupIndexingTestFixture): void {

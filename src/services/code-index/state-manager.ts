@@ -22,6 +22,7 @@ export class CodeIndexStateManager {
 		return {
 			systemStatus: this._systemStatus,
 			message: this._statusMessage,
+			systemMessage: this._statusMessage, // Alias for backward compatibility
 			processedItems: this._processedItems,
 			totalItems: this._totalItems,
 			currentItemUnit: this._currentItemUnit,

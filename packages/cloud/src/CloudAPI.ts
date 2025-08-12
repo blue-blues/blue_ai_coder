@@ -1,4 +1,4 @@
-import { type ShareVisibility, type ShareResponse, shareResponseSchema } from "@roo-code/types"
+import { type ShareVisibility, type ShareResponse, shareResponseSchema } from "@blues-code/types"
 
 import { getRooCodeApiUrl } from "./config"
 import type { AuthService } from "./auth"

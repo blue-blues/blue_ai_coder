@@ -4,7 +4,7 @@ import EventEmitter from "events"
 import * as vscode from "vscode"
 import { z } from "zod"
 
-import type { CloudUserInfo, CloudOrganizationMembership } from "@roo-code/types"
+import type { CloudUserInfo, CloudOrganizationMembership } from "@blues-code/types"
 
 import { getClerkBaseUrl, getRooCodeApiUrl, PRODUCTION_CLERK_BASE_URL } from "../config"
 import { getUserAgent } from "../utils"

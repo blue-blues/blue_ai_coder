@@ -81,7 +81,7 @@ export const getModels = async (options: GetModelsOptions): Promise<ModelRecord>
 			// bluescode_change start
 			case "bluescode-openrouter":
 				models = await getOpenRouterModels({
-					openRouterBaseUrl: getBluesBaseUriFromToken(options.bluescodeToken ?? "") + "/api/openrouter",
+					openRouterBaseUrl: getBluesBaseUriFromToken(options.bluesCodeToken ?? "") + "/api/openrouter",
 				})
 				break
 			case "cerebras":

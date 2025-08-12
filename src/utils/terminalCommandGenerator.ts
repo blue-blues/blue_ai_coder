@@ -4,7 +4,7 @@ import { ContextProxy } from "../core/config/ContextProxy"
 import { ProviderSettingsManager } from "../core/config/ProviderSettingsManager"
 import { supportPrompt } from "../shared/support-prompt"
 import { singleCompletionHandler } from "./single-completion-handler"
-import type { ProviderSettings } from "@roo-code/types"
+import type { ProviderSettings } from "@blues-code/types"
 import { t } from "../i18n"
 import { getLatestTerminalOutput } from "../core/mentions"
 
@@ -145,7 +145,9 @@ function handleError(error: unknown, outputChannel: vscode.OutputChannel, contex
 	outputChannel.appendLine(`Error in ${context}: ${errorMessage}`)
 
 	if (context === "generateTerminalCommand") {
-		vscode.window.showErrorMessage(t("bluescode:terminalCommandGenerator.generationFailed", { error: errorMessage }))
+		vscode.window.showErrorMessage(
+			t("bluescode:terminalCommandGenerator.generationFailed", { error: errorMessage }),
+		)
 	} else {
 		vscode.window.showErrorMessage(`Error: ${errorMessage}`)
 	}

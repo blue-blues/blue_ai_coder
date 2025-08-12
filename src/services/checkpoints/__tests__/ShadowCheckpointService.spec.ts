@@ -13,7 +13,7 @@ import * as fileSearch from "../../../services/search/file-search"
 import { RepoPerTaskCheckpointService } from "../RepoPerTaskCheckpointService"
 
 // bluescode_change start
-vi.mock("@roo-code/telemetry", () => ({
+vi.mock("@blues-code/telemetry", () => ({
 	TelemetryService: {
 		instance: {
 			captureEvent: vi.fn(),
@@ -57,9 +57,12 @@ const initWorkspaceRepo = async ({
 	return { git, testFile }
 }
 
-describe.each([[RepoPerTaskCheckpointService, "RepoPerTaskCheckpointService"]])(
-	"CheckpointService",
-	(klass, prefix) => {
+const testCases: Array<[typeof RepoPerTaskCheckpointService, string]> = [
+	[RepoPerTaskCheckpointService, "RepoPerTaskCheckpointService"],
+]
+
+testCases.forEach(([klass, prefix]: [typeof RepoPerTaskCheckpointService, string]) => {
+	describe("CheckpointService", () => {
 		const taskId = "test-task"
 
 		let workspaceGit: SimpleGit
@@ -831,5 +834,5 @@ describe.each([[RepoPerTaskCheckpointService, "RepoPerTaskCheckpointService"]])(
 				expect(await fs.readFile(testFile, "utf-8")).toBe("Hello, world!")
 			})
 		})
-	},
-)
+	})
+})

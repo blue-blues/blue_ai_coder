@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { ProfileDataResponsePayload } from "@roo/WebviewMessage"
+import { ProfileDataResponsePayload } from "@blues/WebviewMessage"
 import { vscode } from "@/utils/vscode"
 
 export function useKiloIdentity(bluesCodeToken: string, machineId: string) {

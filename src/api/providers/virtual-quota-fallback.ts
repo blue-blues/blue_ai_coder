@@ -2,7 +2,7 @@
 import { Anthropic } from "@anthropic-ai/sdk"
 import { z } from "zod"
 import * as vscode from "vscode"
-import type { ModelInfo, ProviderSettings } from "@roo-code/types"
+import type { ModelInfo, ProviderSettings } from "@blues-code/types"
 import { ProviderSettingsManager } from "../../core/config/ProviderSettingsManager"
 import { ContextProxy } from "../../core/config/ContextProxy"
 import { ApiStream } from "../transform/stream"
@@ -13,7 +13,7 @@ import { buildApiHandler } from "../index"
 import { virtualQuotaFallbackProfileDataSchema } from "../../../packages/types/src/provider-settings"
 import { OpenRouterHandler } from "./openrouter"
 import { UsageTracker } from "../../utils/usage-tracker"
-import { type UsageWindow } from "@roo-code/types"
+import { type UsageWindow } from "@blues-code/types"
 
 type VirtualQuotaFallbackProfile = z.infer<typeof virtualQuotaFallbackProfileDataSchema>
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { getIconForFilePath, getIconUrlByName, getIconForDirectoryPath } from "vscode-material-icons"
 
-import type { ModeConfig } from "@roo-code/types"
-import type { Command } from "@roo/ExtensionMessage"
+import type { ModeConfig } from "@blues-code/types"
+import type { Command } from "@blues/ExtensionMessage"
 
 import {
 	ContextMenuOptionType,

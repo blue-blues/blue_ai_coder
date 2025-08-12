@@ -7,8 +7,8 @@ import { DirectoryScanner } from "./processors"
 import { CacheManager } from "./cache-manager"
 import { SchematicAnalyzer } from "./SchematicAnalyzer"
 import { BackgroundIndexingService, ProcessingPriority } from "./BackgroundIndexingService"
-import { TelemetryService } from "@roo-code/telemetry"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { TelemetryEventName } from "@blues-code/types"
 import { t } from "../../i18n"
 
 /**
@@ -128,7 +128,7 @@ export class CodeIndexOrchestrator {
 	private _setupBackgroundServiceHandlers(): void {
 		if (!this._backgroundIndexingService) return
 
-		this._backgroundIndexingService.on("jobCompleted", (job, status, processingTime) => {
+		this._backgroundIndexingService.on("jobCompleted", (job: any, status: any, processingTime: number) => {
 			this._performanceMetrics.totalFilesProcessed++
 			this._performanceMetrics.averageProcessingTime =
 				(this._performanceMetrics.averageProcessingTime * (this._performanceMetrics.totalFilesProcessed - 1) +
@@ -143,7 +143,7 @@ export class CodeIndexOrchestrator {
 			)
 		})
 
-		this._backgroundIndexingService.on("jobFailed", (job, error) => {
+		this._backgroundIndexingService.on("jobFailed", (job: any, error: any) => {
 			console.error(`[CodeIndexOrchestrator] Background job failed for ${job.filePath}:`, error)
 		})
 
@@ -151,7 +151,7 @@ export class CodeIndexOrchestrator {
 			this.stateManager.setSystemState("Indexed", "Background indexing completed successfully")
 		})
 
-		this._backgroundIndexingService.on("resourceConstraint", (type, value) => {
+		this._backgroundIndexingService.on("resourceConstraint", (type: string, value: any) => {
 			console.warn(`[CodeIndexOrchestrator] Resource constraint detected: ${type} = ${value}`)
 			this.stateManager.setSystemState("Indexing", `Processing paused due to ${type} constraints`)
 		})
@@ -341,7 +341,10 @@ export class CodeIndexOrchestrator {
 		console.log(`[CodeIndexOrchestrator] Performance metrics:`, {
 			efficiency: this._performanceMetrics.indexingEfficiency,
 			avgProcessingTime: this._performanceMetrics.averageProcessingTime,
-			queueSize: queueAnalysis.total,
+			queueSize: Object.values(queueAnalysis.priorityDistribution).reduce(
+				(sum: number, count: number) => sum + count,
+				0,
+			),
 			bottlenecks: queueAnalysis.bottlenecks,
 		})
 
@@ -356,7 +359,7 @@ export class CodeIndexOrchestrator {
 	 * Gets enhanced indexing statistics
 	 */
 	public getEnhancedStats(): {
-		performance: typeof this._performanceMetrics
+		performance: typeof CodeIndexOrchestrator.prototype._performanceMetrics
 		backgroundService?: ReturnType<BackgroundIndexingService["getStats"]>
 		queueStatus?: ReturnType<BackgroundIndexingService["getQueueStatus"]>
 		workspaceAnalysis?: ReturnType<SchematicAnalyzer["getWorkspaceAnalysis"]>

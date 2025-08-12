@@ -27,7 +27,7 @@ import { ContextProxy } from "../../../core/config/ContextProxy"
 import { buildApiHandler } from "../../index"
 import { VirtualQuotaFallbackHandler } from "../virtual-quota-fallback"
 import { UsageTracker } from "../../../utils/usage-tracker"
-import { UsageEvent } from "@roo-code/types"
+import { UsageEvent } from "@blues-code/types"
 
 // Mock dependencies
 vitest.mock("../../../core/config/ProviderSettingsManager")

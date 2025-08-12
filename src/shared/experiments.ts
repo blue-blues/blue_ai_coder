@@ -1,4 +1,4 @@
-import type { AssertEqual, Equals, Keys, Values, ExperimentId, Experiments } from "@roo-code/types"
+import type { AssertEqual, Equals, Keys, Values, ExperimentId, Experiments } from "@blues-code/types"
 
 export const EXPERIMENT_IDS = {
 	MORPH_FAST_APPLY: "morphFastApply", // bluescode_change

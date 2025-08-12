@@ -4,7 +4,7 @@ import { useClickAway } from "react-use"
 import { useTranslation } from "react-i18next"
 import { vscode } from "@/utils/vscode"
 import { getExtension } from "@/utils/bluescode/path-webview"
-import { allowedExtensions } from "@roo/bluescode/rules"
+import { allowedExtensions } from "@blues/bluescode/rules"
 
 interface NewRuleRowProps {
 	isGlobal: boolean

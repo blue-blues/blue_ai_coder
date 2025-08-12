@@ -121,7 +121,7 @@ describe("Command Execution Timeout Integration", () => {
 		expect(result[0]).toBe(false) // Not rejected by user
 		expect(result[1]).toContain("terminated after exceeding")
 		expect(result[1]).toContain("0.1s") // Should show seconds in error message
-	}, 10000) // Increase test timeout to 10 seconds
+	}) // Timeout handled by Vitest configuration
 
 	it("should abort process on timeout", async () => {
 		const shortTimeoutMs = 50 // Short timeout in milliseconds
@@ -144,7 +144,7 @@ describe("Command Execution Timeout Integration", () => {
 
 		// Verify abort was called
 		expect(abortSpy).toHaveBeenCalled()
-	}, 5000) // Increase test timeout to 5 seconds
+	}) // Timeout handled by Vitest configuration
 
 	it("should clean up timeout on successful completion", async () => {
 		const options: ExecuteCommandOptions = {
@@ -286,7 +286,7 @@ describe("Command Execution Timeout Integration", () => {
 			expect(mockPushToolResult).toHaveBeenCalled()
 			const result = mockPushToolResult.mock.calls[0][0]
 			expect(result).not.toContain("terminated after exceeding")
-		}, 3000)
+		}) // Timeout handled by Vitest configuration
 
 		it("should apply timeout for commands not in allowlist", async () => {
 			// Mock VSCode configuration with timeout and allowlist
@@ -319,7 +319,7 @@ describe("Command Execution Timeout Integration", () => {
 			expect(mockPushToolResult).toHaveBeenCalled()
 			const result = mockPushToolResult.mock.calls[0][0]
 			expect(result).toContain("terminated after exceeding")
-		}, 3000)
+		}) // Timeout handled by Vitest configuration
 
 		it("should handle empty allowlist", async () => {
 			// Mock VSCode configuration with timeout and empty allowlist
@@ -352,7 +352,7 @@ describe("Command Execution Timeout Integration", () => {
 			expect(mockPushToolResult).toHaveBeenCalled()
 			const result = mockPushToolResult.mock.calls[0][0]
 			expect(result).toContain("terminated after exceeding")
-		}, 3000)
+		}) // Timeout handled by Vitest configuration
 
 		it("should match command prefixes correctly", async () => {
 			// Mock VSCode configuration with timeout and allowlist
@@ -407,6 +407,6 @@ describe("Command Execution Timeout Integration", () => {
 			expect(mockPushToolResult).toHaveBeenCalled()
 			const result2 = mockPushToolResult.mock.calls[0][0]
 			expect(result2).toContain("terminated after exceeding")
-		}, 5000)
+		}) // Timeout handled by Vitest configuration
 	})
 })

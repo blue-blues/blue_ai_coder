@@ -26,16 +26,16 @@ import {
 	type TerminalActionPromptType,
 	type HistoryItem,
 	type CloudUserInfo,
-	RooCodeEventName,
+	BluesCodeEventName,
 	requestyDefaultModelId,
 	openRouterDefaultModelId,
 	glamaDefaultModelId,
 	ORGANIZATION_ALLOW_ALL,
 	DEFAULT_TERMINAL_OUTPUT_CHARACTER_LIMIT,
 	DEFAULT_WRITE_DELAY_MS,
-} from "@roo-code/types"
-import { TelemetryService } from "@roo-code/telemetry"
-import { CloudService, getRooCodeApiUrl } from "@roo-code/cloud"
+} from "@blues-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { CloudService, getRooCodeApiUrl } from "@blues-code/cloud"
 
 import { Package } from "../../shared/package"
 import { findLast } from "../../shared/array"
@@ -379,7 +379,7 @@ export class ClineProvider
 
 		// Add this cline instance into the stack that represents the order of all the called tasks.
 		this.clineStack.push(task)
-		task.emit(RooCodeEventName.TaskFocused)
+		task.emit(BluesCodeEventName.TaskFocused)
 
 		// Perform special setup provider specific tasks.
 		await this.performPreparationTasks(task)
@@ -433,7 +433,7 @@ export class ClineProvider
 				)
 			}
 
-			task.emit(RooCodeEventName.TaskUnfocused)
+			task.emit(BluesCodeEventName.TaskUnfocused)
 
 			// Make sure no reference kept, once promises end it will be
 			// garbage collected.
@@ -463,11 +463,22 @@ export class ClineProvider
 	// and resume the previous task/cline instance (if it exists)
 	// this is used when a sub task is finished and the parent task needs to be resumed
 	async finishSubTask(lastMessage: string) {
-		console.log(`[subtasks] finishing subtask ${lastMessage}`)
+		console.log(`[DEBUG] ClineProvider.finishSubTask called with message: ${lastMessage}`)
+		console.log(`[DEBUG] Current stack size before removal: ${this.clineInstances.length}`)
+
 		// remove the last cline instance from the stack (this is the finished sub task)
 		await this.removeClineFromStack()
-		// resume the last cline instance in the stack (if it exists - this is the 'parent' calling task)
-		await this.getCurrentCline()?.resumePausedTask(lastMessage)
+
+		console.log(`[DEBUG] Stack size after removal: ${this.clineInstances.length}`)
+
+		const currentCline = this.getCurrentCline()
+		if (currentCline) {
+			console.log(`[DEBUG] Found parent task ${currentCline.taskId}.${currentCline.instanceId}, resuming...`)
+			await currentCline.resumePausedTask(lastMessage)
+			console.log(`[DEBUG] Parent task resume completed, checking if it continues execution`)
+		} else {
+			console.log(`[DEBUG] No parent task found in stack - this might be the issue!`)
+		}
 	}
 
 	// Clear the current task without treating it as a subtask
@@ -829,7 +840,7 @@ export class ClineProvider
 			rootTask: this.clineStack.length > 0 ? this.clineStack[0] : undefined,
 			parentTask,
 			taskNumber: this.clineStack.length + 1,
-			onCreated: (instance) => this.emit(RooCodeEventName.TaskCreated, instance),
+			onCreated: (instance) => this.emit(BluesCodeEventName.TaskCreated, instance),
 			...options,
 		})
 
@@ -1140,15 +1151,15 @@ export class ClineProvider
 		)
 
 		// Add indexing context to indicate task was started without index
-		const indexingContext: IndexingContext = ({
+		const indexingContext: IndexingContext = {
 			hasIndex: false,
 			indexQuality: 0,
 			userChoice: "skip",
 			validationTimestamp: pendingTaskData.timestamp,
-		}(
-			// Store context for potential use by task
-			task as any,
-		)._indexingContext = indexingContext)
+		}
+
+		// Store context for potential use by task
+		;(task as any)._indexingContext = indexingContext
 	}
 
 	/**
@@ -1284,7 +1295,7 @@ export class ClineProvider
 			rootTask: historyItem.rootTask,
 			parentTask: historyItem.parentTask,
 			taskNumber: historyItem.number,
-			onCreated: (instance) => this.emit(RooCodeEventName.TaskCreated, instance),
+			onCreated: (instance) => this.emit(BluesCodeEventName.TaskCreated, instance),
 		})
 
 		await this.addClineToStack(task)
@@ -1495,7 +1506,7 @@ export class ClineProvider
 
 		if (cline) {
 			TelemetryService.instance.captureModeSwitch(cline.taskId, newMode)
-			cline.emit(RooCodeEventName.TaskModeSwitched, cline.taskId, newMode)
+			cline.emit(BluesCodeEventName.TaskModeSwitched, cline.taskId, newMode)
 
 			// Store the current mode in case we need to rollback
 			const previousMode = (cline as any)._taskMode

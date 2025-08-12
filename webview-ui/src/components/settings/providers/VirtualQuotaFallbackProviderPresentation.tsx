@@ -4,7 +4,7 @@ import { VSCodeButton, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 import { PlusIcon, TrashIcon } from "@radix-ui/react-icons"
 import { ChevronUp, ChevronDown } from "lucide-react"
 
-import { type ProviderSettingsEntry } from "@roo-code/types"
+import { type ProviderSettingsEntry } from "@blues-code/types"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, LabeledProgress } from "@src/components/ui"
 import {
 	AlertDialog,
@@ -16,7 +16,7 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@src/components/ui/alert-dialog"
-import { UsageResultByDuration } from "@roo-code/types"
+import { UsageResultByDuration } from "@blues-code/types"
 import { inputEventTransform } from "../transforms"
 import { VirtualQuotaFallbackProviderData } from "./VirtualQuotaFallbackProvider"
 
@@ -114,7 +114,9 @@ export const VirtualQuotaFallbackProviderPresentation = ({
 								onValueChange={(value) => onProfileSelect(index, value)}
 								disabled={availableForThisSlot.length === 0}>
 								<SelectTrigger className="w-full">
-									<SelectValue placeholder={t("bluescode:virtualProvider.selectProfilePlaceholder")} />
+									<SelectValue
+										placeholder={t("bluescode:virtualProvider.selectProfilePlaceholder")}
+									/>
 								</SelectTrigger>
 								<SelectContent>
 									{availableForThisSlot.map((profile) => (

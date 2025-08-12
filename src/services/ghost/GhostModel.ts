@@ -1,4 +1,4 @@
-import { GhostServiceSettings } from "@roo-code/types"
+import { GhostServiceSettings } from "@blues-code/types"
 import { ApiHandler, buildApiHandler } from "../../api"
 import { ContextProxy } from "../../core/config/ContextProxy"
 import { ProviderSettingsManager } from "../../core/config/ProviderSettingsManager"

@@ -1,6 +1,6 @@
 import { DiffStrategy } from "../../../shared/tools"
 import { McpHub } from "../../../services/mcp/McpHub"
-import { Experiments } from "@roo-code/types"
+import { Experiments } from "@blues-code/types"
 
 export type ToolArgs = {
 	cwd: string

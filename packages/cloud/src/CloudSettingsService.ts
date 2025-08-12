@@ -6,7 +6,7 @@ import {
 	OrganizationAllowList,
 	OrganizationSettings,
 	organizationSettingsSchema,
-} from "@roo-code/types"
+} from "@blues-code/types"
 
 import { getRooCodeApiUrl } from "./config"
 import type { AuthService, AuthState } from "./auth"

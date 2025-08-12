@@ -1,6 +1,6 @@
 import { EventEmitter } from "events"
-import { TelemetryService } from "@roo-code/telemetry"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { TelemetryEventName } from "@blues-code/types"
 
 /**
  * Performance metrics for indexing operations
@@ -35,6 +35,10 @@ export interface IndexingPerformanceMetrics {
 	cacheHitRate: number
 	duplicateDetectionRate: number
 	incrementalIndexingEfficiency: number
+
+	// DIAGNOSTIC: Adding missing totalFilesProcessed property
+	// This property is used in 7 files but was missing from interface definition
+	totalFilesProcessed: number
 }
 
 /**
@@ -72,6 +76,10 @@ export interface OptimizationSuggestion {
 	impact: string
 	implementation: string
 	estimatedImprovement: number // percentage
+	autoApplicable?: boolean
+	type?: "performance" | "resource" | "configuration"
+	value?: any
+	actionType?: "setting" | "restart" | "config"
 }
 
 /**
@@ -112,6 +120,7 @@ const DEFAULT_CONFIG: PerformanceMonitorConfig = {
 		cacheHitRate: 0.6, // 60%
 		duplicateDetectionRate: 0.1, // 10%
 		incrementalIndexingEfficiency: 0.8, // 80%
+		totalFilesProcessed: 1000, // total files processed threshold
 	},
 	enableTelemetry: true,
 	enableOptimizationSuggestions: true,
@@ -268,6 +277,30 @@ export class PerformanceMonitor extends EventEmitter {
 		if (this.timingAccumulators.queueWaitTimes.length > 1000) {
 			this.timingAccumulators.queueWaitTimes = this.timingAccumulators.queueWaitTimes.slice(-500)
 		}
+	}
+
+	/**
+	 * Starts tracking an operation
+	 */
+	startOperation(operationId: string, operationType: string): void {
+		// Implementation for tracking operation start
+		this.emit("operationStarted", { operationId, operationType, timestamp: Date.now() })
+	}
+
+	/**
+	 * Ends tracking an operation
+	 */
+	endOperation(operationId: string): void {
+		// Implementation for tracking operation end
+		this.emit("operationEnded", { operationId, timestamp: Date.now() })
+	}
+
+	/**
+	 * Starts monitoring with configuration
+	 */
+	startMonitoring(config?: any, workspaceAnalyses?: any[]): void {
+		this.start()
+		this.emit("monitoringStarted", { config, workspaceAnalyses })
 	}
 
 	/**
@@ -563,30 +596,32 @@ export class PerformanceMonitor extends EventEmitter {
 		const incrementalIndexingEfficiency = this.calculateIncrementalIndexingEfficiency()
 
 		this.currentMetrics = {
-			filesPerSecond,
-			blocksPerSecond,
-			bytesPerSecond,
-			averageFileProcessingTime,
-			averageBatchProcessingTime,
-			totalIndexingTime: totalTime,
-			successRate,
-			errorRate,
-			retryRate,
-			memoryUsage,
-			cpuUsage,
-			diskIORate,
-			averageQueueWaitTime,
-			queueEfficiency,
-			concurrencyUtilization,
-			cacheHitRate,
-			duplicateDetectionRate,
-			incrementalIndexingEfficiency,
+			filesPerSecond: filesPerSecond ?? 0,
+			blocksPerSecond: blocksPerSecond ?? 0,
+			bytesPerSecond: bytesPerSecond ?? 0,
+			averageFileProcessingTime: averageFileProcessingTime ?? 0,
+			averageBatchProcessingTime: averageBatchProcessingTime ?? 0,
+			totalIndexingTime: totalTime ?? 0,
+			successRate: successRate ?? 0,
+			errorRate: errorRate ?? 0,
+			retryRate: retryRate ?? 0,
+			memoryUsage: memoryUsage ?? 0,
+			cpuUsage: cpuUsage ?? 0,
+			diskIORate: diskIORate ?? 0,
+			averageQueueWaitTime: averageQueueWaitTime ?? 0,
+			queueEfficiency: queueEfficiency ?? 0,
+			concurrencyUtilization: concurrencyUtilization ?? 0,
+			cacheHitRate: cacheHitRate ?? 0,
+			duplicateDetectionRate: duplicateDetectionRate ?? 0,
+			incrementalIndexingEfficiency: incrementalIndexingEfficiency ?? 0,
+			// DIAGNOSTIC: Adding totalFilesProcessed to metrics calculation
+			totalFilesProcessed: this.counters.filesProcessed ?? 0,
 		}
 
 		// Add to history
 		this.performanceHistory.push({
 			timestamp: new Date(now),
-			metrics: { ...this.currentMetrics },
+			metrics: { ...this.currentMetrics } as IndexingPerformanceMetrics,
 			workspaceSize: this.counters.bytesProcessed,
 			fileCount: this.counters.filesProcessed,
 		})

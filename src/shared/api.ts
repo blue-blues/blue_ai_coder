@@ -3,7 +3,7 @@ import {
 	type ProviderSettings,
 	ANTHROPIC_DEFAULT_MAX_TOKENS,
 	CLAUDE_CODE_DEFAULT_MAX_OUTPUT_TOKENS,
-} from "@roo-code/types"
+} from "@blues-code/types"
 
 // ApiHandlerOptions
 
@@ -225,7 +225,7 @@ export type GetModelsOptions =
 	| { provider: "requesty"; apiKey?: string }
 	| { provider: "unbound"; apiKey?: string }
 	| { provider: "litellm"; apiKey: string; baseUrl: string }
-	| { provider: "bluescode-openrouter"; bluescodeToken?: string } // bluescode_change
+	| { provider: "bluescode-openrouter"; bluesCodeToken?: string } // bluescode_change
 	| { provider: "cerebras"; cerebrasApiKey?: string } // bluescode_change
 	| { provider: "ollama"; baseUrl?: string }
 	| { provider: "lmstudio"; baseUrl?: string }

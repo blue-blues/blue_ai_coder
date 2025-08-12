@@ -1,8 +1,8 @@
 import cloneDeep from "clone-deep"
 import { serializeError } from "serialize-error"
 
-import type { ToolName, ClineAsk, ToolProgressStatus } from "@roo-code/types"
-import { TelemetryService } from "@roo-code/telemetry"
+import type { ToolName, ClineAsk, ToolProgressStatus } from "@blues-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
 
 import { defaultModeSlug, getModeBySlug } from "../../shared/modes"
 import type { ToolParamName, ToolResponse } from "../../shared/tools"

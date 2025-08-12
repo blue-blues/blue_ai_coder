@@ -5,7 +5,7 @@ import { vscode } from "@src/utils/vscode"
 import { useAppTranslation } from "@/i18n/TranslationContext"
 import { useExtensionState } from "@src/context/ExtensionStateContext"
 import * as ProgressPrimitive from "@radix-ui/react-progress"
-import type { IndexingStatus } from "@roo/ExtensionMessage"
+import type { IndexingStatus } from "@blues/ExtensionMessage"
 
 interface IndexingStatusIndicatorProps {
 	className?: string

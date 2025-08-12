@@ -11,7 +11,7 @@ import { getModelParams } from "../transform/model-params"
 import { DEFAULT_HEADERS } from "./constants"
 import { BaseProvider } from "./base-provider"
 import type { SingleCompletionHandler, ApiHandlerCreateMessageMetadata } from "../index"
-import { bigModelDefaultModelId, BigModelModelId, bigModelModels } from "@roo-code/types"
+import { bigModelDefaultModelId, BigModelModelId, bigModelModels } from "@blues-code/types"
 
 const BIGMODEL_DEFAULT_TEMPERATURE = 0
 

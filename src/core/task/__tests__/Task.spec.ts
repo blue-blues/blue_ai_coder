@@ -6,8 +6,8 @@ import * as path from "path"
 import * as vscode from "vscode"
 import { Anthropic } from "@anthropic-ai/sdk"
 
-import type { GlobalState, ProviderSettings, ModelInfo } from "@roo-code/types"
-import { TelemetryService } from "@roo-code/telemetry"
+import type { GlobalState, ProviderSettings, ModelInfo } from "@blues-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
 
 import { Task } from "../Task"
 import { ClineProvider } from "../../webview/ClineProvider"
@@ -1078,7 +1078,7 @@ describe("Cline", () => {
 				// Verify rate limiting was applied
 				expect(mockDelay).toHaveBeenCalledTimes(mockApiConfig.rateLimitSeconds)
 				expect(mockDelay).toHaveBeenCalledWith(1000)
-			}, 10000) // Increase timeout to 10 seconds
+			}) // Timeout handled by Vitest configuration
 
 			it("should not apply rate limiting if enough time has passed", async () => {
 				// Create parent task
@@ -1218,7 +1218,7 @@ describe("Cline", () => {
 
 				// Verify rate limiting was applied again
 				expect(mockDelay).toHaveBeenCalledTimes(mockApiConfig.rateLimitSeconds)
-			}, 15000) // Increase timeout to 15 seconds
+			}) // Timeout handled by Vitest configuration
 
 			it("should handle rate limiting with zero rate limit", async () => {
 				// Update config to have zero rate limit

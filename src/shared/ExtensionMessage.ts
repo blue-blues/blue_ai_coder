@@ -10,7 +10,7 @@ import type {
 	OrganizationAllowList,
 	CloudUserInfo,
 	ShareVisibility,
-} from "@roo-code/types"
+} from "@blues-code/types"
 
 import { GitCommit } from "../utils/git"
 
@@ -20,7 +20,7 @@ import { Mode } from "./modes"
 import { ModelRecord, RouterModels } from "./api"
 import { ProfileDataResponsePayload, BalanceDataResponsePayload } from "./WebviewMessage" // bluescode_change
 import { ClineRulesToggles } from "./cline-rules" // bluescode_change
-import type { MarketplaceItem } from "@roo-code/types"
+import type { MarketplaceItem } from "@blues-code/types"
 
 // Command interface for frontend/backend communication
 export interface Command {

@@ -11,7 +11,7 @@ import {
 import { Trans } from "react-i18next"
 import { ChevronDown, X, Upload, Download } from "lucide-react"
 
-import { ModeConfig, GroupEntry, PromptComponent, ToolGroup, modeConfigSchema } from "@roo-code/types"
+import { ModeConfig, GroupEntry, PromptComponent, ToolGroup, modeConfigSchema } from "@blues-code/types"
 
 import {
 	Mode,
@@ -21,8 +21,8 @@ import {
 	getCustomInstructions,
 	getAllModes,
 	findModeBySlug as findCustomModeBySlug,
-} from "@roo/modes"
-import { TOOL_GROUPS } from "@roo/tools"
+} from "@blues/modes"
+import { TOOL_GROUPS } from "@blues/tools"
 
 import { vscode } from "@src/utils/vscode"
 import { buildDocLink } from "@src/utils/docLinks"

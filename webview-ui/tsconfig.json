@@ -22,8 +22,12 @@
 		"paths": {
 			"@/*": ["./src/*"],
 			"@src/*": ["./src/*"],
-			"@roo/*": ["../src/shared/*"]
+			"@blues/*": ["../src/shared/*"],
+			"@blues-code/types": ["../packages/types/src/index.ts"],
+			"@blues-code/telemetry": ["../packages/telemetry/src/index.ts"],
+			"@blues-code/cloud": ["../packages/cloud/src/index.ts"],
+			"@blues-code/ipc": ["../packages/ipc/src/index.ts"]
 		}
 	},
-	"include": ["src", "../src/shared", "vitest.setup.ts"]
+	"include": ["src", "vitest.setup.ts"]
 }

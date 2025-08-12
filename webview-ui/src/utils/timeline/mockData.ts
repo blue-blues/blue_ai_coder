@@ -1,4 +1,4 @@
-import type { ClineMessage } from "@roo-code/types"
+import type { ClineMessage } from "@blues-code/types"
 import seedrandom from "seedrandom"
 
 // Fixed base timestamp for consistent snapshots (January 1, 2024, 12:00:00 UTC)

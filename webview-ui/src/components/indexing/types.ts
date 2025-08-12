@@ -1,4 +1,4 @@
-import type { IndexingStatus } from "@roo/ExtensionMessage"
+import type { IndexingStatus } from "@blues/ExtensionMessage"
 
 // Base interfaces for indexing components
 export interface IndexingProgressModalProps {

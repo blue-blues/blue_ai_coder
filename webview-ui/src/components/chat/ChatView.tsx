@@ -10,18 +10,18 @@ import { LRUCache } from "lru-cache"
 import { useDebounceEffect } from "@src/utils/useDebounceEffect"
 import { appendImages } from "@src/utils/imageUtils"
 
-import type { ClineAsk, ClineMessage } from "@roo-code/types"
+import type { ClineAsk, ClineMessage } from "@blues-code/types"
 
-import { ClineSayBrowserAction, ClineSayTool, ExtensionMessage } from "@roo/ExtensionMessage"
-import { McpServer, McpTool } from "@roo/mcp"
-import { findLast } from "@roo/array"
-import { FollowUpData, SuggestionItem } from "@roo-code/types"
-import { combineApiRequests } from "@roo/combineApiRequests"
-import { combineCommandSequences } from "@roo/combineCommandSequences"
-import { getApiMetrics } from "@roo/getApiMetrics"
-import { AudioType } from "@roo/WebviewMessage"
-import { getAllModes } from "@roo/modes"
-import { ProfileValidator } from "@roo/ProfileValidator"
+import { ClineSayBrowserAction, ClineSayTool, ExtensionMessage } from "@blues/ExtensionMessage"
+import { McpServer, McpTool } from "@blues/mcp"
+import { findLast } from "@blues/array"
+import { FollowUpData, SuggestionItem } from "@blues-code/types"
+import { combineApiRequests } from "@blues/combineApiRequests"
+import { combineCommandSequences } from "@blues/combineCommandSequences"
+import { getApiMetrics } from "@blues/getApiMetrics"
+import { AudioType } from "@blues/WebviewMessage"
+import { getAllModes } from "@blues/modes"
+import { ProfileValidator } from "@blues/ProfileValidator"
 
 import { vscode } from "@src/utils/vscode"
 import {
@@ -60,8 +60,8 @@ import { CheckpointWarning } from "./CheckpointWarning"
 import { IdeaSuggestionsBox } from "../bluescode/chat/IdeaSuggestionsBox" // bluescode_change
 import { KilocodeNotifications } from "../bluescode/KilocodeNotifications" // bluescode_change
 import QueuedMessages from "./QueuedMessages"
-import { getLatestTodo } from "@roo/todo"
-import { QueuedMessage } from "@roo-code/types"
+import { getLatestTodo } from "@blues/todo"
+import { QueuedMessage } from "@blues-code/types"
 import { buildDocLink } from "@/utils/docLinks"
 
 export interface ChatViewProps {

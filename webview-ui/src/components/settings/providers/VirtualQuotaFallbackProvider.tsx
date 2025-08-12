@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { type ProviderSettings, type ProviderSettingsEntry } from "@roo-code/types"
+import { type ProviderSettings, type ProviderSettingsEntry } from "@blues-code/types"
 import { vscode } from "@src/utils/vscode"
 import { useExtensionState } from "@src/context/ExtensionStateContext"
 import { VirtualQuotaFallbackProviderPresentation } from "./VirtualQuotaFallbackProviderPresentation"
-import { UsageResultByDuration } from "@roo-code/types"
+import { UsageResultByDuration } from "@blues-code/types"
 
 type VirtualQuotaFallbackProviderProps = {
 	apiConfiguration: ProviderSettings

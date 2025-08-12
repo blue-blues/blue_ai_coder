@@ -76,7 +76,7 @@ export default defineConfig(({ mode }) => {
 		...(gitSha ? { "process.env.PKG_SHA": JSON.stringify(gitSha) } : {}),
 	}
 
-	// TODO: We can use `@roo-code/build` to generate `define` once the
+	// TODO: We can use `@blues-code/build` to generate `define` once the
 	// monorepo is deployed.
 	if (mode === "nightly") {
 		outDir = "../apps/vscode-nightly/build/webview-ui/build"
@@ -98,7 +98,11 @@ export default defineConfig(({ mode }) => {
 			alias: {
 				"@": resolve(__dirname, "./src"),
 				"@src": resolve(__dirname, "./src"),
-				"@roo": resolve(__dirname, "../src/shared"),
+				"@blues": resolve(__dirname, "../src/shared"),
+				"@blues-code/types": resolve(__dirname, "../packages/types/src/index.ts"),
+				"@blues-code/telemetry": resolve(__dirname, "../packages/telemetry/src/index.ts"),
+				"@blues-code/cloud": resolve(__dirname, "../packages/cloud/src/index.ts"),
+				"@blues-code/ipc": resolve(__dirname, "../packages/ipc/src/index.ts"),
 			},
 		},
 		build: {
@@ -110,7 +114,7 @@ export default defineConfig(({ mode }) => {
 			// Ensure source maps are properly included in the build
 			minify: mode === "production" ? "esbuild" : false,
 			rollupOptions: {
-				external: ["vscode"], // bluescode_change: we inadvertently import vscode into the webview: @roo/modes => src/shared/modes => ../core/prompts/sections/custom-instructions
+				external: ["vscode"], // bluescode_change: we inadvertently import vscode into the webview: @blues/modes => src/shared/modes => ../core/prompts/sections/custom-instructions
 				output: {
 					entryFileNames: `assets/[name].js`,
 					chunkFileNames: (chunkInfo) => {

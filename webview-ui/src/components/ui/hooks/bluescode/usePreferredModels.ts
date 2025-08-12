@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import type { ModelInfo } from "@roo-code/types"
+import type { ModelInfo } from "@blues-code/types"
 
 export const usePreferredModels = (models: Record<string, ModelInfo> | null) => {
 	return useMemo(() => {

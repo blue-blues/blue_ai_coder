@@ -418,7 +418,7 @@ suite("Indexing Validation Integration Tests", () => {
 				const manager = CodeIndexManager.getInstance(mockContext, emptyWorkspaceDir)
 
 				if (manager) {
-					IndexingRecommendation()
+					const recommendation = await manager.getIndexingRecommendation()
 
 					// Empty workspace should not recommend indexing
 					assert.strictEqual(recommendation.shouldIndex, false)
@@ -578,4 +578,3 @@ suite("Indexing Validation Integration Tests", () => {
 		})
 	})
 })
-const recommendation = await manager.get

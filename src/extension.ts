@@ -12,8 +12,8 @@ try {
 	console.warn("Failed to load environment variables:", e)
 }
 
-import { CloudService } from "@roo-code/cloud"
-import { TelemetryService, PostHogTelemetryClient } from "@roo-code/telemetry"
+import { CloudService } from "@blues-code/cloud"
+import { TelemetryService, PostHogTelemetryClient } from "@blues-code/telemetry"
 
 import "./utils/path" // Necessary to have access to String.prototype.toPosix.
 import { createOutputChannelLogger, createDualLogger } from "./utils/outputChannelLogger"
@@ -153,30 +153,64 @@ export async function activate(context: vscode.ExtensionContext) {
 				try {
 					await manager.initialize(contextProxy)
 
-					// Initialize enhanced indexing services for this workspace
-					const schematicAnalyzer = new SchematicAnalyzer(manager.codeParser, folder.uri.fsPath)
-					const performanceMonitor = new PerformanceMonitor()
-					const backgroundIndexingService = new BackgroundIndexingService(
-						folder.uri.fsPath,
-						manager.codeParser,
-						schematicAnalyzer,
-						performanceMonitor,
-						manager.cacheManager,
-						manager.orchestrator,
-						manager.configManager,
-					)
+					// Initialize enhanced indexing services for this workspace only if codeParser is available
+					if (manager.codeParser) {
+						const schematicAnalyzer = new SchematicAnalyzer(manager.codeParser, folder.uri.fsPath)
+						const performanceMonitor = new PerformanceMonitor()
 
-					schematicAnalyzers.push(schematicAnalyzer)
-					backgroundIndexingServices.push(backgroundIndexingService)
-					performanceMonitors.push(performanceMonitor)
+						// DEBUG: Validate embedder before passing to BackgroundIndexingService
+						console.log("[DEBUG] Extension.ts - Creating BackgroundIndexingService with embedder:", {
+							embedderExists: !!manager.embedder,
+							embedderType: typeof manager.embedder,
+							embedderUndefined: manager.embedder === undefined,
+							codeParserExists: !!manager.codeParser,
+							vectorStoreExists: !!manager.vectorStore,
+							cacheManagerExists: !!manager.cacheManager,
+						})
 
-					// Add to subscriptions for proper cleanup
-					context.subscriptions.push(backgroundIndexingService)
-					context.subscriptions.push(performanceMonitor)
+						if (!manager.embedder) {
+							throw new Error(
+								`BackgroundIndexingService requires a valid embedder, but manager.embedder is undefined for workspace: ${folder.uri.fsPath}`,
+							)
+						}
 
-					outputChannel.appendLine(
-						`[EnhancedIndexing] Initialized enhanced indexing services for ${folder.uri.fsPath}`,
-					)
+						if (!manager.vectorStore) {
+							throw new Error(
+								`BackgroundIndexingService requires a valid vectorStore, but manager.vectorStore is undefined for workspace: ${folder.uri.fsPath}`,
+							)
+						}
+
+						if (!manager.cacheManager) {
+							throw new Error(
+								`BackgroundIndexingService requires a valid cacheManager, but manager.cacheManager is undefined for workspace: ${folder.uri.fsPath}`,
+							)
+						}
+
+						const backgroundIndexingService = new BackgroundIndexingService(
+							schematicAnalyzer,
+							manager.codeParser,
+							manager.embedder,
+							manager.vectorStore,
+							manager.cacheManager,
+							folder.uri.fsPath,
+						)
+
+						schematicAnalyzers.push(schematicAnalyzer)
+						backgroundIndexingServices.push(backgroundIndexingService)
+						performanceMonitors.push(performanceMonitor)
+
+						// Add to subscriptions for proper cleanup
+						context.subscriptions.push(backgroundIndexingService)
+						context.subscriptions.push(performanceMonitor)
+
+						outputChannel.appendLine(
+							`[EnhancedIndexing] Initialized enhanced indexing services for ${folder.uri.fsPath}`,
+						)
+					} else {
+						outputChannel.appendLine(
+							`[EnhancedIndexing] Skipping enhanced indexing services for ${folder.uri.fsPath} - codeParser not available`,
+						)
+					}
 				} catch (error) {
 					outputChannel.appendLine(
 						`[CodeIndexManager] Error during background CodeIndexManager configuration/indexing for ${folder.uri.fsPath}: ${error.message || error}`,

@@ -23,16 +23,16 @@ import {
 	type BlockingAsk,
 	type ToolProgressStatus,
 	type HistoryItem,
-	RooCodeEventName,
+	BluesCodeEventName,
 	TelemetryEventName,
 	TodoItem,
 	getApiProtocol,
 	getModelId,
 	DEFAULT_CONSECUTIVE_MISTAKE_LIMIT,
 	isBlockingAsk,
-} from "@roo-code/types"
-import { TelemetryService } from "@roo-code/telemetry"
-import { CloudService } from "@roo-code/cloud"
+} from "@blues-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { CloudService } from "@blues-code/cloud"
 
 // api
 import { ApiHandler, ApiHandlerCreateMessageMetadata, buildApiHandler } from "../../api"
@@ -50,6 +50,9 @@ import { defaultModeSlug } from "../../shared/modes"
 import { DiffStrategy } from "../../shared/tools"
 import { EXPERIMENT_IDS, experiments } from "../../shared/experiments"
 import { getModelMaxOutputTokens } from "../../shared/api"
+
+// types
+import { IndexingChoice } from "../../types/indexing-validation"
 
 // services
 import { UrlContentFetcher } from "../../services/browser/UrlContentFetcher"
@@ -573,7 +576,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		this.clineMessages.push(message)
 		const provider = this.providerRef.deref()
 		await provider?.postStateToWebview()
-		this.emit(RooCodeEventName.Message, { action: "created", message })
+		this.emit(BluesCodeEventName.Message, { action: "created", message })
 		await this.saveClineMessages()
 
 		const shouldCaptureMessage = message.partial !== true && CloudService.isEnabled()
@@ -595,7 +598,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 	private async updateClineMessage(message: ClineMessage) {
 		const provider = this.providerRef.deref()
 		await provider?.postMessageToWebview({ type: "messageUpdated", clineMessage: message })
-		this.emit(RooCodeEventName.Message, { action: "updated", message })
+		this.emit(BluesCodeEventName.Message, { action: "updated", message })
 
 		const shouldCaptureMessage = message.partial !== true && CloudService.isEnabled()
 
@@ -624,7 +627,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 				mode: this._taskMode || defaultModeSlug, // Use the task's own mode, not the current provider mode
 			})
 
-			this.emit(RooCodeEventName.TaskTokenUsageUpdated, this.taskId, tokenUsage)
+			this.emit(BluesCodeEventName.TaskTokenUsageUpdated, this.taskId, tokenUsage)
 
 			await this.providerRef.deref()?.updateTaskHistory(historyItem)
 		} catch (error) {
@@ -735,7 +738,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 
 		if (!partial && !isReady && isBlockingAsk(type)) {
 			this.blockingAsk = type
-			this.emit(RooCodeEventName.TaskIdle, this.taskId)
+			this.emit(BluesCodeEventName.TaskIdle, this.taskId)
 		}
 
 		console.log(`[Task#${this.taskId}] pWaitFor askResponse(${type}) -> blocking`)
@@ -749,7 +752,10 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			throw new Error("Current ask promise was ignored")
 		}
 
-		const result = { response: this.askResponse!, text: this.askResponseText, images: this.askResponseImages }
+		if (!this.askResponse) {
+			throw new Error("No ask response available")
+		}
+		const result = { response: this.askResponse, text: this.askResponseText, images: this.askResponseImages }
 		this.askResponse = undefined
 		this.askResponseText = undefined
 		this.askResponseImages = undefined
@@ -757,10 +763,10 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		// Switch back to an active state.
 		if (this.blockingAsk) {
 			this.blockingAsk = undefined
-			this.emit(RooCodeEventName.TaskActive, this.taskId)
+			this.emit(BluesCodeEventName.TaskActive, this.taskId)
 		}
 
-		this.emit(RooCodeEventName.TaskAskResponded)
+		this.emit(BluesCodeEventName.TaskAskResponded)
 		return result
 	}
 
@@ -975,18 +981,29 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			if (codeIndexManager) {
 				const validator = new IndexingValidator(codeIndexManager)
 
-				if (validator.isAvailable()) {
+				if (
+					validator.isAvailable() &&
+					codeIndexManager.codeParser &&
+					codeIndexManager.embedder &&
+					codeIndexManager.vectorStore
+				) {
 					// Initialize enhanced indexing services
-					const schematicAnalyzer = new SchematicAnalyzer(this.cwd)
+					const schematicAnalyzer = new SchematicAnalyzer(codeIndexManager.codeParser, this.cwd)
 					const performanceMonitor = new PerformanceMonitor()
+					if (!codeIndexManager.cacheManager) {
+						throw new Error("CacheManager is required for BackgroundIndexingService")
+					}
 					const backgroundIndexingService = new BackgroundIndexingService(
-						this.cwd,
 						schematicAnalyzer,
-						performanceMonitor,
+						codeIndexManager.codeParser,
+						codeIndexManager.embedder,
+						codeIndexManager.vectorStore,
+						codeIndexManager.cacheManager,
+						this.cwd,
 					)
 
 					// Start performance monitoring
-					performanceMonitor.startOperation("task_indexing_validation")
+					performanceMonitor.startOperation("task_indexing_validation", "validation")
 
 					try {
 						const validationResult = await validator.validateIndexingState()
@@ -994,8 +1011,8 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 						// If indexing is recommended but not complete, handle validation with enhanced services
 						if (!validationResult.isValid && validationResult.recommendation.shouldIndex) {
 							// Use schematic analyzer to prioritize files for indexing
-							const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace()
-							const prioritizedFiles = schematicAnalyzer.getFilesByPriority()
+							const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace([])
+							const prioritizedFiles = await schematicAnalyzer.getFilesByPriority([])
 
 							await this.say(
 								"text",
@@ -1008,35 +1025,32 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 
 							// Start background indexing with prioritized files
 							if (prioritizedFiles.length > 0) {
-								backgroundIndexingService.addBatch(
-									prioritizedFiles.map((file) => ({
-										filePath: file.path,
-										priority:
-											file.importance === "high"
-												? "high"
-												: file.importance === "medium"
-													? "medium"
-													: "low",
-									})),
+								await backgroundIndexingService.addBatch(
+									prioritizedFiles.map((file) =>
+										typeof file === "string" ? file : (file as any).path,
+									),
 								)
 
 								await this.say("text", "⚡ Starting intelligent background indexing...")
 							}
 
 							// This will trigger the validation workflow in ClineProvider
-							await provider.handleIndexingValidation(validationResult, this.taskId)
+							if (provider) {
+								await (provider as any).handleIndexingValidation(validationResult)
+							}
 							return // Exit early - task will be resumed after indexing validation
 						}
 
 						// Create indexing context for the task with enhanced services info
-						this.indexingContext = validator.createIndexingContext(
+						const indexingContext = validator.createIndexingContext(
 							validationResult.isValid ? "skip" : "wait",
 							Date.now(),
 						)
+						// Note: indexingContext is readonly, so we can't assign to it directly
 
 						// If indexing is valid, still start background processing for optimization
 						if (validationResult.isValid) {
-							const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace()
+							const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace([])
 							if (workspaceAnalysis.totalFiles > 0) {
 								await this.say(
 									"text",
@@ -1049,9 +1063,13 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 						}
 					} finally {
 						// Record performance metrics
-						const metrics = performanceMonitor.endOperation("task_indexing_validation")
-						if (metrics) {
-							await this.say("text", `⏱️ Indexing validation completed in ${metrics.duration}ms`)
+						performanceMonitor.endOperation("task_indexing_validation")
+						const metrics = performanceMonitor.getCurrentMetrics()
+						if (metrics && (metrics as any).operationDuration) {
+							await this.say(
+								"text",
+								`⏱️ Indexing validation completed in ${(metrics as any).operationDuration}ms`,
+							)
 						}
 					}
 				}
@@ -1097,117 +1115,131 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			return true // No index manager available, proceed without indexing
 		}
 
-		// Initialize enhanced indexing services
+		// Initialize enhanced indexing services only if all required services are available
 		const validator = new IndexingValidator(codeIndexManager)
-		const schematicAnalyzer = new SchematicAnalyzer(this.cwd)
-		const performanceMonitor = new PerformanceMonitor()
-		const backgroundIndexingService = new BackgroundIndexingService(this.cwd, schematicAnalyzer, performanceMonitor)
+		if (
+			codeIndexManager.codeParser &&
+			codeIndexManager.embedder &&
+			codeIndexManager.vectorStore &&
+			codeIndexManager.cacheManager
+		) {
+			const schematicAnalyzer = new SchematicAnalyzer(codeIndexManager.codeParser, this.cwd)
+			const performanceMonitor = new PerformanceMonitor()
+			const backgroundIndexingService = new BackgroundIndexingService(
+				schematicAnalyzer,
+				codeIndexManager.codeParser,
+				codeIndexManager.embedder,
+				codeIndexManager.vectorStore,
+				codeIndexManager.cacheManager,
+				this.cwd,
+			)
 
-		// Start performance monitoring
-		performanceMonitor.startOperation("ensure_indexing_complete")
+			// Start performance monitoring
+			performanceMonitor.startOperation("ensure_indexing_complete", "completion_check")
 
-		try {
-			// Check if indexing is already complete
-			const currentStatus = validator.getCurrentStatus()
-			if (currentStatus.systemStatus === "Indexed") {
-				// Even if indexed, analyze workspace for optimization opportunities
-				const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace()
-				await this.say("text", `✅ Code indexing complete. Analyzed ${workspaceAnalysis.totalFiles} files`)
+			try {
+				// Check if indexing is already complete
+				const currentStatus = validator.getCurrentStatus()
+				if (currentStatus.systemStatus === "Indexed") {
+					// Even if indexed, analyze workspace for optimization opportunities
+					const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace([])
+					await this.say("text", `✅ Code indexing complete. Analyzed ${workspaceAnalysis.totalFiles} files`)
 
-				// Start background optimization if beneficial
-				if (workspaceAnalysis.totalFiles > 100) {
-					backgroundIndexingService.startBackgroundProcessing()
-					await this.say("text", "🔄 Started background optimization for large workspace")
-				}
-
-				return true
-			}
-
-			// If indexing is in progress, wait for completion with enhanced monitoring
-			if (currentStatus.systemStatus === "Indexing") {
-				await this.say("text", "⏳ Waiting for code indexing to complete with intelligent monitoring...")
-
-				// Use schematic analyzer to provide progress insights
-				const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace()
-				const prioritizedFiles = schematicAnalyzer.getFilesByPriority()
-
-				await this.say(
-					"text",
-					`📊 Monitoring ${workspaceAnalysis.totalFiles} files (${prioritizedFiles.length} prioritized)`,
-				)
-
-				// Wait for completion with performance tracking
-				const completed = await validator.waitForIndexingCompletion(timeoutMs)
-
-				if (completed) {
-					await this.say("text", "✅ Code indexing completed successfully with enhanced monitoring")
-
-					// Start background processing for continued optimization
-					backgroundIndexingService.startBackgroundProcessing()
-					return true
-				} else {
-					await this.say("text", "⚠️ Code indexing timed out, proceeding with partial index")
-
-					// Even on timeout, start background processing to continue indexing
-					if (prioritizedFiles.length > 0) {
-						backgroundIndexingService.addBatch(
-							prioritizedFiles.map((file) => ({
-								filePath: file.path,
-								priority:
-									file.importance === "high"
-										? "high"
-										: file.importance === "medium"
-											? "medium"
-											: "low",
-							})),
-						)
+					// Start background optimization if beneficial
+					if (workspaceAnalysis.totalFiles > 100) {
 						backgroundIndexingService.startBackgroundProcessing()
-						await this.say("text", "🔄 Started background indexing for remaining files")
+						await this.say("text", "🔄 Started background optimization for large workspace")
 					}
 
-					return false
+					return true
 				}
-			}
 
-			// If indexing is in error state or standby, try to start enhanced indexing
-			if (currentStatus.systemStatus === "Error" || currentStatus.systemStatus === "Standby") {
-				await this.say("text", "🔧 Attempting to restart indexing with enhanced services...")
+				// If indexing is in progress, wait for completion with enhanced monitoring
+				if (currentStatus.systemStatus === "Indexing") {
+					await this.say("text", "⏳ Waiting for code indexing to complete with intelligent monitoring...")
 
-				const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace()
-				const prioritizedFiles = schematicAnalyzer.getFilesByPriority()
-
-				if (prioritizedFiles.length > 0) {
-					// Add prioritized files to background processing
-					backgroundIndexingService.addBatch(
-						prioritizedFiles.map((file) => ({
-							filePath: file.path,
-							priority:
-								file.importance === "high" ? "high" : file.importance === "medium" ? "medium" : "low",
-						})),
-					)
-					backgroundIndexingService.startBackgroundProcessing()
+					// Use schematic analyzer to provide progress insights
+					const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace([])
+					const prioritizedFiles = await schematicAnalyzer.getFilesByPriority([])
 
 					await this.say(
 						"text",
-						`🚀 Started enhanced background indexing for ${prioritizedFiles.length} prioritized files`,
+						`📊 Monitoring ${workspaceAnalysis.totalFiles} files (${prioritizedFiles.length} prioritized)`,
+					)
+
+					// Wait for completion with performance tracking
+					const completed = await validator.waitForIndexingCompletion(timeoutMs)
+
+					if (completed) {
+						await this.say("text", "✅ Code indexing completed successfully with enhanced monitoring")
+
+						// Start background processing for continued optimization
+						backgroundIndexingService.startBackgroundProcessing()
+						return true
+					} else {
+						await this.say("text", "⚠️ Code indexing timed out, proceeding with partial index")
+
+						// Even on timeout, start background processing to continue indexing
+						if (prioritizedFiles.length > 0) {
+							await backgroundIndexingService.addBatch(
+								prioritizedFiles.map((file) => (typeof file === "string" ? file : (file as any).path)),
+							)
+							backgroundIndexingService.startBackgroundProcessing()
+							await this.say("text", "🔄 Started background indexing for remaining files")
+						}
+
+						return false
+					}
+				}
+
+				// If indexing is in error state or standby, try to start enhanced indexing
+				if (currentStatus.systemStatus === "Error" || currentStatus.systemStatus === "Standby") {
+					await this.say("text", "🔧 Attempting to restart indexing with enhanced services...")
+
+					const workspaceAnalysis = await schematicAnalyzer.analyzeWorkspace([])
+					const prioritizedFiles = await schematicAnalyzer.getFilesByPriority([])
+
+					if (prioritizedFiles.length > 0) {
+						// Add prioritized files to background processing
+						await backgroundIndexingService.addBatch(
+							prioritizedFiles.map((file) => (typeof file === "string" ? file : (file as any).path)),
+						)
+						backgroundIndexingService.startBackgroundProcessing()
+
+						await this.say(
+							"text",
+							`🚀 Started enhanced background indexing for ${prioritizedFiles.length} prioritized files`,
+						)
+					}
+				}
+
+				return true
+			} finally {
+				// Record performance metrics
+				performanceMonitor.endOperation("ensure_indexing_complete")
+				const metrics = performanceMonitor.getCurrentMetrics()
+				if (metrics && (metrics as any).operationDuration) {
+					await this.say(
+						"text",
+						`⏱️ Enhanced indexing check completed in ${(metrics as any).operationDuration}ms`,
 					)
 				}
 			}
-
+		} else {
+			// If required services are not available, return true to proceed without enhanced indexing
+			await this.say("text", "⚠️ Enhanced indexing services not available, proceeding without indexing")
 			return true
-		} finally {
-			// Record performance metrics
-			const metrics = performanceMonitor.endOperation("ensure_indexing_complete")
-			if (metrics) {
-				await this.say("text", `⏱️ Enhanced indexing check completed in ${metrics.duration}ms`)
-			}
 		}
 	}
 
 	public async resumePausedTask(lastMessage: string) {
+		console.log(`[DEBUG] Task ${this.taskId}.${this.instanceId} resuming from pause with message: ${lastMessage}`)
+
 		// Release this Cline instance from paused state.
 		this.isPaused = false
-		this.emit(RooCodeEventName.TaskUnpaused)
+		this.emit(BluesCodeEventName.TaskUnpaused)
+
+		console.log(`[DEBUG] Task ${this.taskId}.${this.instanceId} unpaused, continuing execution`)
 
 		// Fake an answer from the subtask that it has completed running and
 		// this is the result of what it has done  add the message to the chat
@@ -1219,7 +1251,28 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 				role: "user",
 				content: [{ type: "text", text: `[new_task completed] Result: ${lastMessage}` }],
 			})
+
+			console.log(
+				`[DEBUG] Task ${this.taskId}.${this.instanceId} added subtask result to conversation, triggering main loop continuation`,
+			)
+
+			// CRITICAL FIX: Explicitly continue the main execution loop
+			// The main loop is waiting in waitForResume(), but after we set isPaused = false,
+			// we need to ensure the loop continues with the subtask result as the next user content
+			const nextUserContent = [
+				{
+					type: "text" as const,
+					text: `[new_task completed] Result: ${lastMessage}`,
+				},
+			]
+
+			// Continue the recursive execution loop with the subtask result
+			console.log(
+				`[DEBUG] Task ${this.taskId}.${this.instanceId} calling recursivelyMakeClineRequests to continue execution`,
+			)
+			await this.recursivelyMakeClineRequests(nextUserContent, false)
 		} catch (error) {
+			console.error(`[DEBUG] Task ${this.taskId}.${this.instanceId} failed to resume:`, error)
 			this.providerRef
 				.deref()
 				?.log(`Error failed to add reply from subtask into conversation of parent task, error: ${error}`)
@@ -1529,7 +1582,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		}
 
 		this.abort = true
-		this.emit(RooCodeEventName.TaskAborted)
+		this.emit(BluesCodeEventName.TaskAborted)
 
 		try {
 			this.dispose() // Call the centralized dispose method
@@ -1565,17 +1618,27 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 	// Task Loop
 
 	private async initiateTaskLoop(userContent: Anthropic.Messages.ContentBlockParam[]): Promise<void> {
+		console.log(`[DEBUG] Task ${this.taskId}.${this.instanceId} initiating task loop`)
+
 		// Kicks off the checkpoints initialization process in the background.
 		getCheckpointService(this)
 
 		let nextUserContent = userContent
 		let includeFileDetails = true
 
-		this.emit(RooCodeEventName.TaskStarted)
+		this.emit(BluesCodeEventName.TaskStarted)
 
 		while (!this.abort) {
+			console.log(
+				`[DEBUG] Task ${this.taskId}.${this.instanceId} starting loop iteration, isPaused: ${this.isPaused}`,
+			)
+
 			const didEndLoop = await this.recursivelyMakeClineRequests(nextUserContent, includeFileDetails)
 			includeFileDetails = false // We only need file details the first time.
+
+			console.log(
+				`[DEBUG] Task ${this.taskId}.${this.instanceId} loop iteration completed, didEndLoop: ${didEndLoop}`,
+			)
 
 			// The way this agentic loop works is that cline will be given a
 			// task that he then calls tools to complete. Unless there's an
@@ -1589,14 +1652,18 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			// as he can.
 
 			if (didEndLoop) {
+				console.log(`[DEBUG] Task ${this.taskId}.${this.instanceId} ending main loop`)
 				// For now a task never 'completes'. This will only happen if
 				// the user hits max requests and denies resetting the count.
 				break
 			} else {
+				console.log(`[DEBUG] Task ${this.taskId}.${this.instanceId} continuing loop with noToolsUsed response`)
 				nextUserContent = [{ type: "text", text: formatResponse.noToolsUsed() }]
 				this.consecutiveMistakeCount++
 			}
 		}
+
+		console.log(`[DEBUG] Task ${this.taskId}.${this.instanceId} exited main task loop, abort: ${this.abort}`)
 	}
 
 	public async recursivelyMakeClineRequests(
@@ -2718,7 +2785,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		this.toolUsage[toolName].failures++
 
 		if (error) {
-			this.emit(RooCodeEventName.TaskToolFailed, this.taskId, toolName, error)
+			this.emit(BluesCodeEventName.TaskToolFailed, this.taskId, toolName, error)
 		}
 	}
 
@@ -2726,5 +2793,20 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 
 	public get cwd() {
 		return this.workspacePath
+	}
+
+	/**
+	 * Handles user choice from indexing validation dialog
+	 * This method delegates to the provider's handleIndexingChoice method
+	 * @param choice - User's indexing choice
+	 * @param taskId - Task ID for this validation session
+	 */
+	public async handleIndexingChoice(choice: IndexingChoice, taskId: string): Promise<void> {
+		// Get provider from weak reference and delegate to its implementation
+		const provider = this.providerRef.deref()
+		if (!provider) {
+			throw new Error("Provider reference is no longer available")
+		}
+		return provider.handleIndexingChoice(choice, taskId)
 	}
 }

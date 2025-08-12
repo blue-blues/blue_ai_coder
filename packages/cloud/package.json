@@ -1,6 +1,6 @@
 {
-	"name": "@roo-code/cloud",
-	"description": "Roo Code Cloud VSCode integration.",
+	"name": "@blues-code/cloud",
+	"description": "Blues Code Cloud VSCode integration.",
 	"version": "0.0.0",
 	"type": "module",
 	"exports": "./src/index.ts",
@@ -11,13 +11,13 @@
 		"clean": "rimraf dist .turbo"
 	},
 	"dependencies": {
-		"@roo-code/telemetry": "workspace:^",
-		"@roo-code/types": "workspace:^",
+		"@blues-code/telemetry": "workspace:^",
+		"@blues-code/types": "workspace:^",
 		"zod": "^3.25.61"
 	},
 	"devDependencies": {
-		"@roo-code/config-eslint": "workspace:^",
-		"@roo-code/config-typescript": "workspace:^",
+		"@blues-code/config-eslint": "workspace:^",
+		"@blues-code/config-typescript": "workspace:^",
 		"@types/node": "20.x",
 		"@types/vscode": "^1.84.0",
 		"vitest": "^3.2.3"

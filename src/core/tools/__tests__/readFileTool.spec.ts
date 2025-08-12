@@ -1416,7 +1416,7 @@ describe("read_file tool with image support", () => {
 	}
 
 	describe("Image Format Detection", () => {
-		it.each([
+		const imageFormats: [string, string, string][] = [
 			[".png", "image.png", "image/png"],
 			[".jpg", "photo.jpg", "image/jpeg"],
 			[".jpeg", "picture.jpeg", "image/jpeg"],
@@ -1426,32 +1426,37 @@ describe("read_file tool with image support", () => {
 			[".webp", "modern.webp", "image/webp"],
 			[".ico", "favicon.ico", "image/x-icon"],
 			[".avif", "new-format.avif", "image/avif"],
-		])("should detect %s as an image format", async (ext, filename, expectedMimeType) => {
-			// Setup
-			const imagePath = `test/${filename}`
-			const absolutePath = `/test/${filename}`
-			mockedPathResolve.mockReturnValue(absolutePath)
+		]
 
-			// Ensure API mock supports images
-			setImageSupport(localMockCline, true)
+		imageFormats.forEach((format: [string, string, string]) => {
+			const [ext, filename, expectedMimeType] = format
+			it(`should detect ${ext} as an image format`, async () => {
+				// Setup
+				const imagePath = `test/${filename}`
+				const absolutePath = `/test/${filename}`
+				mockedPathResolve.mockReturnValue(absolutePath)
 
-			// Execute
-			const result = await executeReadImageTool(imagePath)
+				// Ensure API mock supports images
+				setImageSupport(localMockCline, true)
 
-			// Verify result is a multi-part response
-			expect(Array.isArray(result)).toBe(true)
-			const textPart = (result as any[]).find((p) => p.type === "text")?.text
-			const imagePart = (result as any[]).find((p) => p.type === "image")
+				// Execute
+				const result = await executeReadImageTool(imagePath)
 
-			// Verify text part
-			expect(textPart).toContain(`<file><path>${imagePath}</path>`)
-			expect(textPart).not.toContain("<image_data>")
-			expect(textPart).toContain(`<notice>Image file`)
+				// Verify result is a multi-part response
+				expect(Array.isArray(result)).toBe(true)
+				const textPart = (result as any[]).find((p) => p.type === "text")?.text
+				const imagePart = (result as any[]).find((p) => p.type === "image")
 
-			// Verify image part
-			expect(imagePart).toBeDefined()
-			expect(imagePart.source.media_type).toBe(expectedMimeType)
-			expect(imagePart.source.data).toBe(base64ImageData)
+				// Verify text part
+				expect(textPart).toContain(`<file><path>${imagePath}</path>`)
+				expect(textPart).not.toContain("<image_data>")
+				expect(textPart).toContain(`<notice>Image file`)
+
+				// Verify image part
+				expect(imagePart).toBeDefined()
+				expect(imagePart.source.media_type).toBe(expectedMimeType)
+				expect(imagePart.source.data).toBe(base64ImageData)
+			})
 		})
 	})
 

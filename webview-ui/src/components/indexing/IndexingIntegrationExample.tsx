@@ -10,7 +10,7 @@ import {
 	WorkspaceAnalysisDisplay,
 } from "./index"
 import type { IndexingError } from "./types"
-import type { IndexingStatus } from "@roo/ExtensionMessage"
+import type { IndexingStatus } from "@blues/ExtensionMessage"
 
 /**
  * Comprehensive integration example showing how to use all indexing UI components

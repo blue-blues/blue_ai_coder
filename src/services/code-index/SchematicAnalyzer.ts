@@ -4,8 +4,8 @@ import * as fs from "fs/promises"
 import { createHash } from "crypto"
 import { CodeBlock, ICodeParser } from "./interfaces"
 import { scannerExtensions, shouldUseFallbackChunking } from "./shared/supported-extensions"
-import { TelemetryService } from "@roo-code/telemetry"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { TelemetryEventName } from "@blues-code/types"
 import { sanitizeErrorMessage } from "./shared/validation-helpers"
 
 /**
@@ -1276,5 +1276,76 @@ export class SchematicAnalyzer {
 		}
 
 		return result
+	}
+
+	/**
+	 * Gets files grouped by category
+	 */
+	async getFilesByCategory(filePaths?: string[]): Promise<Record<FileCategory, string[]>> {
+		const result: Record<FileCategory, string[]> = {
+			[FileCategory.ENTRY_POINT]: [],
+			[FileCategory.CONFIGURATION]: [],
+			[FileCategory.CORE_LOGIC]: [],
+			[FileCategory.UTILITY]: [],
+			[FileCategory.TEST]: [],
+			[FileCategory.DOCUMENTATION]: [],
+			[FileCategory.ASSET]: [],
+			[FileCategory.GENERATED]: [],
+			[FileCategory.UNKNOWN]: [],
+		}
+
+		// If no file paths provided, use workspace analysis cache
+		if (!filePaths && this.workspaceAnalysisCache) {
+			// Return empty result if no cached analysis
+			return result
+		}
+
+		// Use provided file paths or get from workspace
+		const pathsToAnalyze = filePaths || []
+
+		for (const filePath of pathsToAnalyze) {
+			try {
+				const analysis = await this.analyzeFile(filePath)
+				result[analysis.category].push(filePath)
+			} catch (error) {
+				result[FileCategory.UNKNOWN].push(filePath)
+			}
+		}
+
+		return result
+	}
+
+	/**
+	 * Builds dependency graph for the workspace
+	 */
+	async buildDependencyGraph(filePaths?: string[]): Promise<DependencyRelation[]> {
+		// If workspace analysis is cached and no specific files requested, return cached graph
+		if (!filePaths && this.workspaceAnalysisCache) {
+			return this.workspaceAnalysisCache.dependencyGraph
+		}
+
+		const dependencyGraph: DependencyRelation[] = []
+		const pathsToAnalyze = filePaths || []
+
+		for (const filePath of pathsToAnalyze) {
+			try {
+				const analysis = await this.analyzeFile(filePath)
+
+				// Build dependency relationships
+				for (const dep of analysis.dependencies) {
+					dependencyGraph.push({
+						from: filePath,
+						to: dep,
+						type: "import",
+						isExternal: !dep.startsWith(".") && !dep.startsWith("/"),
+					})
+				}
+			} catch (error) {
+				// Skip files that can't be analyzed
+				continue
+			}
+		}
+
+		return dependencyGraph
 	}
 }

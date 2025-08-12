@@ -1,6 +1,6 @@
 // bluescode_change: Morph fast apply - file added
 
-import { Experiments } from "@roo-code/types"
+import { Experiments } from "@blues-code/types"
 
 export function getMorphInstructions(experiments?: Experiments): string {
 	// don't remove trailing newlines, they are important for the system prompt

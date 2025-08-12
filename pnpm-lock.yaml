@@ -24,6 +24,9 @@ importers:
       '@dotenvx/dotenvx':
         specifier: ^1.34.0
         version: 1.44.1
+      '@types/sinon':
+        specifier: ^17.0.4
+        version: 17.0.4
       '@vscode/vsce':
         specifier: 3.3.2
         version: 3.3.2
@@ -57,6 +60,9 @@ importers:
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
+      sinon:
+        specifier: ^21.0.0
+        version: 21.0.0
       turbo:
         specifier: ^2.5.3
         version: 2.5.4
@@ -79,18 +85,18 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
     devDependencies:
+      '@blues-code/config-eslint':
+        specifier: workspace:^
+        version: link:../../packages/config-eslint
+      '@blues-code/config-typescript':
+        specifier: workspace:^
+        version: link:../../packages/config-typescript
+      '@blues-code/types':
+        specifier: workspace:^
+        version: link:../../packages/types
       '@playwright/test':
         specifier: ^1.53.1
         version: 1.53.1
-      '@roo-code/config-eslint':
-        specifier: workspace:^
-        version: link:../../packages/config-eslint
-      '@roo-code/config-typescript':
-        specifier: workspace:^
-        version: link:../../packages/config-typescript
-      '@roo-code/types':
-        specifier: workspace:^
-        version: link:../../packages/types
       '@types/node':
         specifier: ^22.15.29
         version: 22.15.29
@@ -109,12 +115,12 @@ importers:
 
   apps/storybook:
     dependencies:
+      '@blues-code/types':
+        specifier: workspace:^
+        version: link:../../packages/types
       '@radix-ui/react-slot':
         specifier: ^1.1.2
         version: 1.2.3(@types/react@18.3.23)(react@18.3.1)
-      '@roo-code/types':
-        specifier: workspace:^
-        version: link:../../packages/types
       '@tanstack/react-query':
         specifier: ^5.62.7
         version: 5.79.0(react@18.3.1)
@@ -215,13 +221,13 @@ importers:
 
   apps/vscode-e2e:
     devDependencies:
-      '@roo-code/config-eslint':
+      '@blues-code/config-eslint':
         specifier: workspace:^
         version: link:../../packages/config-eslint
-      '@roo-code/config-typescript':
+      '@blues-code/config-typescript':
         specifier: workspace:^
         version: link:../../packages/config-typescript
-      '@roo-code/types':
+      '@blues-code/types':
         specifier: workspace:^
         version: link:../../packages/types
       '@types/mocha':
@@ -254,12 +260,18 @@ importers:
 
   apps/vscode-nightly:
     devDependencies:
-      '@roo-code/build':
+      '@blues-code/build':
         specifier: workspace:^
         version: link:../../packages/build
 
   apps/web-evals:
     dependencies:
+      '@blues-code/evals':
+        specifier: workspace:^
+        version: link:../../packages/evals
+      '@blues-code/types':
+        specifier: workspace:^
+        version: link:../../packages/types
       '@hookform/resolvers':
         specifier: ^5.1.1
         version: 5.1.1(react-hook-form@7.57.0(react@18.3.1))
@@ -299,12 +311,6 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.1.8
         version: 1.2.7(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@roo-code/evals':
-        specifier: workspace:^
-        version: link:../../packages/evals
-      '@roo-code/types':
-        specifier: workspace:^
-        version: link:../../packages/types
       '@tanstack/react-query':
         specifier: ^5.69.0
         version: 5.79.0(react@18.3.1)
@@ -363,10 +369,10 @@ importers:
         specifier: ^3.25.61
         version: 3.25.67
     devDependencies:
-      '@roo-code/config-eslint':
+      '@blues-code/config-eslint':
         specifier: workspace:^
         version: link:../../packages/config-eslint
-      '@roo-code/config-typescript':
+      '@blues-code/config-typescript':
         specifier: workspace:^
         version: link:../../packages/config-typescript
       '@tailwindcss/postcss':
@@ -390,18 +396,18 @@ importers:
 
   apps/web-roo-code:
     dependencies:
+      '@blues-code/evals':
+        specifier: workspace:^
+        version: link:../../packages/evals
+      '@blues-code/types':
+        specifier: workspace:^
+        version: link:../../packages/types
       '@radix-ui/react-dialog':
         specifier: ^1.1.14
         version: 1.1.14(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slot':
         specifier: ^1.2.3
         version: 1.2.3(@types/react@18.3.23)(react@18.3.1)
-      '@roo-code/evals':
-        specifier: workspace:^
-        version: link:../../packages/evals
-      '@roo-code/types':
-        specifier: workspace:^
-        version: link:../../packages/types
       '@tanstack/react-query':
         specifier: ^5.79.0
         version: 5.79.0(react@18.3.1)
@@ -457,10 +463,10 @@ importers:
         specifier: ^3.25.61
         version: 3.25.67
     devDependencies:
-      '@roo-code/config-eslint':
+      '@blues-code/config-eslint':
         specifier: workspace:^
         version: link:../../packages/config-eslint
-      '@roo-code/config-typescript':
+      '@blues-code/config-typescript':
         specifier: workspace:^
         version: link:../../packages/config-typescript
       '@tailwindcss/typography':
@@ -491,10 +497,10 @@ importers:
         specifier: ^3.25.61
         version: 3.25.67
     devDependencies:
-      '@roo-code/config-eslint':
+      '@blues-code/config-eslint':
         specifier: workspace:^
         version: link:../config-eslint
-      '@roo-code/config-typescript':
+      '@blues-code/config-typescript':
         specifier: workspace:^
         version: link:../config-typescript
       '@types/node':
@@ -506,20 +512,20 @@ importers:
 
   packages/cloud:
     dependencies:
-      '@roo-code/telemetry':
+      '@blues-code/telemetry':
         specifier: workspace:^
         version: link:../telemetry
-      '@roo-code/types':
+      '@blues-code/types':
         specifier: workspace:^
         version: link:../types
       zod:
         specifier: ^3.25.61
         version: 3.25.67
     devDependencies:
-      '@roo-code/config-eslint':
+      '@blues-code/config-eslint':
         specifier: workspace:^
         version: link:../config-eslint
-      '@roo-code/config-typescript':
+      '@blues-code/config-typescript':
         specifier: workspace:^
         version: link:../config-typescript
       '@types/node':
@@ -569,10 +575,10 @@ importers:
 
   packages/evals:
     dependencies:
-      '@roo-code/ipc':
+      '@blues-code/ipc':
         specifier: workspace:^
         version: link:../ipc
-      '@roo-code/types':
+      '@blues-code/types':
         specifier: workspace:^
         version: link:../types
       cmd-ts:
@@ -609,10 +615,10 @@ importers:
         specifier: ^3.25.61
         version: 3.25.67
     devDependencies:
-      '@roo-code/config-eslint':
+      '@blues-code/config-eslint':
         specifier: workspace:^
         version: link:../config-eslint
-      '@roo-code/config-typescript':
+      '@blues-code/config-typescript':
         specifier: workspace:^
         version: link:../config-typescript
       '@types/node':
@@ -636,17 +642,17 @@ importers:
 
   packages/ipc:
     dependencies:
-      '@roo-code/types':
+      '@blues-code/types':
         specifier: workspace:^
         version: link:../types
       node-ipc:
         specifier: ^12.0.0
         version: 12.0.0
     devDependencies:
-      '@roo-code/config-eslint':
+      '@blues-code/config-eslint':
         specifier: workspace:^
         version: link:../config-eslint
-      '@roo-code/config-typescript':
+      '@blues-code/config-typescript':
         specifier: workspace:^
         version: link:../config-typescript
       '@types/node':
@@ -661,7 +667,7 @@ importers:
 
   packages/telemetry:
     dependencies:
-      '@roo-code/types':
+      '@blues-code/types':
         specifier: workspace:^
         version: link:../types
       posthog-node:
@@ -671,10 +677,10 @@ importers:
         specifier: ^3.25.61
         version: 3.25.67
     devDependencies:
-      '@roo-code/config-eslint':
+      '@blues-code/config-eslint':
         specifier: workspace:^
         version: link:../config-eslint
-      '@roo-code/config-typescript':
+      '@blues-code/config-typescript':
         specifier: workspace:^
         version: link:../config-typescript
       '@types/node':
@@ -693,10 +699,10 @@ importers:
         specifier: ^3.25.61
         version: 3.25.67
     devDependencies:
-      '@roo-code/config-eslint':
+      '@blues-code/config-eslint':
         specifier: workspace:^
         version: link:../config-eslint
-      '@roo-code/config-typescript':
+      '@blues-code/config-typescript':
         specifier: workspace:^
         version: link:../config-typescript
       '@types/node':
@@ -726,6 +732,18 @@ importers:
       '@aws-sdk/credential-providers':
         specifier: ^3.806.0
         version: 3.821.0
+      '@blues-code/cloud':
+        specifier: workspace:^
+        version: link:../packages/cloud
+      '@blues-code/ipc':
+        specifier: workspace:^
+        version: link:../packages/ipc
+      '@blues-code/telemetry':
+        specifier: workspace:^
+        version: link:../packages/telemetry
+      '@blues-code/types':
+        specifier: workspace:^
+        version: link:../packages/types
       '@cerebras/cerebras_cloud_sdk':
         specifier: ^1.35.0
         version: 1.35.0
@@ -744,18 +762,6 @@ importers:
       '@qdrant/js-client-rest':
         specifier: ^1.14.0
         version: 1.14.1(typescript@5.8.3)
-      '@roo-code/cloud':
-        specifier: workspace:^
-        version: link:../packages/cloud
-      '@roo-code/ipc':
-        specifier: workspace:^
-        version: link:../packages/ipc
-      '@roo-code/telemetry':
-        specifier: workspace:^
-        version: link:../packages/telemetry
-      '@roo-code/types':
-        specifier: workspace:^
-        version: link:../packages/types
       '@types/lodash.debounce':
         specifier: ^4.0.9
         version: 4.0.9
@@ -949,13 +955,13 @@ importers:
         specifier: ^3.25.61
         version: 3.25.67
     devDependencies:
-      '@roo-code/build':
+      '@blues-code/build':
         specifier: workspace:^
         version: link:../packages/build
-      '@roo-code/config-eslint':
+      '@blues-code/config-eslint':
         specifier: workspace:^
         version: link:../packages/config-eslint
-      '@roo-code/config-typescript':
+      '@blues-code/config-typescript':
         specifier: workspace:^
         version: link:../packages/config-typescript
       '@types/clone-deep':
@@ -1054,6 +1060,9 @@ importers:
 
   webview-ui:
     dependencies:
+      '@blues-code/types':
+        specifier: workspace:^
+        version: link:../packages/types
       '@radix-ui/react-alert-dialog':
         specifier: ^1.1.6
         version: 1.1.14(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1096,9 +1105,6 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.1.8
         version: 1.2.7(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@roo-code/types':
-        specifier: workspace:^
-        version: link:../packages/types
       '@tailwindcss/vite':
         specifier: ^4.0.0
         version: 4.1.8(vite@6.3.5(@types/node@20.19.1)(jiti@2.4.2)(lightningcss@1.30.1)(tsx@4.19.4)(yaml@2.8.0))
@@ -1256,10 +1262,10 @@ importers:
         specifier: ^3.25.61
         version: 3.25.67
     devDependencies:
-      '@roo-code/config-eslint':
+      '@blues-code/config-eslint':
         specifier: workspace:^
         version: link:../packages/config-eslint
-      '@roo-code/config-typescript':
+      '@blues-code/config-typescript':
         specifier: workspace:^
         version: link:../packages/config-typescript
       '@storybook/addon-essentials':
@@ -3442,6 +3448,12 @@ packages:
   '@sinonjs/fake-timers@10.3.0':
     resolution: {integrity: sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==}
 
+  '@sinonjs/fake-timers@13.0.5':
+    resolution: {integrity: sha512-36/hTbH2uaWuGVERyC6da9YwGWnzUZXuPro/F2LfsdOsLnCojz/iSH8MxUt/FD2S5XBSVPhmArFUXcpCQ2Hkiw==}
+
+  '@sinonjs/samsam@8.0.3':
+    resolution: {integrity: sha512-hw6HbX+GyVZzmaYNh82Ecj1vdGZrqVIn/keDTg63IgAwiQPO+xCz99uG6Woqgb4tM0mUiFENKZ4cqd7IX94AXQ==}
+
   '@smithy/abort-controller@2.2.0':
     resolution: {integrity: sha512-wRlta7GuLWpTqtFfGo+nZyOO1vEvewdNR1R4rTxpC8XU6vG/NDyrFBhwLZsqg1NUoR1noVaXJPC/7ZK47QCySw==}
     engines: {node: '>=14.0.0'}
@@ -4476,6 +4488,12 @@ packages:
 
   '@types/shell-quote@1.7.5':
     resolution: {integrity: sha512-+UE8GAGRPbJVQDdxi16dgadcBfQ+KG2vgZhV1+3A1XmHbmwcdwhCUwIdy+d3pAGrbvgRoVSjeI9vOWyq376Yzw==}
+
+  '@types/sinon@17.0.4':
+    resolution: {integrity: sha512-RHnIrhfPO3+tJT0s7cFaXGZvsL4bbR3/k7z3P312qMS4JaS2Tk+KiwiLx1S0rQ56ERj00u1/BtdyVd0FY+Pdew==}
+
+  '@types/sinonjs__fake-timers@8.1.5':
+    resolution: {integrity: sha512-mQkU2jY8jJEF7YHjHvsQO8+3ughTL1mcnn96igfhONmR+fUPSKIkefQYpSe8bsly2Ep7oQbn/6VG5/9/0qcArQ==}
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
@@ -9892,6 +9910,9 @@ packages:
   simple-swizzle@0.2.2:
     resolution: {integrity: sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==}
 
+  sinon@21.0.0:
+    resolution: {integrity: sha512-TOgRcwFPbfGtpqvZw+hyqJDvqfapr1qUlOizROIk4bBLjlsjlB00Pg6wMFXNtJRpu+eCZuVOaLatG7M8105kAw==}
+
   sirv@3.0.1:
     resolution: {integrity: sha512-FoqMu0NCGBLCcAkS1qA+XJIQTR6/JHfQXl+uGteNCQ76T91DMUjPa9xfmeqMY3z80nLSg9yQmNjK0Px6RWsH/A==}
     engines: {node: '>=18'}
@@ -9965,6 +9986,7 @@ packages:
   source-map@0.8.0-beta.0:
     resolution: {integrity: sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==}
     engines: {node: '>= 8'}
+    deprecated: The work that was done in this beta branch won't be included in future versions
 
   space-separated-tokens@1.1.5:
     resolution: {integrity: sha512-q/JSVd1Lptzhf5bkYm4ob4iWPjx0KiRe3sRFBNrVqbJkFaBm5vbbowy1mymoPNLRa52+oadOhJ+K49wsSeSjTA==}
@@ -10568,6 +10590,10 @@ packages:
 
   type-detect@4.0.8:
     resolution: {integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==}
+    engines: {node: '>=4'}
+
+  type-detect@4.1.0:
+    resolution: {integrity: sha512-Acylog8/luQ8L7il+geoSxhEkazvkslg7PSNKOX59mbB9cOveP5aq9h74Y7YU8yDpJwetzQQrfIwtf4Wp4LKcw==}
     engines: {node: '>=4'}
 
   type-fest@0.21.3:
@@ -13921,6 +13947,15 @@ snapshots:
     dependencies:
       '@sinonjs/commons': 3.0.1
 
+  '@sinonjs/fake-timers@13.0.5':
+    dependencies:
+      '@sinonjs/commons': 3.0.1
+
+  '@sinonjs/samsam@8.0.3':
+    dependencies:
+      '@sinonjs/commons': 3.0.1
+      type-detect: 4.1.0
+
   '@smithy/abort-controller@2.2.0':
     dependencies:
       '@smithy/types': 2.12.0
@@ -15248,6 +15283,12 @@ snapshots:
 
   '@types/shell-quote@1.7.5': {}
 
+  '@types/sinon@17.0.4':
+    dependencies:
+      '@types/sinonjs__fake-timers': 8.1.5
+
+  '@types/sinonjs__fake-timers@8.1.5': {}
+
   '@types/stack-utils@2.0.3': {}
 
   '@types/stacktrace-js@2.0.3':
@@ -15510,7 +15551,7 @@ snapshots:
       sirv: 3.0.1
       tinyglobby: 0.2.14
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/ui@3.2.4)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.30.1)(tsx@4.19.4)(yaml@2.8.0)
+      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@20.19.1)(@vitest/ui@3.2.4)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.30.1)(tsx@4.19.4)(yaml@2.8.0)
 
   '@vitest/utils@2.0.5':
     dependencies:
@@ -21933,6 +21974,14 @@ snapshots:
       is-arrayish: 0.3.2
     optional: true
 
+  sinon@21.0.0:
+    dependencies:
+      '@sinonjs/commons': 3.0.1
+      '@sinonjs/fake-timers': 13.0.5
+      '@sinonjs/samsam': 8.0.3
+      diff: 7.0.0
+      supports-color: 7.2.0
+
   sirv@3.0.1:
     dependencies:
       '@polka/url': 1.0.0-next.29
@@ -22644,6 +22693,8 @@ snapshots:
       prelude-ls: 1.2.1
 
   type-detect@4.0.8: {}
+
+  type-detect@4.1.0: {}
 
   type-fest@0.21.3: {}
 

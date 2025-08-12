@@ -1,7 +1,7 @@
 import * as vscode from "vscode"
 import { getWorkspacePath } from "../../utils/path"
 import { ContextProxy } from "../../core/config/ContextProxy"
-import { VectorStoreSearchResult } from "./interfaces"
+import { VectorStoreSearchResult, ICodeParser, IEmbedder, IVectorStore } from "./interfaces"
 import { IndexingState } from "./interfaces/manager"
 import { CodeIndexConfigManager } from "./config-manager"
 import { CodeIndexStateManager } from "./state-manager"
@@ -13,8 +13,8 @@ import fs from "fs/promises"
 import ignore from "ignore"
 import path from "path"
 import { t } from "../../i18n"
-import { TelemetryService } from "@roo-code/telemetry"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { TelemetryEventName } from "@blues-code/types"
 import {
 	IndexRecommendation,
 	IndexingEstimate,
@@ -36,6 +36,11 @@ export class CodeIndexManager {
 	private _orchestrator: CodeIndexOrchestrator | undefined
 	private _searchService: CodeIndexSearchService | undefined
 	private _cacheManager: CacheManager | undefined
+
+	// Service instances exposed as public properties
+	private _codeParser: ICodeParser | undefined
+	private _embedder: IEmbedder | undefined
+	private _vectorStore: IVectorStore | undefined
 
 	// Flag to prevent race conditions during error recovery
 	private _isRecoveringFromError = false
@@ -72,7 +77,7 @@ export class CodeIndexManager {
 		CodeIndexManager.instances.clear()
 	}
 
-	private readonly workspacePath: string
+	public readonly workspacePath: string
 	private readonly context: vscode.ExtensionContext
 
 	// Private constructor for singleton pattern
@@ -117,6 +122,31 @@ export class CodeIndexManager {
 		} catch (error) {
 			return false
 		}
+	}
+
+	// Public getters for service instances
+	public get codeParser(): ICodeParser | undefined {
+		return this._codeParser
+	}
+
+	public get embedder(): IEmbedder | undefined {
+		return this._embedder
+	}
+
+	public get vectorStore(): IVectorStore | undefined {
+		return this._vectorStore
+	}
+
+	public get cacheManager(): CacheManager | undefined {
+		return this._cacheManager
+	}
+
+	public get orchestrator(): CodeIndexOrchestrator | undefined {
+		return this._orchestrator
+	}
+
+	public get configManager(): CodeIndexConfigManager | undefined {
+		return this._configManager
 	}
 
 	/**
@@ -363,6 +393,9 @@ export class CodeIndexManager {
 			this._serviceFactory = undefined
 			this._orchestrator = undefined
 			this._searchService = undefined
+			this._codeParser = undefined
+			this._embedder = undefined
+			this._vectorStore = undefined
 
 			// Reset the flag after recovery is complete
 			this._isRecoveringFromError = false
@@ -773,6 +806,11 @@ export class CodeIndexManager {
 			this._cacheManager!,
 			ignoreInstance,
 		)
+
+		// Store service instances for public access
+		this._codeParser = parser
+		this._embedder = embedder
+		this._vectorStore = vectorStore
 
 		// Validate embedder configuration before proceeding
 		const validationResult = await this._serviceFactory.validateEmbedder(embedder)

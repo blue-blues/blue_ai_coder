@@ -71,11 +71,11 @@ const resendMessageSequence = async (
 export const fetchBluesCodeNotificationsHandler = async (provider: ClineProvider) => {
 	try {
 		const { apiConfiguration } = await provider.getState()
-		const bluescodeToken = apiConfiguration?.bluescodeToken
+		const bluesCodeToken = apiConfiguration?.bluesCodeToken
 
-		if (!bluescodeToken || apiConfiguration?.apiProvider !== "bluescode") {
+		if (!bluesCodeToken || apiConfiguration?.apiProvider !== "bluescode") {
 			provider.postMessageToWebview({
-				type: "bluescodeNotificationsResponse",
+				type: "bluesCodeNotificationsResponse",
 				notifications: [],
 			})
 			return
@@ -83,20 +83,20 @@ export const fetchBluesCodeNotificationsHandler = async (provider: ClineProvider
 
 		const response = await axios.get("https://bluescode.ai/api/users/notifications", {
 			headers: {
-				Authorization: `Bearer ${bluescodeToken}`,
+				Authorization: `Bearer ${bluesCodeToken}`,
 				"Content-Type": "application/json",
 			},
 			timeout: 5000,
 		})
 
 		provider.postMessageToWebview({
-			type: "bluescodeNotificationsResponse",
+			type: "bluesCodeNotificationsResponse",
 			notifications: response.data?.notifications || [],
 		})
 	} catch (error: any) {
 		provider.log(`Error fetching Blues Code notifications: ${error.message}`)
 		provider.postMessageToWebview({
-			type: "bluescodeNotificationsResponse",
+			type: "bluesCodeNotificationsResponse",
 			notifications: [],
 		})
 	}

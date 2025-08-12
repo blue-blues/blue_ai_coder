@@ -1,7 +1,7 @@
 import pWaitFor from "p-wait-for"
 import * as vscode from "vscode"
 
-import { TelemetryService } from "@roo-code/telemetry"
+import { TelemetryService } from "@blues-code/telemetry"
 
 import { Task } from "../task/Task"
 
@@ -17,7 +17,7 @@ import { DIFF_VIEW_URI_SCHEME } from "../../integrations/editor/DiffViewProvider
 import { CheckpointServiceOptions, RepoPerTaskCheckpointService } from "../../services/checkpoints"
 
 // bluescode_change start
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryEventName } from "@blues-code/types"
 import { stringifyError } from "../../shared/kilocode/errorUtils"
 
 function reportError(callsite: string, error: unknown) {

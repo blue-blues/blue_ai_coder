@@ -1,6 +1,6 @@
 import { Anthropic } from "@anthropic-ai/sdk"
 
-import type { ProviderSettings, ModelInfo } from "@roo-code/types"
+import type { ProviderSettings, ModelInfo } from "@blues-code/types"
 
 import { ApiStream } from "./transform/stream"
 
@@ -150,7 +150,7 @@ export function buildApiHandler(configuration: ProviderSettings): ApiHandler {
 		case "fireworks":
 			return new FireworksHandler(options)
 		default:
-			apiProvider satisfies "gemini-cli" | undefined
+			apiProvider satisfies "kilocode" | undefined
 			return new AnthropicHandler(options)
 	}
 }

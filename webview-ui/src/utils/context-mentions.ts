@@ -1,9 +1,9 @@
 import { Fzf } from "fzf"
 
-import type { ModeConfig } from "@roo-code/types"
-import type { Command } from "@roo/ExtensionMessage"
+import type { ModeConfig } from "@blues-code/types"
+import type { Command } from "@blues/ExtensionMessage"
 
-import { mentionRegex } from "@roo/context-mentions"
+import { mentionRegex } from "@blues/context-mentions"
 
 import { escapeSpaces } from "./path-mentions"
 

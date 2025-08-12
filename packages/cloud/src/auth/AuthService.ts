@@ -1,6 +1,6 @@
 import EventEmitter from "events"
 
-import type { CloudUserInfo } from "@roo-code/types"
+import type { CloudUserInfo } from "@blues-code/types"
 
 export interface AuthServiceEvents {
 	"auth-state-changed": [

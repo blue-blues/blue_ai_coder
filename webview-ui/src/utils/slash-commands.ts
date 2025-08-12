@@ -1,9 +1,9 @@
 /* eslint no-misleading-character-class: 0 */
 // bluescode_change: this file was pulled from Cline and adjusted for us
 
-import { getAllModes } from "@roo/modes"
+import { getAllModes } from "@blues/modes"
 import { getBasename } from "./bluescode/path-webview"
-import { ClineRulesToggles } from "@roo/cline-rules"
+import { ClineRulesToggles } from "@blues/cline-rules"
 
 export interface SlashCommand {
 	name: string

@@ -5,8 +5,8 @@ import * as vscode from "vscode"
 import pWaitFor from "p-wait-for"
 import delay from "delay"
 
-import type { ExperimentId } from "@roo-code/types"
-import { DEFAULT_TERMINAL_OUTPUT_CHARACTER_LIMIT } from "@roo-code/types"
+import type { ExperimentId } from "@blues-code/types"
+import { DEFAULT_TERMINAL_OUTPUT_CHARACTER_LIMIT } from "@blues-code/types"
 
 import { EXPERIMENT_IDS, experiments as Experiments } from "../../shared/experiments"
 import { formatLanguage } from "../../shared/language"
@@ -23,7 +23,7 @@ import { formatReminderSection } from "./reminder"
 
 // bluescode_change start
 import { OpenRouterHandler } from "../../api/providers/openrouter"
-import { TelemetryService } from "@roo-code/telemetry"
+import { TelemetryService } from "@blues-code/telemetry"
 import { t } from "../../i18n"
 import { BluesCodeOllamaHandler } from "../../api/providers/kilocode-ollama"
 // bluescode_change end

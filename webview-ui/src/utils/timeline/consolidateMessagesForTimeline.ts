@@ -1,6 +1,6 @@
-import type { ClineMessage } from "@roo-code/types"
-import { combineApiRequests } from "@roo/combineApiRequests"
-import { combineCommandSequences } from "@roo/combineCommandSequences"
+import type { ClineMessage } from "@blues-code/types"
+import { combineApiRequests } from "@blues/combineApiRequests"
+import { combineCommandSequences } from "@blues/combineCommandSequences"
 import { shouldShowInTimeline } from "../messageColors"
 
 /**

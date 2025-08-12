@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 
-import { RouterModels } from "@roo/api"
-import { ExtensionMessage } from "@roo/ExtensionMessage"
+import { RouterModels } from "@blues/api"
+import { ExtensionMessage } from "@blues/ExtensionMessage"
 
 import { vscode } from "@src/utils/vscode"
 

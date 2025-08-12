@@ -7,7 +7,7 @@ import type {
 	CustomModePrompts,
 	TodoItem,
 	Experiments, // bluescode_change
-} from "@roo-code/types"
+} from "@blues-code/types"
 
 import type { SystemPromptSettings } from "./types"
 

@@ -10,9 +10,9 @@ import {
 	type OrganizationAllowList,
 	azureOpenAiDefaultApiVersion,
 	openAiModelInfoSaneDefaults,
-} from "@roo-code/types"
+} from "@blues-code/types"
 
-import { ExtensionMessage } from "@roo/ExtensionMessage"
+import { ExtensionMessage } from "@blues/ExtensionMessage"
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { Button, StandardTooltip } from "@src/components/ui"

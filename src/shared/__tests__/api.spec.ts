@@ -1,7 +1,7 @@
 import { describe, test, expect } from "vitest"
 import { getModelMaxOutputTokens, shouldUseReasoningBudget, shouldUseReasoningEffort } from "../api"
-import type { ModelInfo, ProviderSettings } from "@roo-code/types"
-import { CLAUDE_CODE_DEFAULT_MAX_OUTPUT_TOKENS, ANTHROPIC_DEFAULT_MAX_TOKENS } from "@roo-code/types"
+import type { ModelInfo, ProviderSettings } from "@blues-code/types"
+import { CLAUDE_CODE_DEFAULT_MAX_OUTPUT_TOKENS, ANTHROPIC_DEFAULT_MAX_TOKENS } from "@blues-code/types"
 
 describe("getModelMaxOutputTokens", () => {
 	const mockModel: ModelInfo = {

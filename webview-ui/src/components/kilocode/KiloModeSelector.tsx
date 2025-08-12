@@ -1,6 +1,6 @@
 import React from "react"
-import { Mode, defaultModeSlug, getAllModes } from "@roo/modes"
-import { ModeConfig } from "@roo-code/types"
+import { Mode, defaultModeSlug, getAllModes } from "@blues/modes"
+import { ModeConfig } from "@blues-code/types"
 import { SelectDropdown, DropdownOptionType } from "@/components/ui"
 import { useAppTranslation } from "@/i18n/TranslationContext"
 import { vscode } from "@/utils/vscode"

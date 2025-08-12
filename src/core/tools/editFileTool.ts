@@ -9,10 +9,10 @@ import { formatResponse } from "../prompts/responses"
 import { ToolUse, AskApproval, HandleError, PushToolResult, RemoveClosingTag } from "../../shared/tools"
 import { fileExistsAtPath } from "../../utils/fs"
 import { getReadablePath } from "../../utils/path"
-import { Experiments, ProviderSettings } from "@roo-code/types"
+import { Experiments, ProviderSettings } from "@blues-code/types"
 import { getBluesBaseUriFromToken } from "../../utils/bluescode-token"
 import { DEFAULT_HEADERS } from "../../api/providers/constants"
-import { TelemetryService } from "@roo-code/telemetry"
+import { TelemetryService } from "@blues-code/telemetry"
 
 async function validateParams(
 	cline: Task,

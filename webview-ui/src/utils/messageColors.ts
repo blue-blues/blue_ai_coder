@@ -1,4 +1,4 @@
-import type { ClineMessage } from "@roo-code/types"
+import type { ClineMessage } from "@blues-code/types"
 
 export interface TaskTimelineMessageTypeConfig {
 	color: string

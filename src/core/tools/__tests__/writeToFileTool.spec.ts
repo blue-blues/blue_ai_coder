@@ -252,19 +252,23 @@ describe("writeToFileTool", () => {
 	})
 
 	describe("file existence detection", () => {
-		it.skipIf(process.platform === "win32")("detects existing file and sets editType to modify", async () => {
-			await executeWriteFileTool({}, { fileExists: true })
+		if (process.platform !== "win32") {
+			it("detects existing file and sets editType to modify", async () => {
+				await executeWriteFileTool({}, { fileExists: true })
 
-			expect(mockedFileExistsAtPath).toHaveBeenCalledWith(absoluteFilePath)
-			expect(mockCline.diffViewProvider.editType).toBe("modify")
-		})
+				expect(mockedFileExistsAtPath).toHaveBeenCalledWith(absoluteFilePath)
+				expect(mockCline.diffViewProvider.editType).toBe("modify")
+			})
+		}
 
-		it.skipIf(process.platform === "win32")("detects new file and sets editType to create", async () => {
-			await executeWriteFileTool({}, { fileExists: false })
+		if (process.platform !== "win32") {
+			it("detects new file and sets editType to create", async () => {
+				await executeWriteFileTool({}, { fileExists: false })
 
-			expect(mockedFileExistsAtPath).toHaveBeenCalledWith(absoluteFilePath)
-			expect(mockCline.diffViewProvider.editType).toBe("create")
-		})
+				expect(mockedFileExistsAtPath).toHaveBeenCalledWith(absoluteFilePath)
+				expect(mockCline.diffViewProvider.editType).toBe("create")
+			})
+		}
 
 		it("uses cached editType without filesystem check", async () => {
 			mockCline.diffViewProvider.editType = "modify"

@@ -2,12 +2,12 @@ import { useCallback, useState, memo, useMemo } from "react"
 import { useEvent } from "react-use"
 import { ChevronDown, Skull } from "lucide-react"
 
-import { CommandExecutionStatus, commandExecutionStatusSchema } from "@roo-code/types"
+import { CommandExecutionStatus, commandExecutionStatusSchema } from "@blues-code/types"
 
-import { ExtensionMessage } from "@roo/ExtensionMessage"
-import { safeJsonParse } from "@roo/safeJsonParse"
+import { ExtensionMessage } from "@blues/ExtensionMessage"
+import { safeJsonParse } from "@blues/safeJsonParse"
 
-import { COMMAND_OUTPUT_STRING } from "@roo/combineCommandSequences"
+import { COMMAND_OUTPUT_STRING } from "@blues/combineCommandSequences"
 
 import { vscode } from "@src/utils/vscode"
 import { useExtensionState } from "@src/context/ExtensionStateContext"

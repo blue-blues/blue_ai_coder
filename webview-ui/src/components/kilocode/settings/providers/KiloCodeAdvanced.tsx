@@ -1,6 +1,6 @@
 import { ExternalLinkIcon } from "@radix-ui/react-icons"
-import { type ProviderSettings } from "@roo-code/types"
-import type { RouterModels } from "@roo/api"
+import { type ProviderSettings } from "@blues-code/types"
+import type { RouterModels } from "@blues/api"
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import {
 	useOpenRouterModelProviders,

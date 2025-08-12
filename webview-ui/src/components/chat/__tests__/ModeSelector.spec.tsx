@@ -2,8 +2,8 @@ import React from "react"
 import { render, screen, fireEvent } from "@/utils/test-utils"
 import { describe, test, expect, vi } from "vitest"
 import ModeSelector from "../ModeSelector"
-import { Mode } from "@roo/modes"
-import { ModeConfig } from "@roo-code/types"
+import { Mode } from "@blues/modes"
+import { ModeConfig } from "@blues-code/types"
 
 // Mock the dependencies
 vi.mock("@/utils/vscode", () => ({
@@ -38,8 +38,8 @@ vi.mock("@/utils/TelemetryClient", () => ({
 // Create a variable to control what getAllModes returns
 let mockModes: ModeConfig[] = []
 
-vi.mock("@roo/modes", async () => {
-	const actual = await vi.importActual<typeof import("@roo/modes")>("@roo/modes")
+vi.mock("@blues/modes", async () => {
+	const actual = await vi.importActual<typeof import("@blues/modes")>("@blues/modes")
 	return {
 		...actual,
 		getAllModes: () => mockModes,

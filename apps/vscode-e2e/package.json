@@ -1,5 +1,5 @@
 {
-	"name": "@roo-code/vscode-e2e",
+	"name": "@blues-code/vscode-e2e",
 	"private": true,
 	"scripts": {
 		"lint": "eslint src --ext=ts --max-warnings=0",
@@ -10,9 +10,9 @@
 		"clean": "rimraf out .turbo"
 	},
 	"devDependencies": {
-		"@roo-code/config-eslint": "workspace:^",
-		"@roo-code/config-typescript": "workspace:^",
-		"@roo-code/types": "workspace:^",
+		"@blues-code/config-eslint": "workspace:^",
+		"@blues-code/config-typescript": "workspace:^",
+		"@blues-code/types": "workspace:^",
 		"@types/mocha": "^10.0.10",
 		"@types/node": "20.x",
 		"@types/vscode": "^1.95.0",

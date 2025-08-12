@@ -1,4 +1,4 @@
-import type { ProviderSettings } from "@roo-code/types"
+import type { ProviderSettings } from "@blues-code/types"
 import { buildApiHandler, SingleCompletionHandler, ApiHandler } from "../api" //bluescode_change
 
 /**

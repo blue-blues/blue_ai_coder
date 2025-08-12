@@ -2,7 +2,7 @@ import React from "react"
 import { render, screen, fireEvent } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { EditModeControls } from "../EditModeControls"
-import { Mode } from "@roo/modes"
+import { Mode } from "@blues/modes"
 
 // Mock the translation hook
 vi.mock("@/i18n/TranslationContext", () => ({

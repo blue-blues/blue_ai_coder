@@ -1,8 +1,8 @@
 import * as vscode from "vscode"
 import delay from "delay"
 
-import type { CommandId } from "@roo-code/types"
-import { TelemetryService } from "@roo-code/telemetry"
+import type { CommandId } from "@blues-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
 
 import { getCommand } from "../utils/commands"
 import { ClineProvider } from "../core/webview/ClineProvider"

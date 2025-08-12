@@ -3,8 +3,8 @@ import { EventEmitter } from "events"
 import { CodeIndexManager } from "../code-index/manager"
 import { SchematicAnalyzer } from "../code-index/SchematicAnalyzer"
 import { BackgroundIndexingService, ProcessingPriority } from "../code-index/BackgroundIndexingService"
-import { TelemetryService } from "@roo-code/telemetry"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { TelemetryEventName } from "@blues-code/types"
 import { StartupIndexingHelpers } from "./StartupIndexingCoordinatorHelpers"
 import {
 	StartupPhase,

@@ -9,22 +9,22 @@ import {
 	type OrganizationAllowList,
 	ORGANIZATION_ALLOW_ALL,
 	GhostServiceSettings, // kilocode_change
-} from "@roo-code/types"
+} from "@blues-code/types"
 
-import { ExtensionMessage, ExtensionState, MarketplaceInstalledMetadata, Command } from "@roo/ExtensionMessage"
-import { findLastIndex } from "@roo/array"
-import { McpServer } from "@roo/mcp"
-import { checkExistKey } from "@roo/checkExistApiConfig"
-import { Mode, defaultModeSlug, defaultPrompts } from "@roo/modes"
-import { CustomSupportPrompts } from "@roo/support-prompt"
-import { experimentDefault } from "@roo/experiments"
-import { TelemetrySetting } from "@roo/TelemetrySetting"
-import { RouterModels } from "@roo/api"
+import { ExtensionMessage, ExtensionState, MarketplaceInstalledMetadata, Command } from "@blues/ExtensionMessage"
+import { findLastIndex } from "@blues/array"
+import { McpServer } from "@blues/mcp"
+import { checkExistKey } from "@blues/checkExistApiConfig"
+import { Mode, defaultModeSlug, defaultPrompts } from "@blues/modes"
+import { CustomSupportPrompts } from "@blues/support-prompt"
+import { experimentDefault } from "@blues/experiments"
+import { TelemetrySetting } from "@blues/TelemetrySetting"
+import { RouterModels } from "@blues/api"
 import { McpMarketplaceCatalog } from "../../../src/shared/bluescode/mcp" // bluescode_change
 
 import { vscode } from "@src/utils/vscode"
 import { convertTextMateToHljs } from "@src/utils/textMateToHljs"
-import { ClineRulesToggles } from "@roo/cline-rules" // kilocode_change
+import { ClineRulesToggles } from "@blues/cline-rules" // kilocode_change
 
 export interface ExtensionStateContextType extends ExtensionState {
 	historyPreviewCollapsed?: boolean // Add the new state property

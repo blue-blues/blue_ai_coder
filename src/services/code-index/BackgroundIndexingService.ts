@@ -3,8 +3,8 @@ import { EventEmitter } from "events"
 import { SchematicAnalyzer, FileAnalysis, ImportanceLevel } from "./SchematicAnalyzer"
 import { ICodeParser, IEmbedder, IVectorStore, CodeBlock } from "./interfaces"
 import { CacheManager } from "./cache-manager"
-import { TelemetryService } from "@roo-code/telemetry"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { TelemetryEventName } from "@blues-code/types"
 import { sanitizeErrorMessage } from "./shared/validation-helpers"
 import { createHash } from "crypto"
 import { v5 as uuidv5 } from "uuid"
@@ -221,6 +221,51 @@ export class BackgroundIndexingService extends EventEmitter {
 		}
 
 		return jobIds
+	}
+
+	/**
+	 * Alias for addBatchToQueue for compatibility
+	 */
+	async addBatch(filePaths: string[], forcePriority?: ProcessingPriority): Promise<string[]> {
+		return this.addBatchToQueue(filePaths, forcePriority)
+	}
+
+	/**
+	 * Alias for startProcessing for compatibility
+	 */
+	startBackgroundProcessing(): void {
+		this.startProcessing()
+	}
+
+	/**
+	 * Queues a single file for processing
+	 */
+	async queueFile(filePath: string, priority?: ProcessingPriority): Promise<string> {
+		return this.addToQueue(filePath, undefined, priority)
+	}
+
+	/**
+	 * Adjusts the batch size for processing
+	 */
+	adjustBatchSize(newBatchSize: number): void {
+		this.config.batchSize = Math.max(1, Math.min(100, newBatchSize))
+		this.emit("configUpdated", { batchSize: this.config.batchSize })
+	}
+
+	/**
+	 * Adjusts the concurrency level for processing
+	 */
+	adjustConcurrency(newConcurrency: number): void {
+		this.config.maxConcurrentJobs = Math.max(1, Math.min(10, newConcurrency))
+		this.emit("configUpdated", { maxConcurrentJobs: this.config.maxConcurrentJobs })
+	}
+
+	/**
+	 * Adjusts the priority threshold for processing
+	 */
+	adjustPriorityThreshold(threshold: number): void {
+		this.config.priorityThresholds.normal = Math.max(1000, Math.min(60000, threshold))
+		this.emit("configUpdated", { priorityThresholds: this.config.priorityThresholds })
 	}
 
 	/**

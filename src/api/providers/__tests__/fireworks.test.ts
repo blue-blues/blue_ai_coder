@@ -3,7 +3,7 @@
 import { FireworksHandler } from "../fireworks"
 import type { ApiHandlerOptions } from "../../../shared/api"
 import type { Anthropic } from "@anthropic-ai/sdk"
-import { fireworksDefaultModelId, fireworksModels } from "@roo-code/types"
+import { fireworksDefaultModelId, fireworksModels } from "@blues-code/types"
 
 const mockCreate = vi.fn()
 

@@ -1,4 +1,4 @@
-import { RooCodeEventName } from "./events.js"
+import { BluesCodeEventName } from "./events.js"
 import { type ClineMessage, type BlockingAsk, type TokenUsage } from "./message.js"
 import { type ToolUsage, type ToolName } from "./tool.js"
 
@@ -45,16 +45,16 @@ export interface TaskProviderLike {
 }
 
 export type TaskProviderEvents = {
-	[RooCodeEventName.TaskCreated]: [task: TaskLike]
+	[BluesCodeEventName.TaskCreated]: [task: TaskLike]
 
 	// Proxied from the Task EventEmitter.
-	[RooCodeEventName.TaskStarted]: [taskId: string]
-	[RooCodeEventName.TaskCompleted]: [taskId: string, tokenUsage: TokenUsage, toolUsage: ToolUsage]
-	[RooCodeEventName.TaskAborted]: [taskId: string]
-	[RooCodeEventName.TaskFocused]: [taskId: string]
-	[RooCodeEventName.TaskUnfocused]: [taskId: string]
-	[RooCodeEventName.TaskActive]: [taskId: string]
-	[RooCodeEventName.TaskIdle]: [taskId: string]
+	[BluesCodeEventName.TaskStarted]: [taskId: string]
+	[BluesCodeEventName.TaskCompleted]: [taskId: string, tokenUsage: TokenUsage, toolUsage: ToolUsage]
+	[BluesCodeEventName.TaskAborted]: [taskId: string]
+	[BluesCodeEventName.TaskFocused]: [taskId: string]
+	[BluesCodeEventName.TaskUnfocused]: [taskId: string]
+	[BluesCodeEventName.TaskActive]: [taskId: string]
+	[BluesCodeEventName.TaskIdle]: [taskId: string]
 }
 
 /**
@@ -74,25 +74,25 @@ export interface TaskLike {
 
 export type TaskEvents = {
 	// Task Lifecycle
-	[RooCodeEventName.TaskStarted]: []
-	[RooCodeEventName.TaskCompleted]: [taskId: string, tokenUsage: TokenUsage, toolUsage: ToolUsage]
-	[RooCodeEventName.TaskAborted]: []
-	[RooCodeEventName.TaskFocused]: []
-	[RooCodeEventName.TaskUnfocused]: []
-	[RooCodeEventName.TaskActive]: [taskId: string]
-	[RooCodeEventName.TaskIdle]: [taskId: string]
+	[BluesCodeEventName.TaskStarted]: []
+	[BluesCodeEventName.TaskCompleted]: [taskId: string, tokenUsage: TokenUsage, toolUsage: ToolUsage]
+	[BluesCodeEventName.TaskAborted]: []
+	[BluesCodeEventName.TaskFocused]: []
+	[BluesCodeEventName.TaskUnfocused]: []
+	[BluesCodeEventName.TaskActive]: [taskId: string]
+	[BluesCodeEventName.TaskIdle]: [taskId: string]
 
 	// Subtask Lifecycle
-	[RooCodeEventName.TaskPaused]: []
-	[RooCodeEventName.TaskUnpaused]: []
-	[RooCodeEventName.TaskSpawned]: [taskId: string]
+	[BluesCodeEventName.TaskPaused]: []
+	[BluesCodeEventName.TaskUnpaused]: []
+	[BluesCodeEventName.TaskSpawned]: [taskId: string]
 
 	// Task Execution
-	[RooCodeEventName.Message]: [{ action: "created" | "updated"; message: ClineMessage }]
-	[RooCodeEventName.TaskModeSwitched]: [taskId: string, mode: string]
-	[RooCodeEventName.TaskAskResponded]: []
+	[BluesCodeEventName.Message]: [{ action: "created" | "updated"; message: ClineMessage }]
+	[BluesCodeEventName.TaskModeSwitched]: [taskId: string, mode: string]
+	[BluesCodeEventName.TaskAskResponded]: []
 
 	// Task Analytics
-	[RooCodeEventName.TaskToolFailed]: [taskId: string, tool: ToolName, error: string]
-	[RooCodeEventName.TaskTokenUsageUpdated]: [taskId: string, tokenUsage: TokenUsage]
+	[BluesCodeEventName.TaskToolFailed]: [taskId: string, tool: ToolName, error: string]
+	[BluesCodeEventName.TaskTokenUsageUpdated]: [taskId: string, tokenUsage: TokenUsage]
 }

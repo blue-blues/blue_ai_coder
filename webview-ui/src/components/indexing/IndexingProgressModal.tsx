@@ -6,7 +6,7 @@ import { useAppTranslation } from "@/i18n/TranslationContext"
 import { Modal } from "@src/components/common/Modal"
 import * as ProgressPrimitive from "@radix-ui/react-progress"
 import { VSCodeButton } from "@vscode/webview-ui-toolkit/react"
-import type { IndexingStatus } from "@roo/ExtensionMessage"
+import type { IndexingStatus } from "@blues/ExtensionMessage"
 
 interface IndexingProgressModalProps {
 	isOpen: boolean

@@ -20,7 +20,7 @@ describe.skip("inspectSwift", () => {
 
 	it("should parse Swift definitions", async () => {
 		// This test validates that testParseSourceCodeDefinitions produces output
-		const result = await testParseSourceCodeDefinitions("test.swift", sampleSwiftContent, testOptions)
+		const result = await testParseSourceCodeDefinitions("test.swift", sampleSwiftContent)
 		expect(result).toBeDefined()
 
 		// Check that the output format includes line numbers and content
@@ -28,5 +28,5 @@ describe.skip("inspectSwift", () => {
 			expect(result).toMatch(/\d+--\d+ \| .+/)
 			debugLog("Swift parsing test completed successfully")
 		}
-	}, 15000) // Increase timeout to 15 seconds
+	}) // Timeout handled by Vitest configuration
 })

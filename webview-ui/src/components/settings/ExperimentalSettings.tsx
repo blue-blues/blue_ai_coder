@@ -4,9 +4,9 @@ import { FlaskConical } from "lucide-react"
 import type {
 	Experiments,
 	ProviderSettings, // kilocode_change
-} from "@roo-code/types"
+} from "@blues-code/types"
 
-import { EXPERIMENT_IDS, experimentConfigsMap } from "@roo/experiments"
+import { EXPERIMENT_IDS, experimentConfigsMap } from "@blues/experiments"
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { cn } from "@src/lib/utils"

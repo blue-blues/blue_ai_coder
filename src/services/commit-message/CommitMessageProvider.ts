@@ -8,9 +8,9 @@ import { supportPrompt } from "../../shared/support-prompt"
 import { t } from "../../i18n"
 import { addCustomInstructions } from "../../core/prompts/sections/custom-instructions"
 import { getWorkspacePath } from "../../utils/path"
-import { TelemetryEventName, type ProviderSettings } from "@roo-code/types"
+import { TelemetryEventName, type ProviderSettings } from "@blues-code/types"
 import delay from "delay"
-import { TelemetryService } from "@roo-code/telemetry"
+import { TelemetryService } from "@blues-code/telemetry"
 
 /**
  * Provides AI-powered commit message generation for source control management.

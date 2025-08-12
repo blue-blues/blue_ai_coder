@@ -2,8 +2,8 @@
 
 import * as vscode from "vscode"
 
-import type { ClineMessage } from "@roo-code/types"
-import { TelemetryService } from "@roo-code/telemetry"
+import type { ClineMessage } from "@blues-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
 
 import { CloudService } from "../CloudService"
 import { WebAuthService } from "../auth/WebAuthService"
@@ -26,7 +26,7 @@ vi.mock("vscode", () => ({
 	},
 }))
 
-vi.mock("@roo-code/telemetry")
+vi.mock("@blues-code/telemetry")
 
 vi.mock("../auth/WebAuthService")
 

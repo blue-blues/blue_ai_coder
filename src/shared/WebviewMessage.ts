@@ -7,8 +7,8 @@ import type {
 	InstallMarketplaceItemOptions,
 	MarketplaceItem,
 	ShareVisibility,
-} from "@roo-code/types"
-import { marketplaceItemSchema } from "@roo-code/types"
+} from "@blues-code/types"
+import { marketplaceItemSchema } from "@blues-code/types"
 
 import { Mode } from "./modes"
 
@@ -271,6 +271,20 @@ export interface WebviewMessage {
 		| "retryIndexing"
 		| "indexingPauseResume"
 		| "requestIndexingDetailedProgress"
+		| "indexingStatusResponse"
+		| "startEnhancedIndexing"
+		| "enhancedIndexingResponse"
+		| "pauseBackgroundIndexing"
+		| "resumeBackgroundIndexing"
+		| "backgroundIndexingResponse"
+		| "getPerformanceMetrics"
+		| "performanceMetricsResponse"
+		| "analyzeWorkspaceStructure"
+		| "workspaceAnalysisResponse"
+		| "validateIndexingComplete"
+		| "indexingValidationResponse"
+		| "optimizeIndexingPerformance"
+		| "indexingOptimizationResponse"
 	text?: string
 	editedMessageContent?: string
 	tab?: "settings" | "history" | "mcp" | "modes" | "chat" | "marketplace" | "account"

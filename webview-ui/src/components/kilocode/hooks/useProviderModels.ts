@@ -33,9 +33,9 @@ import {
 	unboundDefaultModelId,
 	litellmDefaultModelId,
 	bluesCodeDefaultModelId,
-} from "@roo-code/types"
-import { cerebrasModels, cerebrasDefaultModelId } from "@roo/api"
-import type { ModelRecord, RouterModels } from "@roo/api"
+} from "@blues-code/types"
+import { cerebrasModels, cerebrasDefaultModelId } from "@blues/api"
+import type { ModelRecord, RouterModels } from "@blues/api"
 import { useRouterModels } from "../../ui/hooks/useRouterModels"
 
 const FALLBACK_MODELS = {

@@ -1,6 +1,6 @@
 // bluescode_change - new file
 import type { ExtensionContext, Memento } from "vscode"
-import { UsageResultByDuration, UsageEvent, UsageResult, UsageType, UsageWindow } from "@roo-code/types"
+import { UsageResultByDuration, UsageEvent, UsageResult, UsageType, UsageWindow } from "@blues-code/types"
 import { ContextProxy } from "../core/config/ContextProxy"
 
 const USAGE_STORAGE_KEY = "bluescode.virtualQuotaFallbackProvider.usage.v1"

@@ -1,9 +1,9 @@
 import axios from "axios"
 import * as yaml from "yaml"
 import { z } from "zod"
-// import { getRooCodeApiUrl } from "@roo-code/cloud" bluescode_change: use our own api
-import type { MarketplaceItem, MarketplaceItemType } from "@roo-code/types"
-import { modeMarketplaceItemSchema, mcpMarketplaceItemSchema } from "@roo-code/types"
+// import { getRooCodeApiUrl } from "@blues-code/cloud" bluescode_change: use our own api
+import type { MarketplaceItem, MarketplaceItemType } from "@blues-code/types"
+import { modeMarketplaceItemSchema, mcpMarketplaceItemSchema } from "@blues-code/types"
 import { getBluesCodeApiUrl } from "../../shared/kilocode/api"
 
 // Response schemas for YAML API responses

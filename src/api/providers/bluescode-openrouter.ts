@@ -7,7 +7,7 @@ import {
 	bluesCodeDefaultModelId,
 	openRouterDefaultModelId,
 	openRouterDefaultModelInfo,
-} from "@roo-code/types"
+} from "@blues-code/types"
 import { getBluesBaseUriFromToken } from "../../utils/bluescode-token"
 import { ApiHandlerCreateMessageMetadata } from ".."
 import OpenAI from "openai"
@@ -25,7 +25,7 @@ export class BluesCodeOpenrouterHandler extends OpenRouterHandler {
 		options = {
 			...options,
 			openRouterBaseUrl: `${baseUri}/api/openrouter/`,
-			openRouterApiKey: options.bluescodeToken,
+			openRouterApiKey: options.bluesCodeToken,
 		}
 
 		super(options)
@@ -50,7 +50,7 @@ export class BluesCodeOpenrouterHandler extends OpenRouterHandler {
 	}
 
 	override getModel() {
-		let id = this.options.bluescodeModel ?? bluesCodeDefaultModelId
+		let id = this.options.bluesCodeModel ?? bluesCodeDefaultModelId
 		let info = this.models[id]
 		let defaultTemperature = 0
 
@@ -78,18 +78,18 @@ export class BluesCodeOpenrouterHandler extends OpenRouterHandler {
 	}
 
 	public override async fetchModel() {
-		if (!this.options.bluescodeToken || !this.options.openRouterBaseUrl) {
+		if (!this.options.bluesCodeToken || !this.options.openRouterBaseUrl) {
 			throw new Error("Blues Code token + baseUrl is required to fetch models")
 		}
 
 		const [models, endpoints] = await Promise.all([
 			getModels({
 				provider: "bluescode-openrouter",
-				bluescodeToken: this.options.bluescodeToken,
+				bluesCodeToken: this.options.bluesCodeToken,
 			}),
 			getModelEndpoints({
 				router: "openrouter",
-				modelId: this.options.bluescodeModel,
+				modelId: this.options.bluesCodeModel,
 				endpoint: this.options.openRouterSpecificProvider,
 			}),
 		])
@@ -101,5 +101,5 @@ export class BluesCodeOpenrouterHandler extends OpenRouterHandler {
 }
 
 function getBluesBaseUri(options: ApiHandlerOptions) {
-	return getBluesBaseUriFromToken(options.bluescodeToken ?? "")
+	return getBluesBaseUriFromToken(options.bluesCodeToken ?? "")
 }

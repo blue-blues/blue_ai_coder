@@ -1,6 +1,6 @@
 import * as vscode from "vscode"
 
-import type { ShareResponse, ShareVisibility } from "@roo-code/types"
+import type { ShareResponse, ShareVisibility } from "@blues-code/types"
 
 import type { CloudAPI } from "./CloudAPI"
 import type { SettingsService } from "./SettingsService"

@@ -1,6 +1,6 @@
 import * as vscode from "vscode"
-import { TelemetryService } from "@roo-code/telemetry"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { TelemetryEventName } from "@blues-code/types"
 import {
 	StartupPhase,
 	StartupIndexingConfig,
@@ -47,7 +47,26 @@ export interface StartupIndexingHealth {
  * Monitoring and telemetry for startup indexing
  */
 export class StartupIndexingMonitor {
-	private metrics: StartupIndexingMetrics
+	private metrics: StartupIndexingMetrics = {
+		totalDuration: 0,
+		phaseTimings: new Map(),
+		filesProcessed: 0,
+		averageFileProcessingTime: 0,
+		memoryUsage: {
+			initial: 0,
+			peak: 0,
+			final: 0,
+		},
+		cpuUsage: {
+			average: 0,
+			peak: 0,
+		},
+		errorCount: 0,
+		recoveryAttempts: 0,
+		successRate: 0,
+		workspaceCount: 0,
+		totalFileCount: 0,
+	}
 	private phaseStartTimes: Map<StartupPhase, number> = new Map()
 	private startTime: number = 0
 	private memorySnapshots: number[] = []

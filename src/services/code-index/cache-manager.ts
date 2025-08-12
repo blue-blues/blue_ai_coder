@@ -3,8 +3,8 @@ import { createHash } from "crypto"
 import { ICacheManager } from "./interfaces/cache"
 import debounce from "lodash.debounce"
 import { safeWriteJson } from "../../utils/safeWriteJson"
-import { TelemetryService } from "@roo-code/telemetry"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { TelemetryEventName } from "@blues-code/types"
 
 /**
  * Manages the cache for code indexing
@@ -116,5 +116,30 @@ export class CacheManager implements ICacheManager {
 	 */
 	getAllHashes(): Record<string, string> {
 		return { ...this.fileHashes }
+	}
+
+	/**
+	 * Gets cache statistics
+	 * @returns Cache statistics including size and hit rate
+	 */
+	getCacheStats(): {
+		totalEntries: number
+		cacheSize: number
+		hitRate: number
+		missRate: number
+		lastModified?: Date
+	} {
+		const totalEntries = Object.keys(this.fileHashes).length
+		const cacheSize = JSON.stringify(this.fileHashes).length
+
+		// For now, return basic stats - in a real implementation,
+		// we would track hits and misses over time
+		return {
+			totalEntries,
+			cacheSize,
+			hitRate: 0.8, // Placeholder
+			missRate: 0.2, // Placeholder
+			lastModified: new Date(), // Current timestamp as placeholder
+		}
 	}
 }

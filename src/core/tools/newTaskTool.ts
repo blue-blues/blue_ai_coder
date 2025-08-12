@@ -1,6 +1,6 @@
 import delay from "delay"
 
-import { RooCodeEventName } from "@roo-code/types"
+import { BluesCodeEventName } from "@blues-code/types"
 
 import { ToolUse, AskApproval, HandleError, PushToolResult, RemoveClosingTag } from "../../shared/tools"
 import { Task } from "../task/Task"
@@ -104,14 +104,14 @@ export async function newTaskTool(
 			// await delay(500)
 			// bluescode_change end
 
-			cline.emit(RooCodeEventName.TaskSpawned, newCline.taskId)
+			cline.emit(BluesCodeEventName.TaskSpawned, newCline.taskId)
 
 			pushToolResult(`Successfully created new task in ${targetMode.name} mode with message: ${unescapedMessage}`)
 
 			// Set the isPaused flag to true so the parent
 			// task can wait for the sub-task to finish.
 			cline.isPaused = true
-			cline.emit(RooCodeEventName.TaskPaused)
+			cline.emit(BluesCodeEventName.TaskPaused)
 
 			return
 		}

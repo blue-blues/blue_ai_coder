@@ -7,10 +7,10 @@ import { GhostModel } from "../GhostModel"
 import { allowNetConnect } from "../../../vitest.setup"
 
 const KEYS = {
-	KILOCODE: null,
-	BLUESCODE: null,
-	OPENROUTER: null,
-	MISTRAL: null,
+	KILOCODE: undefined,
+	BLUESCODE: undefined,
+	OPENROUTER: undefined,
+	MISTRAL: undefined,
 }
 
 describe("GhostModelPerformance", () => {

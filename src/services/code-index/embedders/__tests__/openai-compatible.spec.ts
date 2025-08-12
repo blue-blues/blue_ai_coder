@@ -10,7 +10,7 @@ vitest.mock("openai")
 global.fetch = vitest.fn()
 
 // Mock TelemetryService
-vitest.mock("@roo-code/telemetry", () => ({
+vitest.mock("@blues-code/telemetry", () => ({
 	TelemetryService: {
 		instance: {
 			captureEvent: vitest.fn(),
@@ -678,7 +678,7 @@ describe("OpenAICompatibleEmbedder", () => {
 			})
 
 			describe("URL detection", () => {
-				it.each([
+				const testCases: [string, boolean][] = [
 					[
 						"https://myresource.openai.azure.com/openai/deployments/mymodel/embeddings?api-version=2024-02-01",
 						true,
@@ -687,10 +687,14 @@ describe("OpenAICompatibleEmbedder", () => {
 					["https://api.openai.com/v1", false],
 					["https://api.example.com", false],
 					["http://localhost:8080", false],
-				])("should detect URL type correctly: %s -> %s", (url, expected) => {
-					const embedder = new OpenAICompatibleEmbedder(url, testApiKey, testModelId)
-					const isFullUrl = (embedder as any).isFullEndpointUrl(url)
-					expect(isFullUrl).toBe(expected)
+				]
+
+				testCases.forEach(([url, expected]) => {
+					it(`should detect URL type correctly: ${url} -> ${expected}`, () => {
+						const embedder = new OpenAICompatibleEmbedder(url, testApiKey, testModelId)
+						const isFullUrl = (embedder as any).isFullEndpointUrl(url)
+						expect(isFullUrl).toBe(expected)
+					})
 				})
 
 				// Edge cases where 'embeddings' or 'deployments' appear in non-endpoint contexts
@@ -782,15 +786,19 @@ describe("OpenAICompatibleEmbedder", () => {
 					expect(baseResult.embeddings[0]).toEqual([0.4, 0.5, 0.6])
 				})
 
-				it.each([
+				const httpErrorCases: [number, string][] = [
 					[401, "Authentication failed. Please check your API key."],
 					[500, "Failed to create embeddings after 3 attempts"],
-				])("should handle HTTP errors: %d", async (status, expectedMessage) => {
-					const embedder = new OpenAICompatibleEmbedder(azureUrl, testApiKey, testModelId)
-					const mockResponse = createMockResponse({}, status, false)
-					;(global.fetch as MockedFunction<typeof fetch>).mockResolvedValue(mockResponse as any)
+				]
 
-					await expect(embedder.createEmbeddings(["test"])).rejects.toThrow(expectedMessage)
+				httpErrorCases.forEach(([status, expectedMessage]) => {
+					it(`should handle HTTP errors: ${status}`, async () => {
+						const embedder = new OpenAICompatibleEmbedder(azureUrl, testApiKey, testModelId)
+						const mockResponse = createMockResponse({}, status, false)
+						;(global.fetch as MockedFunction<typeof fetch>).mockResolvedValue(mockResponse as any)
+
+						await expect(embedder.createEmbeddings(["test"])).rejects.toThrow(expectedMessage)
+					})
 				})
 
 				it("should handle rate limiting with retries", async () => {

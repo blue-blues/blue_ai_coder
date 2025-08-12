@@ -53,9 +53,9 @@ import {
 	mainlandZAiModels,
 	fireworksModels,
 	fireworksDefaultModelId,
-} from "@roo-code/types"
+} from "@blues-code/types"
 
-import type { ModelRecord, RouterModels } from "@roo/api"
+import type { ModelRecord, RouterModels } from "@blues/api"
 
 import { useRouterModels } from "./useRouterModels"
 import { useOpenRouterModelProviders } from "./useOpenRouterModelProviders"

@@ -1,6 +1,6 @@
 // bluescode_change - new file
 import { telemetryClient } from "../utils/TelemetryClient"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryEventName } from "@blues-code/types"
 
 interface PerformanceMemory {
 	usedJSHeapSize?: number

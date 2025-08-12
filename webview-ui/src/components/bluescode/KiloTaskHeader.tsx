@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next"
 import { CloudUpload, CloudDownload, FoldVertical } from "lucide-react"
 import { validateSlashCommand } from "@/utils/slash-commands"
 
-import type { ClineMessage } from "@roo-code/types"
+import type { ClineMessage } from "@blues-code/types"
 
-import { getModelMaxOutputTokens } from "@roo/api"
+import { getModelMaxOutputTokens } from "@blues/api"
 
 import { formatLargeNumber } from "@src/utils/format"
 import { cn } from "@src/lib/utils"
@@ -21,7 +21,7 @@ import { TaskActions } from "../chat/TaskActions"
 import { ShareButton } from "../chat/ShareButton"
 import { ContextWindowProgress } from "../chat/ContextWindowProgress"
 import { TaskTimeline } from "../chat/TaskTimeline"
-import { mentionRegexGlobal } from "@roo/context-mentions"
+import { mentionRegexGlobal } from "@blues/context-mentions"
 
 import { vscode } from "@/utils/vscode"
 import { TodoListDisplay } from "../chat/TodoListDisplay"

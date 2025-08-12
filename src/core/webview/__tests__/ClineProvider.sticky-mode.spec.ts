@@ -1,11 +1,11 @@
 // npx vitest core/webview/__tests__/ClineProvider.sticky-mode.spec.ts
 
 import * as vscode from "vscode"
-import { TelemetryService } from "@roo-code/telemetry"
+import { TelemetryService } from "@blues-code/telemetry"
 import { ClineProvider } from "../ClineProvider"
 import { ContextProxy } from "../../config/ContextProxy"
 import { Task } from "../../task/Task"
-import type { HistoryItem, ProviderName } from "@roo-code/types"
+import type { HistoryItem, ProviderName } from "@blues-code/types"
 
 // Mock setup
 vi.mock("vscode", () => ({
@@ -105,7 +105,7 @@ vi.mock("../../diff/strategies/multi-search-replace", () => ({
 		applyDiff: vi.fn(),
 	})),
 }))
-vi.mock("@roo-code/cloud", () => ({
+vi.mock("@blues-code/cloud", () => ({
 	CloudService: {
 		hasInstance: vi.fn().mockReturnValue(true),
 		get instance() {
@@ -160,7 +160,7 @@ vi.mock("fs/promises", () => ({
 	unlink: vi.fn().mockResolvedValue(undefined),
 	rmdir: vi.fn().mockResolvedValue(undefined),
 }))
-vi.mock("@roo-code/telemetry", () => ({
+vi.mock("@blues-code/telemetry", () => ({
 	TelemetryService: {
 		hasInstance: vi.fn().mockReturnValue(true),
 		createInstance: vi.fn(),

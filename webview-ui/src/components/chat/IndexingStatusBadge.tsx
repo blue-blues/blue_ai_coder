@@ -6,7 +6,7 @@ import { useAppTranslation } from "@/i18n/TranslationContext"
 import { useTooltip } from "@/hooks/useTooltip"
 import { useExtensionState } from "@src/context/ExtensionStateContext"
 import { CodeIndexPopover } from "./CodeIndexPopover"
-import type { IndexingStatus, IndexingStatusUpdateMessage } from "@roo/ExtensionMessage"
+import type { IndexingStatus, IndexingStatusUpdateMessage } from "@blues/ExtensionMessage"
 
 interface IndexingStatusBadgeProps {
 	className?: string

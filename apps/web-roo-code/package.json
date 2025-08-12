@@ -13,8 +13,8 @@
 	"dependencies": {
 		"@radix-ui/react-dialog": "^1.1.14",
 		"@radix-ui/react-slot": "^1.2.3",
-		"@roo-code/evals": "workspace:^",
-		"@roo-code/types": "workspace:^",
+		"@blues-code/evals": "workspace:^",
+		"@blues-code/types": "workspace:^",
 		"@tanstack/react-query": "^5.79.0",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
@@ -35,8 +35,8 @@
 		"zod": "^3.25.61"
 	},
 	"devDependencies": {
-		"@roo-code/config-eslint": "workspace:^",
-		"@roo-code/config-typescript": "workspace:^",
+		"@blues-code/config-eslint": "workspace:^",
+		"@blues-code/config-typescript": "workspace:^",
 		"@tailwindcss/typography": "^0.5.16",
 		"@types/node": "20.x",
 		"@types/react": "^18.3.23",

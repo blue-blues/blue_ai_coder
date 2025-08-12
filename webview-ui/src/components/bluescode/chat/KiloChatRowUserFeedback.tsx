@@ -1,4 +1,4 @@
-import { ClineMessage } from "@roo-code/types"
+import { ClineMessage } from "@blues-code/types"
 import { Mention } from "../../chat/Mention"
 import { Button } from "@src/components/ui"
 import Thumbnails from "../../common/Thumbnails"

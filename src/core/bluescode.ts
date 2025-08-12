@@ -1,5 +1,5 @@
-import { TelemetryService } from "@roo-code/telemetry"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { TelemetryEventName } from "@blues-code/types"
 
 export function reportExcessiveRecursion(functionName: string, recursionDepth: number) {
 	if (recursionDepth > 10 && Number.isInteger(Math.log10(recursionDepth))) {

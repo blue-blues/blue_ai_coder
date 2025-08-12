@@ -14,8 +14,8 @@ import { CheckpointDiff, CheckpointResult, CheckpointEventMap } from "./types"
 import { getExcludePatterns } from "./excludes"
 
 // bluescode_change start
-import { TelemetryService } from "@roo-code/telemetry"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryService } from "@blues-code/telemetry"
+import { TelemetryEventName } from "@blues-code/types"
 import { stringifyError } from "../../shared/kilocode/errorUtils"
 
 function reportError(callsite: string, error: unknown) {

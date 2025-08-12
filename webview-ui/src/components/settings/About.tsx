@@ -5,8 +5,8 @@ import { Info, Download, Upload, TriangleAlert } from "lucide-react"
 
 import { VSCodeCheckbox, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 
-import { Package } from "@roo/package"
-import { TelemetrySetting } from "@roo/TelemetrySetting"
+import { Package } from "@blues/package"
+import { TelemetrySetting } from "@blues/TelemetrySetting"
 
 import { vscode } from "@/utils/vscode"
 import { cn } from "@/lib/utils"

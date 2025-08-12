@@ -18,7 +18,7 @@ let hasShownNonBluesCodeRulesMessage = false
 
 import { Dirent } from "fs"
 
-import { isLanguage } from "@roo-code/types"
+import { isLanguage } from "@blues-code/types"
 
 import type { SystemPromptSettings } from "../types"
 

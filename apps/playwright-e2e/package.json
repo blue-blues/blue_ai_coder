@@ -1,5 +1,5 @@
 {
-	"name": "@roo-code/playwright-e2e",
+	"name": "@blues-code/playwright-e2e",
 	"private": true,
 	"type": "module",
 	"scripts": {
@@ -13,9 +13,9 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.53.1",
-		"@roo-code/config-eslint": "workspace:^",
-		"@roo-code/config-typescript": "workspace:^",
-		"@roo-code/types": "workspace:^",
+		"@blues-code/config-eslint": "workspace:^",
+		"@blues-code/config-typescript": "workspace:^",
+		"@blues-code/types": "workspace:^",
 		"@types/node": "^22.15.29",
 		"@vscode/test-electron": "^2.4.0",
 		"dotenv": "^16.4.5",

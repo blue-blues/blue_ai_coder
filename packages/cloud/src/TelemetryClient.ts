@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */ /* bluescode_change this file is meant to be a stub */
-import { TelemetryEventName, type TelemetryEvent, type ClineMessage } from "@roo-code/types" // bluescode_change removed rooCodeTelemetryEventSchema because unused
-import { BaseTelemetryClient } from "@roo-code/telemetry"
+import { TelemetryEventName, type TelemetryEvent, type ClineMessage } from "@blues-code/types" // bluescode_change removed rooCodeTelemetryEventSchema because unused
+import { BaseTelemetryClient } from "@blues-code/telemetry"
 
 // import { getRooCodeApiUrl } from "./config" // bluescode_change
 import type { AuthService } from "./auth"

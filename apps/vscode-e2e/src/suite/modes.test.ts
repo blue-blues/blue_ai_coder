@@ -1,6 +1,6 @@
 import * as assert from "assert"
 
-import { RooCodeEventName } from "@roo-code/types"
+import { BluesCodeEventName } from "@blues-code/types"
 
 import { waitUntilCompleted } from "./utils"
 import { setDefaultSuiteTimeout } from "./test-utils"
@@ -11,7 +11,7 @@ suite("Kilo Code Modes", function () {
 	test("Should handle switching modes correctly", async () => {
 		const modes: string[] = []
 
-		globalThis.api.on(RooCodeEventName.TaskModeSwitched, (_taskId, mode) => modes.push(mode))
+		globalThis.api.on(BluesCodeEventName.TaskModeSwitched, (_taskId, mode) => modes.push(mode))
 
 		const switchModesTaskId = await globalThis.api.startNewTask({
 			configuration: { mode: "code", alwaysAllowModeSwitch: true, autoApprovalEnabled: true },

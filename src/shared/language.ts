@@ -1,4 +1,4 @@
-import { type Language, isLanguage } from "@roo-code/types"
+import { type Language, isLanguage } from "@blues-code/types"
 import { bluesLanguages } from "./bluescode/bluesLanguages"
 
 /**
