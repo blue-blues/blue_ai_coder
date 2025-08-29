@@ -6,7 +6,7 @@ import type { Keys, Equals, AssertEqual } from "./type-fu.js"
  * ExperimentId
  */
 
-const bluesCodeExperimentIds = ["morphFastApply", "inlineAssist"] as const
+const bluesCodeExperimentIds = ["morphFastApply", "inlineAssist", "enableReflection", "showReflectionInsights"] as const
 export const experimentIds = [
 	"powerSteering",
 	"multiFileApplyDiff",
@@ -29,6 +29,8 @@ export const experimentsSchema = z.object({
 	inlineAssist: z.boolean().optional(), // bluescode_change
 	preventFocusDisruption: z.boolean().optional(),
 	assistantMessageParser: z.boolean().optional(),
+	enableReflection: z.boolean().optional(), // bluescode_change
+	showReflectionInsights: z.boolean().optional(), // bluescode_change
 })
 
 export type Experiments = z.infer<typeof experimentsSchema>

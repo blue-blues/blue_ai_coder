@@ -464,12 +464,12 @@ export class ClineProvider
 	// this is used when a sub task is finished and the parent task needs to be resumed
 	async finishSubTask(lastMessage: string) {
 		console.log(`[DEBUG] ClineProvider.finishSubTask called with message: ${lastMessage}`)
-		console.log(`[DEBUG] Current stack size before removal: ${this.clineInstances.length}`)
+		console.log(`[DEBUG] Current stack size before removal: ${this.clineStack.length}`)
 
 		// remove the last cline instance from the stack (this is the finished sub task)
 		await this.removeClineFromStack()
 
-		console.log(`[DEBUG] Stack size after removal: ${this.clineInstances.length}`)
+		console.log(`[DEBUG] Stack size after removal: ${this.clineStack.length}`)
 
 		const currentCline = this.getCurrentCline()
 		if (currentCline) {

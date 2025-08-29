@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 
 type LogoProps = Omit<SVGProps<SVGSVGElement>, "xmlns" | "viewBox" | "onClick">
 
-export const Logo = ({ width = 50, height = 32, fill = "#fff", className, ...props }: LogoProps) => {
+export const Logo = ({ width = 50, height = 50, fill = "#fff", className, ...props }: LogoProps) => {
 	const router = useRouter()
 
 	return (
@@ -16,15 +16,105 @@ export const Logo = ({ width = 50, height = 32, fill = "#fff", className, ...pro
 			xmlns="http://www.w3.org/2000/svg"
 			width={width}
 			height={height}
-			viewBox="90 12 100 64"
+			viewBox="0 0 512 512"
 			onClick={() => router.push("/")}
 			className={cn("logo cursor-pointer", className)}
 			{...props}>
-			<path
-				d="M171.633,15.8336l-1.7284,6.2499c-.0915.3309-.4369.5221-.7659.4239l-28.9937-8.6507c-.1928-.0575-.4016-.0167-.5586.1092l-28.7143,23.0269c-.0838.0672-.1839.1112-.2901.1276l-17.0849,2.6329c-.3163.0488-.5419.3327-.5178.6519l.0742.9817c.0237.3136.2809.5583.5953.5664l19.8448.513.2263.0063,14.6634-7.8328c.2053-.1097.455-.0936.6445.0415l10.3884,7.4053c.1629.1161.2589.3045.2571.5045l-.0876,9.826c-.0011.1272.0373.2515.11.3559l14.6133,20.9682c.1146.1644.3024.2624.5028.2624h4.626c.4615,0,.7574-.4908.542-.8989l-10.4155-19.7312c-.1019-.193-.0934-.4255.0221-.6106l5.4305-8.6994c.0591-.0947.143-.1715.2425-.222l19.415-9.8522c.1973-.1001.4332-.0861.6172.0366l5.5481,3.6981c.1007.0671.2189.1029.3399.1029h5.0407c.4881,0,.7804-.5429.5116-.9503l-13.9967-21.2171c-.2898-.4393-.962-.3331-1.1022.1741Z"
-				fill={fill}
-				strokeWidth="0"
-			/>
+			{/* Outer glow background */}
+			<circle cx="256" cy="256" r="250" fill="url(#outerGlow)" />
+
+			{/* Background circle with subtle glow */}
+			<circle cx="256" cy="256" r="240" fill="url(#gradient1-hq)" opacity="0.2" filter="url(#glow-hq)" />
+
+			{/* Secondary ring */}
+			<circle cx="256" cy="256" r="200" fill="url(#gradient1-hq)" opacity="0.15" />
+
+			{/* Middle ring */}
+			<circle cx="256" cy="256" r="180" fill="url(#gradient2-hq)" opacity="0.3" />
+
+			{/* Inner ring with enhanced styling */}
+			<circle cx="256" cy="256" r="120" fill="url(#coreGradient-hq)" filter="url(#dropshadow-hq)" />
+
+			{/* Central core with highlight */}
+			<circle cx="256" cy="256" r="70" fill="url(#gradient3-hq)" filter="url(#innerShadow)" />
+
+			{/* Inner core */}
+			<circle cx="256" cy="256" r="45" fill="url(#coreGradient-hq)" opacity="0.8" />
+
+			{/* Highlight dot for depth */}
+			<circle cx="236" cy="236" r="16" fill="#ffffff" opacity="0.7" />
+			<circle cx="240" cy="240" r="8" fill="#ffffff" opacity="0.9" />
+
+			{/* Subtle inner glow rings */}
+			<circle cx="256" cy="256" r="50" fill="none" stroke="url(#gradient3-hq)" strokeWidth="2" opacity="0.4" />
+			<circle cx="256" cy="256" r="35" fill="none" stroke="#ffffff" strokeWidth="1" opacity="0.3" />
+
+			{/* Additional depth elements */}
+			<circle cx="256" cy="256" r="90" fill="none" stroke="url(#gradient2-hq)" strokeWidth="1" opacity="0.2" />
+			<circle cx="256" cy="256" r="150" fill="none" stroke="url(#gradient1-hq)" strokeWidth="1" opacity="0.1" />
+
+			{/* Gradients and filters definitions */}
+			<defs>
+				{/* Main gradient for outer ring */}
+				<linearGradient id="gradient1-hq" x1="0%" y1="0%" x2="100%" y2="100%">
+					<stop offset="0%" stopColor="#6366f1" stopOpacity="0.4" />
+					<stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.4" />
+				</linearGradient>
+
+				{/* Middle ring gradient */}
+				<linearGradient id="gradient2-hq" x1="0%" y1="0%" x2="100%" y2="100%">
+					<stop offset="0%" stopColor="#7c3aed" stopOpacity="0.6" />
+					<stop offset="100%" stopColor="#a78bfa" stopOpacity="0.6" />
+				</linearGradient>
+
+				{/* Core gradient */}
+				<linearGradient id="gradient3-hq" x1="0%" y1="0%" x2="100%" y2="100%">
+					<stop offset="0%" stopColor="#a78bfa" />
+					<stop offset="100%" stopColor="#c7d2fe" />
+				</linearGradient>
+
+				{/* Enhanced core gradient for depth */}
+				<radialGradient id="coreGradient-hq" cx="50%" cy="40%" r="60%">
+					<stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+					<stop offset="20%" stopColor="#f8fafc" stopOpacity="0.95" />
+					<stop offset="40%" stopColor="#c7d2fe" stopOpacity="0.9" />
+					<stop offset="70%" stopColor="#a78bfa" />
+					<stop offset="100%" stopColor="#7c3aed" />
+				</radialGradient>
+
+				{/* Outer glow gradient */}
+				<radialGradient id="outerGlow" cx="50%" cy="50%" r="70%">
+					<stop offset="0%" stopColor="#6366f1" stopOpacity="0" />
+					<stop offset="70%" stopColor="#6366f1" stopOpacity="0.1" />
+					<stop offset="100%" stopColor="#6366f1" stopOpacity="0.3" />
+				</radialGradient>
+
+				{/* Glow effect */}
+				<filter id="glow-hq" x="-50%" y="-50%" width="200%" height="200%">
+					<feGaussianBlur stdDeviation="8" result="coloredBlur" />
+					<feMerge>
+						<feMergeNode in="coloredBlur" />
+						<feMergeNode in="SourceGraphic" />
+					</feMerge>
+				</filter>
+
+				{/* Drop shadow */}
+				<filter id="dropshadow-hq" x="-50%" y="-50%" width="200%" height="200%">
+					<feDropShadow dx="0" dy="8" stdDeviation="16" floodColor="#6366f1" floodOpacity="0.4" />
+				</filter>
+
+				{/* Inner shadow */}
+				<filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+					<feOffset dx="0" dy="2" />
+					<feGaussianBlur stdDeviation="4" result="offset-blur" />
+					<feFlood floodColor="#000000" floodOpacity="0.1" />
+					<feComposite in2="offset-blur" operator="in" />
+					<feMerge>
+						<feMergeNode />
+						<feMergeNode in="SourceGraphic" />
+					</feMerge>
+				</filter>
+			</defs>
 		</svg>
 	)
 }

@@ -84,6 +84,14 @@ const ChatRow = memo(
 		// This allows us to detect changes without causing re-renders
 		const prevHeightRef = useRef(0)
 
+		// Add debug logging for component lifecycle
+		useEffect(() => {
+			console.log(`[DEBUG] ChatRow mounted/updated for message ${message.ts}`, { isLast, highlighted })
+			return () => {
+				console.log(`[DEBUG] ChatRow cleanup for message ${message.ts}`)
+			}
+		}, [message.ts, isLast, highlighted])
+
 		const [chatrow, { height }] = useSize(
 			<div
 				// kilocode_change: add highlighted className
@@ -140,6 +148,7 @@ export const ChatRowContent = ({
 	// const [editedContent, setEditedContent] = useState("") // kilocode_change
 	// const [editMode, setEditMode] = useState<Mode>(mode || "code") // kilocode_change
 	const [_editImages, setEditImages] = useState<string[]>([]) // kilocode_change
+	const [logoLoadError, setLogoLoadError] = useState(false) // Fix for DOM manipulation issue
 	const { copyWithFeedback } = useCopyToClipboard()
 
 	// Handle message events for image selection during edit mode
@@ -283,7 +292,7 @@ export const ChatRowContent = ({
 			case "api_req_retry_delayed":
 				return []
 			case "api_req_started":
-				const getIconSpan = (iconName: string, color: string) => (
+				const getIconSpan = (iconName: string, color: string, animate = false) => (
 					<div
 						style={{
 							width: 16,
@@ -293,7 +302,7 @@ export const ChatRowContent = ({
 							justifyContent: "center",
 						}}>
 						<span
-							className={`codicon codicon-${iconName}`}
+							className={`codicon codicon-${iconName} ${animate ? "animate-blink" : ""}`}
 							style={{ color, fontSize: 16, marginBottom: "-1.5px" }}
 						/>
 					</div>
@@ -310,7 +319,48 @@ export const ChatRowContent = ({
 					) : apiRequestFailedMessage ? (
 						getIconSpan("error", errorColor)
 					) : (
-						<ProgressIndicator />
+						// Use React state to handle logo loading errors instead of direct DOM manipulation
+						<div
+							style={{
+								width: 16,
+								height: 16,
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+							}}>
+							{logoLoadError ? (
+								// Fallback to spinning codicon if image fails to load
+								<span
+									className="codicon codicon-sync animate-blink"
+									style={{ color: "var(--vscode-foreground)", fontSize: 16, marginBottom: "-1.5px" }}
+								/>
+							) : (
+								<img
+									src="/images/roo-logo.svg"
+									alt="API Request"
+									className="animate-blink"
+									style={{
+										width: 16,
+										height: 16,
+										display: "block",
+										objectFit: "contain",
+									}}
+									onError={(e) => {
+										console.error(
+											"[DEBUG] Image onError triggered for roo-logo.svg:",
+											e.currentTarget.src,
+										)
+										console.log("[DEBUG] Setting logoLoadError to true to trigger React re-render")
+										// Use React state instead of direct DOM manipulation
+										setLogoLoadError(true)
+									}}
+									onLoad={() => {
+										console.log("[DEBUG] Successfully loaded roo-logo.svg")
+										setLogoLoadError(false)
+									}}
+								/>
+							)}
+						</div>
 					),
 					apiReqCancelReason !== null && apiReqCancelReason !== undefined ? (
 						apiReqCancelReason === "user_cancelled" ? (

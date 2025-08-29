@@ -472,6 +472,20 @@ input[cmdk-input]:focus {
 	animation: pulse 1.5s ease-in-out infinite;
 }
 
+@keyframes blink {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.3;
+	}
+}
+
+.animate-blink {
+	animation: blink 1s ease-in-out infinite;
+}
+
 /* Transition utilities */
 .transition-all {
 	transition-property: all;
@@ -483,4 +497,14 @@ input[cmdk-input]:focus {
 	transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
 	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 	transition-duration: 150ms;
+}
+
+/* Override CSS reset for textarea border-radius */
+textarea {
+	border-radius: inherit !important;
+}
+
+/* Ensure textareas have rounded corners by default */
+textarea:not([class*="rounded"]) {
+	border-radius: 0.5rem !important; /* Default rounded-lg for textareas */
 }

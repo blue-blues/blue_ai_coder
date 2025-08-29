@@ -116,6 +116,24 @@ import { SchematicAnalyzer } from "../../services/code-index/SchematicAnalyzer"
 import { BackgroundIndexingService } from "../../services/code-index/BackgroundIndexingService"
 import { PerformanceMonitor } from "../../services/code-index/PerformanceMonitor"
 
+// TRAE-Agent Phase 2: Intelligence System Integration
+import {
+	IntelligenceSystem,
+	IntelligenceConfig,
+	createIntelligenceSystem,
+	DEFAULT_INTELLIGENCE_CONFIG,
+	EXPERIMENTAL_INTELLIGENCE_CONFIG,
+	CONSERVATIVE_INTELLIGENCE_CONFIG,
+} from "../intelligence"
+import { createReflectionEngine } from "../reflection"
+import type { ReflectionResult, ReflectionContext } from "../reflection/types"
+import {
+	ExperimentManager,
+	getExperimentManager,
+	initializeExperiments,
+	getEnvironmentFlags,
+} from "../config/ExperimentFlags"
+
 const MAX_EXPONENTIAL_BACKOFF_SECONDS = 600 // 10 minutes
 
 export type TaskOptions = {
@@ -279,6 +297,15 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 	assistantMessageParser?: AssistantMessageParser
 	isAssistantMessageParserEnabled = false
 
+	// TRAE-Agent Phase 1: Reflection system
+	enableReflection: boolean = false
+	reflectionEngine?: any // ReflectionEngine - using any to avoid import issues
+
+	// TRAE-Agent Phase 2: Intelligence system
+	enableIntelligence: boolean = false
+	intelligenceSystem?: IntelligenceSystem
+	experimentManager?: ExperimentManager
+
 	constructor({
 		context, // bluescode_change
 		provider,
@@ -374,6 +401,111 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		}
 
 		this.toolRepetitionDetector = new ToolRepetitionDetector(this.consecutiveMistakeLimit)
+
+		// TRAE-Agent Phase 2: Initialize experiment manager and intelligence system
+		this.experimentManager = initializeExperiments(getEnvironmentFlags(), this.taskId)
+		this.enableIntelligence = this.experimentManager.shouldEnableIntelligence()
+
+		// TRAE-Agent: Initialize reflection engine if enabled
+		const enableReflectionExperiment = provider
+			.getState()
+			.then((state) => state?.experiments?.enableReflection ?? false)
+			.catch(() => false)
+
+		enableReflectionExperiment.then(async (enabled) => {
+			if (enabled) {
+				this.enableReflection = true
+
+				// Phase 2: Create intelligence system if enabled
+				if (this.enableIntelligence) {
+					try {
+						const intelligenceConfig = this.experimentManager?.getIntelligenceConfig()
+						const environmentFlags = getEnvironmentFlags()
+
+						// Select appropriate configuration based on environment
+						let config: IntelligenceConfig
+						if (process.env.NODE_ENV === "production") {
+							config = CONSERVATIVE_INTELLIGENCE_CONFIG
+						} else if (process.env.NODE_ENV === "development") {
+							config = EXPERIMENTAL_INTELLIGENCE_CONFIG
+						} else {
+							config = DEFAULT_INTELLIGENCE_CONFIG
+						}
+
+						// Override with experiment manager settings
+						config = {
+							...config,
+							...intelligenceConfig,
+						}
+
+						this.intelligenceSystem = createIntelligenceSystem(config)
+
+						console.log("[TRAE-Agent Phase 2] Intelligence system initialized:", {
+							contextMemory: !!this.intelligenceSystem.contextMemory,
+							errorRecovery: !!this.intelligenceSystem.errorRecovery,
+							strategyAdapter: !!this.intelligenceSystem.strategyAdapter,
+							toolSelector: !!this.intelligenceSystem.toolSelector,
+							problemDetector: !!this.intelligenceSystem.problemDetector,
+						})
+					} catch (error) {
+						console.error("[TRAE-Agent Phase 2] Failed to initialize intelligence system:", error)
+						this.experimentManager?.recordError()
+					}
+				}
+
+				// Initialize reflection engine with intelligence integration
+				this.reflectionEngine = createReflectionEngine({
+					enableSequentialThinking: true,
+					enableSelfAssessment: true,
+					maxReasoningSteps: 8,
+					assessmentInterval: 300000, // 5 minutes
+					patternDetectionThreshold: 0.7,
+					semanticSimilarityThreshold: 0.8,
+					performanceWindowSize: 100,
+					// Phase 2: Pass intelligence config to reflection engine
+					intelligenceConfig: this.enableIntelligence
+						? this.experimentManager?.getIntelligenceConfig()
+						: undefined,
+				})
+
+				// Set up reflection event listeners
+				this.reflectionEngine.on("reflection_insight", (insight: any) => {
+					console.log("[TRAE-Agent] Reflection insight:", insight)
+				})
+
+				this.reflectionEngine.on("self_assessment_completed", (assessment: any) => {
+					console.log("[TRAE-Agent] Self-assessment completed:", assessment.confidence)
+				})
+
+				// Phase 2: Set up intelligence system event listeners
+				if (this.intelligenceSystem) {
+					// Context Memory events
+					this.intelligenceSystem.contextMemory?.on("learning_event", (event) => {
+						console.log("[TRAE-Agent Phase 2] Context learning:", event.event)
+					})
+
+					// Error Recovery events
+					this.intelligenceSystem.errorRecovery?.on("recovery_executed", (event) => {
+						console.log("[TRAE-Agent Phase 2] Error recovery:", event.strategy)
+					})
+
+					// Problem Detector events
+					this.intelligenceSystem.problemDetector?.on("problems_analyzed", (event) => {
+						console.log("[TRAE-Agent Phase 2] Problems detected:", event.predictions.length)
+					})
+
+					// Strategy Adapter events
+					this.intelligenceSystem.strategyAdapter?.on("adaptation_executed", (event) => {
+						console.log("[TRAE-Agent Phase 2] Strategy adapted:", event.newStrategy)
+					})
+
+					// Tool Selector events
+					this.intelligenceSystem.toolSelector?.on("recommendations_generated", (event) => {
+						console.log("[TRAE-Agent Phase 2] Tool recommendations:", event.recommendations.length)
+					})
+				}
+			}
+		})
 
 		onCreated?.(this)
 
@@ -1525,6 +1657,56 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		if (this.pauseInterval) {
 			clearInterval(this.pauseInterval)
 			this.pauseInterval = undefined
+		}
+
+		// TRAE-Agent Phase 2: Dispose intelligence system
+		try {
+			if (this.intelligenceSystem) {
+				console.log("[TRAE-Agent Phase 2] Disposing intelligence system")
+
+				// Dispose individual components
+				if (this.intelligenceSystem.contextMemory) {
+					this.intelligenceSystem.contextMemory.dispose()
+				}
+				if (this.intelligenceSystem.errorRecovery) {
+					this.intelligenceSystem.errorRecovery.dispose()
+				}
+				if (this.intelligenceSystem.strategyAdapter) {
+					this.intelligenceSystem.strategyAdapter.dispose()
+				}
+				if (this.intelligenceSystem.toolSelector) {
+					this.intelligenceSystem.toolSelector.dispose()
+				}
+				if (this.intelligenceSystem.problemDetector) {
+					this.intelligenceSystem.problemDetector.dispose()
+				}
+
+				this.intelligenceSystem = undefined
+			}
+		} catch (error) {
+			console.error("Error disposing intelligence system:", error)
+		}
+
+		// TRAE-Agent: Dispose reflection engine
+		try {
+			if (this.reflectionEngine) {
+				console.log("[TRAE-Agent] Disposing reflection engine")
+				this.reflectionEngine.dispose()
+				this.reflectionEngine = undefined
+			}
+		} catch (error) {
+			console.error("Error disposing reflection engine:", error)
+		}
+
+		// TRAE-Agent Phase 2: Dispose experiment manager
+		try {
+			if (this.experimentManager) {
+				console.log("[TRAE-Agent Phase 2] Disposing experiment manager")
+				this.experimentManager.dispose()
+				this.experimentManager = undefined
+			}
+		} catch (error) {
+			console.error("Error disposing experiment manager:", error)
 		}
 
 		// Release any terminals associated with this task.
@@ -2793,6 +2975,126 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 
 	public get cwd() {
 		return this.workspacePath
+	}
+
+	/**
+	 * TRAE-Agent: Perform reflection and self-assessment
+	 * This method analyzes recent performance and provides insights
+	 */
+	public async performReflection(): Promise<ReflectionResult | null> {
+		if (!this.enableReflection || !this.reflectionEngine) {
+			return null
+		}
+
+		try {
+			// Build reflection context from current task state
+			const context: ReflectionContext = {
+				taskId: this.taskId,
+				currentStep: this.clineMessages.length,
+				totalSteps: Math.max(this.clineMessages.length + 10, 50), // Estimate
+				recentTools: this.getRecentToolUses(20),
+				recentErrors: this.getRecentErrors(10),
+				performance: this.calculateCurrentPerformance(),
+				environment: {
+					workspacePath: this.cwd,
+					apiConfiguration: this.apiConfiguration,
+					toolUsage: this.toolUsage,
+					consecutiveMistakeCount: this.consecutiveMistakeCount,
+				},
+			}
+
+			// Perform reflection
+			const result = await this.reflectionEngine.reflect(context)
+
+			if (result.success && result.insights.length > 0) {
+				// Log insights for debugging
+				console.log("[TRAE-Agent] Reflection insights:", result.insights)
+
+				// Optionally share insights with user in development mode
+				const provider = this.providerRef.deref()
+				const state = await provider?.getState()
+				if (state?.experiments?.showReflectionInsights) {
+					await this.say(
+						"text",
+						`🤔 Self-reflection: ${result.insights[0]}`,
+						undefined,
+						false,
+						undefined,
+						undefined,
+						{ isNonInteractive: true },
+					)
+				}
+			}
+
+			return result
+		} catch (error) {
+			console.error("[TRAE-Agent] Reflection error:", error)
+			return null
+		}
+	}
+
+	/**
+	 * Get recent tool uses for reflection analysis
+	 */
+	private getRecentToolUses(limit: number): any[] {
+		// Extract tool uses from recent cline messages
+		const toolUses: any[] = []
+
+		for (let i = Math.max(0, this.clineMessages.length - limit * 2); i < this.clineMessages.length; i++) {
+			const message = this.clineMessages[i]
+			if (message.type === "say" && message.text) {
+				// Look for tool usage patterns in message text
+				try {
+					const parsed = JSON.parse(message.text)
+					if (parsed.request || parsed.tool) {
+						toolUses.push({
+							name: parsed.tool || "unknown",
+							timestamp: message.ts,
+							params: parsed.parameters || {},
+						})
+					}
+				} catch {
+					// Not a tool message, skip
+				}
+			}
+		}
+
+		return toolUses.slice(-limit)
+	}
+
+	/**
+	 * Get recent errors for reflection analysis
+	 */
+	private getRecentErrors(limit: number): string[] {
+		const errors: string[] = []
+
+		for (let i = Math.max(0, this.clineMessages.length - limit * 2); i < this.clineMessages.length; i++) {
+			const message = this.clineMessages[i]
+			if (message.type === "say" && message.say === "error" && message.text) {
+				errors.push(message.text)
+			}
+		}
+
+		return errors.slice(-limit)
+	}
+
+	/**
+	 * Calculate current performance metrics
+	 */
+	private calculateCurrentPerformance(): any {
+		const totalMessages = this.clineMessages.length
+		const errorCount = this.getRecentErrors(50).length
+		const toolCount = this.getRecentToolUses(50).length
+
+		return {
+			taskCompletionRate: totalMessages > 0 ? Math.min(totalMessages / 20, 1) : 0,
+			averageStepsToCompletion: totalMessages,
+			errorRate: toolCount > 0 ? errorCount / toolCount : 0,
+			repetitionRate: this.consecutiveMistakeCount / Math.max(toolCount, 1),
+			adaptabilityScore: Object.keys(this.toolUsage).length / Math.max(toolCount / 10, 1),
+			efficiencyScore: Math.max(0, 1 - this.consecutiveMistakeCount / Math.max(toolCount, 1)),
+			lastCalculatedAt: Date.now(),
+		}
 	}
 
 	/**

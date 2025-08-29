@@ -7,6 +7,8 @@ export const EXPERIMENT_IDS = {
 	INLINE_ASSIST: "inlineAssist", // bluescode_change
 	PREVENT_FOCUS_DISRUPTION: "preventFocusDisruption",
 	ASSISTANT_MESSAGE_PARSER: "assistantMessageParser",
+	ENABLE_REFLECTION: "enableReflection", // bluescode_change
+	SHOW_REFLECTION_INSIGHTS: "showReflectionInsights", // bluescode_change
 } as const satisfies Record<string, ExperimentId>
 
 type _AssertExperimentIds = AssertEqual<Equals<ExperimentId, Values<typeof EXPERIMENT_IDS>>>
@@ -24,6 +26,8 @@ export const experimentConfigsMap: Record<ExperimentKey, ExperimentConfig> = {
 	INLINE_ASSIST: { enabled: false }, // bluescode_change
 	PREVENT_FOCUS_DISRUPTION: { enabled: false },
 	ASSISTANT_MESSAGE_PARSER: { enabled: false },
+	ENABLE_REFLECTION: { enabled: false }, // bluescode_change
+	SHOW_REFLECTION_INSIGHTS: { enabled: false }, // bluescode_change
 }
 
 export const experimentDefault = Object.fromEntries(

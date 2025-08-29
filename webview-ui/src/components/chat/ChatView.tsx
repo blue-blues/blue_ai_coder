@@ -1616,6 +1616,12 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 
 	const itemContent = useCallback(
 		(index: number, messageOrGroup: ClineMessage | ClineMessage[]) => {
+			console.log(`[DEBUG] Virtuoso rendering item at index ${index}`, {
+				isArray: Array.isArray(messageOrGroup),
+				messageTs: Array.isArray(messageOrGroup) ? "group" : messageOrGroup.ts,
+				totalItems: groupedMessages.length,
+			})
+
 			// browser session group
 			if (Array.isArray(messageOrGroup)) {
 				return (

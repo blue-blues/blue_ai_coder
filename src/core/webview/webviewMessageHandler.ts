@@ -1880,48 +1880,6 @@ export const webviewMessageHandler = async (
 			await updateGlobalState("autoApprovalEnabled", message.bool ?? false)
 			await provider.postStateToWebview()
 			break
-		case "enhancePrompt":
-			if (message.text) {
-				try {
-					const state = await provider.getState()
-					const {
-						apiConfiguration,
-						customSupportPrompts,
-						listApiConfigMeta,
-						enhancementApiConfigId,
-						includeTaskHistoryInEnhance,
-					} = state
-
-					const currentCline = provider.getCurrentCline()
-					const result = await MessageEnhancer.enhanceMessage({
-						text: message.text,
-						apiConfiguration,
-						customSupportPrompts,
-						listApiConfigMeta,
-						enhancementApiConfigId,
-						includeTaskHistoryInEnhance,
-						currentClineMessages: currentCline?.clineMessages,
-						providerSettingsManager: provider.providerSettingsManager,
-					})
-
-					if (result.success && result.enhancedText) {
-						// Capture telemetry for prompt enhancement
-						MessageEnhancer.captureTelemetry(currentCline?.taskId, includeTaskHistoryInEnhance)
-						await provider.postMessageToWebview({ type: "enhancedPrompt", text: result.enhancedText })
-					} else {
-						throw new Error(result.error || "Unknown error")
-					}
-				} catch (error) {
-					provider.log(
-						`Error enhancing prompt: ${JSON.stringify(error, Object.getOwnPropertyNames(error), 2)}`,
-					)
-
-					TelemetryService.instance.captureException(error, { context: "enhance_prompt" }) // bluescode_change
-					vscode.window.showErrorMessage(t("common:errors.enhance_prompt"))
-					await provider.postMessageToWebview({ type: "enhancedPrompt" })
-				}
-			}
-			break
 		case "getSystemPrompt":
 			try {
 				const systemPrompt = await generateSystemPrompt(provider, message)
@@ -3028,17 +2986,13 @@ export const webviewMessageHandler = async (
 		case "fixMermaidSyntax":
 			if (message.text && message.requestId) {
 				try {
-					const { apiConfiguration } = await provider.getState()
-
-					const prompt = mermaidFixPrompt(message.values?.error || "Unknown syntax error", message.text)
-
-					const fixedCode = await singleCompletionHandler(apiConfiguration, prompt)
-
+					// Note: Mermaid syntax fixing functionality has been removed
+					// as it depended on the enhance prompt feature
 					provider.postMessageToWebview({
 						type: "mermaidFixResponse",
 						requestId: message.requestId,
-						success: true,
-						fixedCode: fixedCode?.trim() || null,
+						success: false,
+						error: "Mermaid syntax fixing is no longer available",
 					})
 				} catch (error) {
 					const errorMessage = error instanceof Error ? error.message : "Failed to fix Mermaid syntax"

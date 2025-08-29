@@ -32,6 +32,8 @@ describe("experiments", () => {
 				inlineAssist: false, // bluescode_change
 				preventFocusDisruption: false,
 				assistantMessageParser: false,
+				enableReflection: false, // bluescode_change
+				showReflectionInsights: false, // bluescode_change
 			}
 			expect(Experiments.isEnabled(experiments, EXPERIMENT_IDS.POWER_STEERING)).toBe(false)
 		})
@@ -44,6 +46,8 @@ describe("experiments", () => {
 				inlineAssist: false, // bluescode_change
 				preventFocusDisruption: false,
 				assistantMessageParser: false,
+				enableReflection: false, // bluescode_change
+				showReflectionInsights: false, // bluescode_change
 			}
 			expect(Experiments.isEnabled(experiments, EXPERIMENT_IDS.POWER_STEERING)).toBe(true)
 		})
@@ -56,6 +60,8 @@ describe("experiments", () => {
 				inlineAssist: false, // bluescode_change
 				preventFocusDisruption: false,
 				assistantMessageParser: false,
+				enableReflection: false, // bluescode_change
+				showReflectionInsights: false, // bluescode_change
 			}
 			expect(Experiments.isEnabled(experiments, EXPERIMENT_IDS.POWER_STEERING)).toBe(false)
 		})
