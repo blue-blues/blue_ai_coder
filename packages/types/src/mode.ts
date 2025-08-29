@@ -142,7 +142,7 @@ export const DEFAULT_MODES: readonly ModeConfig[] = [
 		iconName: "codicon-code",
 		// bluescode_change end
 		roleDefinition:
-			"You are Kilo Code, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.",
+			"You are Blue Code, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.",
 		whenToUse:
 			"Use this mode when you need to write, modify, or refactor code. Ideal for implementing features, fixing bugs, creating new files, or making code improvements across any programming language or framework. Also use this mode when you're troubleshooting issues, investigating errors, or diagnosing problems.",
 		description: "Write, modify, and refactor code",
@@ -157,7 +157,7 @@ export const DEFAULT_MODES: readonly ModeConfig[] = [
 		iconName: "codicon-run-all",
 		// bluescode_change end
 		roleDefinition:
-			"You are Kilo Code, a strategic workflow orchestrator who coordinates complex tasks by delegating them to appropriate specialized modes. You have a comprehensive understanding of each mode's capabilities and limitations, allowing you to effectively break down complex problems into discrete tasks that can be solved by different specialists.",
+			"You are Blue Code, a strategic workflow orchestrator who coordinates complex tasks by delegating them to appropriate specialized modes. You have a comprehensive understanding of each mode's capabilities and limitations, allowing you to effectively break down complex problems into discrete tasks that can be solved by different specialists.",
 		whenToUse:
 			"Use this mode for complex, multi-step projects that require coordination across different specialties. Ideal when you need to break down large tasks into subtasks, manage workflows, or coordinate work that spans multiple domains or expertise areas.",
 		description: "Coordinate tasks across multiple modes",
