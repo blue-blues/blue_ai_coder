@@ -7,12 +7,12 @@ export class GhostCursorAnimation {
 
 	public constructor(context: vscode.ExtensionContext) {
 		this.decorationWait = vscode.window.createTextEditorDecorationType({
-			gutterIconPath: vscode.Uri.joinPath(context.extensionUri, "assets", "icons", "logo-outline-black.gif"),
+			gutterIconPath: vscode.Uri.joinPath(context.extensionUri, "assets", "icons", "kilo-dark.svg"),
 			gutterIconSize: "30px",
 			isWholeLine: false,
 		})
 		this.decorationActive = vscode.window.createTextEditorDecorationType({
-			gutterIconPath: vscode.Uri.joinPath(context.extensionUri, "assets", "icons", "logo-outline-yellow.gif"),
+			gutterIconPath: vscode.Uri.joinPath(context.extensionUri, "assets", "icons", "kilo-light.svg"),
 			gutterIconSize: "30px",
 			isWholeLine: false,
 		})

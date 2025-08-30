@@ -1197,7 +1197,7 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 			}
 
 			if (message.ask === "command") {
-				return alwaysAllowExecute && isAllowedCommand(message)
+				return false // Always require manual approval for commands
 			}
 
 			// For read/write operations, check if it's outside workspace and if
@@ -1266,8 +1266,6 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 			alwaysAllowWriteOutsideWorkspace,
 			alwaysAllowWriteProtected,
 			isWriteToolAction,
-			alwaysAllowExecute,
-			isAllowedCommand,
 			alwaysAllowMcp,
 			isMcpToolAlwaysAllowed,
 			alwaysAllowModeSwitch,

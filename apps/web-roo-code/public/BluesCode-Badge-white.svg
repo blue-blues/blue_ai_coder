@@ -1,0 +1,50 @@
+<!-- BluesCode Logo - Badge White Variant -->
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <!-- Main gradient for badge - white theme -->
+    <linearGradient id="gradient1-badge-white" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#c7d2fe;stop-opacity:0.9"/>
+    </linearGradient>
+    
+    <!-- Core gradient for badge -->
+    <radialGradient id="coreGradient-badge-white" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.98"/>
+      <stop offset="20%" style="stop-color:#f8fafc;stop-opacity:0.95"/>
+      <stop offset="70%" style="stop-color:#c7d2fe"/>
+      <stop offset="100%" style="stop-color:#a78bfa"/>
+    </radialGradient>
+    
+    <!-- Glow effect for badge -->
+    <filter id="glow-badge-white" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Logo circle centered -->
+  <g transform="translate(60, 60)">
+    <!-- Outer ring -->
+    <circle cx="0" cy="0" r="35" fill="url(#gradient1-badge-white)" opacity="0.4"/>
+    
+    <!-- Middle ring -->
+    <circle cx="0" cy="0" r="28" fill="url(#gradient1-badge-white)" opacity="0.6"/>
+    
+    <!-- Inner core -->
+    <circle cx="0" cy="0" r="20" fill="url(#coreGradient-badge-white)" filter="url(#glow-badge-white)"/>
+    
+    <!-- Central core -->
+    <circle cx="0" cy="0" r="12" fill="url(#gradient1-badge-white)" opacity="0.8"/>
+    
+    <!-- Highlight dot -->
+    <circle cx="-3" cy="-3" r="3" fill="#ffffff" opacity="0.8"/>
+  </g>
+  
+  <!-- "BC" text centered below -->
+  <text x="60" y="95" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+    BC
+  </text>
+</svg>

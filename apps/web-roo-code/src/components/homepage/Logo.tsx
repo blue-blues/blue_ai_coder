@@ -1,25 +1,18 @@
-"use client"
+import React from "react"
 
-import { SVGProps, useEffect, useRef } from "react"
-import { useRouter } from "next/navigation"
-import { useHover } from "react-use"
+interface LogoProps {
+	size?: number
+}
 
-import { cn } from "@/lib/utils"
-
-type LogoProps = Omit<SVGProps<SVGSVGElement>, "xmlns" | "viewBox" | "onClick">
-
-export const Logo = ({ width = 50, height = 50, fill = "#fff", className, ...props }: LogoProps) => {
-	const router = useRouter()
-
+const Logo: React.FC<LogoProps> = ({ size = 64 }) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			width={width}
-			height={height}
+			width={size}
+			height={size}
 			viewBox="0 0 50 50"
-			onClick={() => router.push("/")}
-			className={cn("logo cursor-pointer", className)}
-			{...props}>
+			fill="none"
+			className="inline-block">
 			{/* BluesCode Logo */}
 			{/* Outer border */}
 			<path
@@ -57,26 +50,4 @@ export const Logo = ({ width = 50, height = 50, fill = "#fff", className, ...pro
 	)
 }
 
-export const HoppingLogo = (props: LogoProps) => {
-	const ref = useRef<SVGSVGElement>(null)
-	const logo = <Logo ref={ref} {...props} />
-	const [hoverable, hovered] = useHover(logo)
-
-	useEffect(() => {
-		const element = ref.current
-		const isHopping = element !== null && element.classList.contains("animate-hop")
-
-		if (hovered && element && !isHopping) {
-			element.classList.add("animate-hop")
-		} else if (element && isHopping) {
-			const onAnimationEnd = () => {
-				element.classList.remove("animate-hop")
-				element.removeEventListener("animationiteration", onAnimationEnd)
-			}
-
-			element.addEventListener("animationiteration", onAnimationEnd)
-		}
-	}, [hovered])
-
-	return hoverable
-}
+export default Logo

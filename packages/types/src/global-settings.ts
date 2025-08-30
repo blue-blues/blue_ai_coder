@@ -261,7 +261,7 @@ export const EVALS_SETTINGS: BluesCodeSettings = {
 	alwaysAllowMcp: true,
 	alwaysAllowModeSwitch: true,
 	alwaysAllowSubtasks: true,
-	alwaysAllowExecute: true,
+	alwaysAllowExecute: false,
 	alwaysAllowFollowupQuestions: true,
 	alwaysAllowUpdateTodoList: true,
 	followupAutoApproveTimeoutMs: 0,

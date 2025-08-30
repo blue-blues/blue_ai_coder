@@ -336,8 +336,8 @@ export const ChatRowContent = ({
 								/>
 							) : (
 								<img
-									src="/images/roo-logo.svg"
-									alt="API Request"
+									src="/images/bluescode-logo.svg"
+									alt="BluesCode Request"
 									className="animate-blink"
 									style={{
 										width: 16,
@@ -347,7 +347,7 @@ export const ChatRowContent = ({
 									}}
 									onError={(e) => {
 										console.error(
-											"[DEBUG] Image onError triggered for roo-logo.svg:",
+											"[DEBUG] Image onError triggered for bluescode-logo.svg:",
 											e.currentTarget.src,
 										)
 										console.log("[DEBUG] Setting logoLoadError to true to trigger React re-render")
@@ -355,7 +355,7 @@ export const ChatRowContent = ({
 										setLogoLoadError(true)
 									}}
 									onLoad={() => {
-										console.log("[DEBUG] Successfully loaded roo-logo.svg")
+										console.log("[DEBUG] Successfully loaded bluescode-logo.svg")
 										setLogoLoadError(false)
 									}}
 								/>

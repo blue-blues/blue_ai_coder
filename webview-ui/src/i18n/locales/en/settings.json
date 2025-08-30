@@ -9,10 +9,10 @@
 		"remove": "Remove"
 	},
 	"header": {
-		"title": "Settings",
+		"title": "Blues Code Configuration",
 		"saveButtonTooltip": "Save changes",
 		"nothingChangedTooltip": "Nothing changed",
-		"doneButtonTooltip": "Discard unsaved changes and close settings panel"
+		"doneButtonTooltip": "Discard unsaved changes and close configuration panel"
 	},
 	"unsavedChangesDialog": {
 		"title": "Unsaved Changes",
@@ -21,7 +21,7 @@
 		"discardButton": "Discard changes"
 	},
 	"sections": {
-		"providers": "Providers",
+		"providers": "Workspace",
 		"autoApprove": "Auto-Approve",
 		"browser": "Browser",
 		"checkpoints": "Checkpoints",
@@ -30,9 +30,9 @@
 		"contextManagement": "Context",
 		"terminal": "Terminal",
 		"prompts": "Prompts",
-		"experimental": "Experimental",
+		"experimental": "Features",
 		"language": "Language",
-		"about": "About Blues Code"
+		"about": "System"
 	},
 	"prompts": {
 		"description": "Configure support prompts that are used for quick actions like enhancing prompts, explaining code, and fixing issues. These prompts help Blues Code provide better assistance for common development tasks."
@@ -147,7 +147,7 @@
 			},
 			"protected": {
 				"label": "Include protected files",
-				"description": "Allow Blues Code to create and edit protected files (like .bluescodeignore and .bluescode/ configuration files) without requiring approval."
+				"description": "Allow Blues Code to create and edit protected files (like .rooignore and .roo/ configuration files) without requiring approval."
 			}
 		},
 		"browser": {
@@ -535,7 +535,7 @@
 		},
 		"autoCondenseContext": {
 			"name": "Automatically trigger intelligent context condensing",
-			"description": "When enabled, Blues Code will automatically condense the context when the threshold is reached. When disabled, you can still manually trigger context condensing."
+			"description": "When enabled, FlowMaster Pro will automatically condense the context when the threshold is reached. When disabled, you can still manually trigger context condensing."
 		},
 		"openTabs": {
 			"label": "Open tabs context limit",
@@ -546,8 +546,8 @@
 			"description": "Maximum number of files to include in current working directory details. Higher values provide more context but increase token usage."
 		},
 		"rooignore": {
-			"label": "Show .bluescodeignore'd files in lists and searches",
-			"description": "When enabled, files matching patterns in .bluescodeignore will be shown in lists with a lock symbol. When disabled, these files will be completely hidden from file lists and searches."
+			"label": "Show .rooignore'd files in lists and searches",
+			"description": "When enabled, files matching patterns in .rooignore will be shown in lists with a lock symbol. When disabled, these files will be completely hidden from file lists and searches."
 		},
 		"maxConcurrentFileReads": {
 			"label": "Concurrent file reads limit",
@@ -690,11 +690,11 @@
 		},
 		"SEARCH_AND_REPLACE": {
 			"name": "Use experimental search and replace tool",
-			"description": "Enable the experimental search and replace tool, allowing Blues Code to replace multiple instances of a search term in one request."
+			"description": "Enable the experimental search and replace tool, allowing FlowMaster Pro to replace multiple instances of a search term in one request."
 		},
 		"INSERT_BLOCK": {
 			"name": "Use experimental insert content tool",
-			"description": "Enable the experimental insert content tool, allowing Blues Code to insert content at specific line numbers without needing to create a diff."
+			"description": "Enable the experimental insert content tool, allowing FlowMaster Pro to insert content at specific line numbers without needing to create a diff."
 		},
 		"POWER_STEERING": {
 			"name": "Use experimental \"power steering\" mode",
@@ -776,11 +776,11 @@
 		"useCustomModel": "Use custom: {{modelId}}"
 	},
 	"footer": {
-		"feedback": "If you have any questions or feedback, feel free to open an issue at <githubLink>github.com/Blues-Org/bluescode</githubLink> or join <redditLink>reddit.com/r/bluescode</redditLink> or <discordLink>bluescode.ai/discord</discordLink>.",
-		"support": "For financial questions, please contact Customer Support at <supportLink>https://bluescode.ai/support</supportLink>",
+		"feedback": "If you have any questions or feedback, feel free to open an issue at <githubLink>github.com/FlowMaster-Org/flowmaster</githubLink> or join <redditLink>reddit.com/r/flowmaster</redditLink> or <discordLink>flowmaster.ai/discord</discordLink>.",
+		"support": "For financial questions, please contact Customer Support at <supportLink>https://flowmaster.ai/support</supportLink>",
 		"telemetry": {
 			"label": "Allow error and usage reporting",
-			"description": "Help improve Blues Code by sending usage data and error reports. No code, prompts, or personal information is ever sent. See our privacy policy for more details."
+			"description": "Help improve FlowMaster Pro by sending usage data and error reports. No code, prompts, or personal information is ever sent. See our privacy policy for more details."
 		},
 		"settings": {
 			"import": "Import",

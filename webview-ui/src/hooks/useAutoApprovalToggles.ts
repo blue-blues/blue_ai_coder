@@ -9,7 +9,7 @@ export function useAutoApprovalToggles() {
 	const {
 		alwaysAllowReadOnly,
 		alwaysAllowWrite,
-		alwaysAllowExecute,
+		// SECURITY: alwaysAllowExecute removed to prevent auto-execution bypass
 		alwaysAllowBrowser,
 		alwaysAllowMcp,
 		alwaysAllowModeSwitch,
@@ -23,7 +23,7 @@ export function useAutoApprovalToggles() {
 		() => ({
 			alwaysAllowReadOnly,
 			alwaysAllowWrite,
-			alwaysAllowExecute,
+			// SECURITY: alwaysAllowExecute removed from toggles object
 			alwaysAllowBrowser,
 			alwaysAllowMcp,
 			alwaysAllowModeSwitch,
@@ -35,7 +35,7 @@ export function useAutoApprovalToggles() {
 		[
 			alwaysAllowReadOnly,
 			alwaysAllowWrite,
-			alwaysAllowExecute,
+			// SECURITY: alwaysAllowExecute removed from dependency array
 			alwaysAllowBrowser,
 			alwaysAllowMcp,
 			alwaysAllowModeSwitch,

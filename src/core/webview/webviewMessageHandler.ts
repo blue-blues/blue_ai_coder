@@ -333,7 +333,8 @@ export const webviewMessageHandler = async (
 			await provider.postStateToWebview()
 			break
 		case "alwaysAllowExecute":
-			await updateGlobalState("alwaysAllowExecute", message.bool ?? undefined)
+			// Security: Always force alwaysAllowExecute to false to prevent auto-execution bypass
+			await updateGlobalState("alwaysAllowExecute", false)
 			await provider.postStateToWebview()
 			break
 		case "alwaysAllowBrowser":

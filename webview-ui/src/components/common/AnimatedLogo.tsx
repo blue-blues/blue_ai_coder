@@ -1,31 +1,65 @@
-"use client"
+import React from "react"
 
-import { SVGProps, useEffect, useRef } from "react"
-import { useRouter } from "next/navigation"
-import { useHover } from "react-use"
+export type LogoAnimationState = "none" | "subtle" | "active" | "loading" | "breathing" | "processing"
 
-import { cn } from "@/lib/utils"
+export interface AnimatedLogoProps {
+	width?: number
+	height?: number
+	animationState?: LogoAnimationState
+	className?: string
+	onAnimationComplete?: () => void
+	enableHoverGlow?: boolean
+}
 
-type LogoProps = Omit<SVGProps<SVGSVGElement>, "xmlns" | "viewBox" | "onClick">
+export default function AnimatedLogo({
+	width = 100,
+	height = 100,
+	animationState = "none",
+	className = "",
+	onAnimationComplete,
+	enableHoverGlow = false,
+}: AnimatedLogoProps) {
+	const getAnimationClass = () => {
+		switch (animationState) {
+			case "subtle":
+				return "logo-blink-subtle"
+			case "active":
+				return "logo-blink-active"
+			case "loading":
+				return "logo-blink-loading"
+			case "breathing":
+				return "logo-blink-breathing"
+			case "processing":
+				return "logo-blink-processing"
+			default:
+				return ""
+		}
+	}
 
-export const Logo = ({ width = 50, height = 50, fill = "#fff", className, ...props }: LogoProps) => {
-	const router = useRouter()
+	const animationClass = getAnimationClass()
+	const hoverClass = enableHoverGlow ? "logo-hover-glow" : ""
+	const combinedClassName = `${animationClass} ${hoverClass} ${className}`.trim()
 
 	return (
 		<svg
+			id="BluesCode_Animated_Logo"
 			xmlns="http://www.w3.org/2000/svg"
+			version="1.1"
+			viewBox="0 0 50 50"
+			className={combinedClassName}
 			width={width}
 			height={height}
-			viewBox="0 0 50 50"
-			onClick={() => router.push("/")}
-			className={cn("logo cursor-pointer", className)}
-			{...props}>
-			{/* BluesCode Logo */}
+			onAnimationIteration={onAnimationComplete}
+			style={{
+				transition: "all 0.3s ease",
+				transformOrigin: "center center",
+			}}>
 			{/* Outer border */}
 			<path
-				fill="currentColor"
+				fill="var(--vscode-descriptionForeground)"
 				d="M0,0v50h50V0H0ZM46.2962963,46.2962963H3.7037037V3.7037037h42.5925926v42.5925926Z"
 			/>
+
 			{/* BluesCode "BC" lettermark */}
 			<path
 				fill="#4169E1"
@@ -49,34 +83,12 @@ export const Logo = ({ width = 50, height = 50, fill = "#fff", className, ...pro
 				d="M14.8148148,15.2777778h4.6296296l3.7037037,3.7037037v4.1666667h-3.7037037v-4.1666667h-4.6296296v4.1666667h-3.7037037v-12.037037h3.7037037v4.1666667Z"
 			/>
 			<path fill="#4169E1" d="M23.1481481,15.2777778h-3.7037037v-4.1666667h3.7037037v4.1666667Z" />
+
 			{/* Background highlight */}
 			<path fill="#1E90FF" d="M7.4074074,7.4074074h35.1851852v35.1851852H7.4074074V7.4074074Z" />
+
 			{/* Inner background */}
 			<path fill="#4169E1" d="M11.1111111,11.1111111h27.7777778v27.7777778H11.1111111V11.1111111Z" />
 		</svg>
 	)
-}
-
-export const HoppingLogo = (props: LogoProps) => {
-	const ref = useRef<SVGSVGElement>(null)
-	const logo = <Logo ref={ref} {...props} />
-	const [hoverable, hovered] = useHover(logo)
-
-	useEffect(() => {
-		const element = ref.current
-		const isHopping = element !== null && element.classList.contains("animate-hop")
-
-		if (hovered && element && !isHopping) {
-			element.classList.add("animate-hop")
-		} else if (element && isHopping) {
-			const onAnimationEnd = () => {
-				element.classList.remove("animate-hop")
-				element.removeEventListener("animationiteration", onAnimationEnd)
-			}
-
-			element.addEventListener("animationiteration", onAnimationEnd)
-		}
-	}, [hovered])
-
-	return hoverable
 }

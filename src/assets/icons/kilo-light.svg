@@ -1,6 +1,97 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg id="Kilo_Code_Branding" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 39.9997627 39.9999944">
-  <g transform="scale(0.8)" transform-origin="center">
-    <path fill="#424242" d="M27.9998324,34.6666921h6.6666279v5.3333023h-8.3809037l-3.6190266-3.6190266v-8.3809037h5.3333023v6.6666279ZM39.9997627,26.2857884l-3.6190266-3.6190266h-8.3809037v5.3333023h6.6666279v6.6666279h5.3333023v-8.3809037ZM17.3332326,22.6667578h-5.3333023v5.3333023h5.3333023v-5.3333023ZM0,36.3809638l3.6190266,3.6190266h13.714206v-5.3333023H5.3333023v-11.9999302H0v13.714206ZM33.9600959,11.9999247V3.619021L30.3410693-.0000056h-7.6745392v5.3333023h5.9602634v6.6666279h-5.9602634v5.3333023h17.3332326v-5.3333023h-6.0396668ZM5.3333023,0H0v17.3332326h5.3333023v-5.9999651h6.6666279v5.9999651h5.3333023v-5.9999651l-5.3333023-5.3333023h-6.6666279V0ZM17.3332326,0h-5.3333023v5.9999651h5.3333023V0Z" />
-  </g>
+<!-- Blues AI Logo - Light Theme Variant -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <!-- Main gradient for outer ring - light theme -->
+    <linearGradient id="gradient1-light" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:0.7"/>
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0.7"/>
+    </linearGradient>
+    
+    <!-- Middle ring gradient - light theme -->
+    <linearGradient id="gradient2-light" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.8"/>
+    </linearGradient>
+    
+    <!-- Core gradient - light theme -->
+    <linearGradient id="gradient3-light" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#a78bfa"/>
+    </linearGradient>
+    
+    <!-- Enhanced core gradient for depth - light theme -->
+    <radialGradient id="coreGradient-light" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:0.95"/>
+      <stop offset="20%" style="stop-color:#e2e8f0;stop-opacity:0.9"/>
+      <stop offset="40%" style="stop-color:#c7d2fe;stop-opacity:0.85"/>
+      <stop offset="70%" style="stop-color:#a78bfa"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </radialGradient>
+    
+    <!-- Outer glow gradient - light theme -->
+    <radialGradient id="outerGlow-light" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:0"/>
+      <stop offset="70%" style="stop-color:#4f46e5;stop-opacity:0.08"/>
+      <stop offset="100%" style="stop-color:#4f46e5;stop-opacity:0.2"/>
+    </radialGradient>
+    
+    <!-- Glow effect - subtle for light theme -->
+    <filter id="glow-light" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Drop shadow - subtle for light theme -->
+    <filter id="dropshadow-light" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#4f46e5" flood-opacity="0.25"/>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow-light" x="-50%" y="-50%" width="200%" height="200%">
+      <feOffset dx="0" dy="1"/>
+      <feGaussianBlur stdDeviation="3" result="offset-blur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.08"/>
+      <feComposite in2="offset-blur" operator="in"/>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Outer glow background -->
+  <circle cx="256" cy="256" r="250" fill="url(#outerGlow-light)"/>
+  
+  <!-- Background circle with subtle glow -->
+  <circle cx="256" cy="256" r="240" fill="url(#gradient1-light)" opacity="0.15" filter="url(#glow-light)"/>
+  
+  <!-- Secondary ring -->
+  <circle cx="256" cy="256" r="200" fill="url(#gradient1-light)" opacity="0.1"/>
+  
+  <!-- Middle ring -->
+  <circle cx="256" cy="256" r="180" fill="url(#gradient2-light)" opacity="0.25"/>
+  
+  <!-- Inner ring with enhanced styling -->
+  <circle cx="256" cy="256" r="120" fill="url(#coreGradient-light)" filter="url(#dropshadow-light)"/>
+  
+  <!-- Central core with highlight -->
+  <circle cx="256" cy="256" r="70" fill="url(#gradient3-light)" filter="url(#innerShadow-light)"/>
+  
+  <!-- Inner core -->
+  <circle cx="256" cy="256" r="45" fill="url(#coreGradient-light)" opacity="0.7"/>
+  
+  <!-- Highlight dot for depth -->
+  <circle cx="236" cy="236" r="16" fill="#ffffff" opacity="0.6"/>
+  <circle cx="240" cy="240" r="8" fill="#ffffff" opacity="0.8"/>
+  
+  <!-- Subtle inner glow rings -->
+  <circle cx="256" cy="256" r="50" fill="none" stroke="url(#gradient3-light)" stroke-width="2" opacity="0.3"/>
+  <circle cx="256" cy="256" r="35" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.25"/>
+  
+  <!-- Additional depth elements -->
+  <circle cx="256" cy="256" r="90" fill="none" stroke="url(#gradient2-light)" stroke-width="1" opacity="0.15"/>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="url(#gradient1-light)" stroke-width="1" opacity="0.08"/>
 </svg>

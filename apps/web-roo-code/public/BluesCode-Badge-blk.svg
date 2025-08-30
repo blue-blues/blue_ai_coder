@@ -1,0 +1,50 @@
+<!-- BluesCode Logo - Badge Black Variant -->
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <!-- Main gradient for badge - black theme -->
+    <linearGradient id="gradient1-badge-blk" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1f2937;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:0.9"/>
+    </linearGradient>
+    
+    <!-- Core gradient for badge -->
+    <radialGradient id="coreGradient-badge-blk" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#6b7280;stop-opacity:0.95"/>
+      <stop offset="20%" style="stop-color:#4b5563;stop-opacity:0.9"/>
+      <stop offset="70%" style="stop-color:#374151"/>
+      <stop offset="100%" style="stop-color:#1f2937"/>
+    </radialGradient>
+    
+    <!-- Glow effect for badge -->
+    <filter id="glow-badge-blk" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Logo circle centered -->
+  <g transform="translate(60, 60)">
+    <!-- Outer ring -->
+    <circle cx="0" cy="0" r="35" fill="url(#gradient1-badge-blk)" opacity="0.3"/>
+    
+    <!-- Middle ring -->
+    <circle cx="0" cy="0" r="28" fill="url(#gradient1-badge-blk)" opacity="0.5"/>
+    
+    <!-- Inner core -->
+    <circle cx="0" cy="0" r="20" fill="url(#coreGradient-badge-blk)" filter="url(#glow-badge-blk)"/>
+    
+    <!-- Central core -->
+    <circle cx="0" cy="0" r="12" fill="url(#gradient1-badge-blk)" opacity="0.8"/>
+    
+    <!-- Highlight dot -->
+    <circle cx="-3" cy="-3" r="3" fill="#6b7280" opacity="0.7"/>
+  </g>
+  
+  <!-- "BC" text centered below -->
+  <text x="60" y="95" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#1f2937">
+    BC
+  </text>
+</svg>

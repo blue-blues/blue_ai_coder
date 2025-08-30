@@ -35,7 +35,7 @@ export function Footer() {
 				<div className="xl:grid xl:grid-cols-3 xl:gap-8">
 					<div className="space-y-8">
 						<div className="flex items-center">
-							<Image src={logoSrc} alt="Roo Code Logo" width={120} height={40} className="h-6 w-auto" />
+							<Image src={logoSrc} alt="BluesCode Logo" width={120} height={40} className="h-6 w-auto" />
 						</div>
 						<p className="max-w-md text-sm leading-6 text-muted-foreground md:pr-16 lg:pr-32">
 							Empowering developers to build better software faster with AI-powered tools and insights.
@@ -48,8 +48,12 @@ export function Footer() {
 							rel="noopener noreferrer"
 							className="inline-flex items-center space-x-2 group">
 							<Image
-								src={resolvedTheme === "light" ? "/RooCode-Badge-blk.svg" : "/RooCode-Badge-white.svg"}
-								alt="Made with Roo Code"
+								src={
+									resolvedTheme === "light"
+										? "/BluesCode-Badge-blk.svg"
+										: "/BluesCode-Badge-white.svg"
+								}
+								alt="Made with BluesCode"
 								width={120}
 								height={40}
 								className="h-8 w-auto opacity-70 transition-opacity group-hover:opacity-100"

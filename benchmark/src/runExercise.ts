@@ -58,7 +58,7 @@ export async function run() {
 		autoApprovalEnabled: true,
 		alwaysAllowReadOnly: true,
 		alwaysAllowWrite: true,
-		alwaysAllowExecute: true,
+		alwaysAllowExecute: false, // SECURITY: Always require manual approval for commands
 		alwaysAllowBrowser: true,
 		alwaysApproveResubmit: true,
 		alwaysAllowMcp: true,

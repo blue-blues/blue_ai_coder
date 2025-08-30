@@ -24,12 +24,13 @@
 @plugin "tailwindcss-animate";
 
 @theme {
-	--font-display: var(--vscode-font-family);
-
-	--text-xs: calc(var(--vscode-font-size) * 0.85);
-	--text-sm: calc(var(--vscode-font-size) * 0.9);
+	/* Original typography scale */
+	--text-xs: calc(var(--vscode-font-size) * 0.75);
+	--text-sm: calc(var(--vscode-font-size) * 0.875);
 	--text-base: var(--vscode-font-size);
-	--text-lg: calc(var(--vscode-font-size) * 1.1);
+	--text-lg: calc(var(--vscode-font-size) * 1.125);
+	--text-xl: calc(var(--vscode-font-size) * 1.25);
+	--text-2xl: calc(var(--vscode-font-size) * 1.5);
 
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);

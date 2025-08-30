@@ -36,8 +36,6 @@ vi.mock("../CommandPatternSelector", () => ({
 // Mock ExtensionStateContext
 const mockExtensionState = {
 	terminalShellIntegrationDisabled: false,
-	allowedCommands: ["npm"],
-	deniedCommands: ["rm"],
 	setAllowedCommands: vi.fn(),
 	setDeniedCommands: vi.fn(),
 }

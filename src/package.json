@@ -4,7 +4,7 @@
 	"description": "%extension.description%",
 	"publisher": "bluescode",
 	"version": "4.79.0",
-	"icon": "assets/icons/logo-outline-black.png",
+	"icon": "assets/icons/bluescode-logo.png",
 	"galleryBanner": {
 		"color": "#FFFFFF",
 		"theme": "light"
@@ -110,8 +110,8 @@
 				{
 					"id": "blues-code-ActivityBar",
 					"title": "%views.activitybar.title%",
-					"icon": "assets/icons/blues.png",
-					"darkIcon": "assets/icons/blues-dark.png",
+					"icon": "assets/icons/bluescode-logo.svg",
+					"darkIcon": "assets/icons/bluescode-logo.svg",
 					"when": "isMac"
 				}
 			]
@@ -130,11 +130,6 @@
 				"command": "blues-code.plusButtonClicked",
 				"title": "%command.newTask.title%",
 				"icon": "$(add)"
-			},
-			{
-				"command": "blues-code.mcpButtonClicked",
-				"title": "%command.mcpServers.title%",
-				"icon": "$(server)"
 			},
 			{
 				"command": "blues-code.importSettings",
@@ -160,11 +155,6 @@
 				"command": "blues-code.marketplaceButtonClicked",
 				"title": "%command.marketplace.title%",
 				"icon": "$(extensions)"
-			},
-			{
-				"command": "blues-code.popoutButtonClicked",
-				"title": "%command.openInEditor.title%",
-				"icon": "$(link-external)"
 			},
 			{
 				"command": "blues-code.settingsButtonClicked",
@@ -242,17 +232,11 @@
 				"category": "%configuration.title%"
 			},
 			{
-				"command": "blues-code.profileButtonClicked",
-				"title": "%command.profile.title%",
-				"icon": "$(account)",
-				"category": "%configuration.title%"
-			},
-			{
 				"command": "blues-code.generateCommitMessage",
 				"title": "%command.generateCommitMessage.title%",
 				"icon": {
-					"light": "assets/icons/blues-light.svg",
-					"dark": "assets/icons/blues-dark.svg"
+					"light": "assets/icons/bluescode-logo-light.svg",
+					"dark": "assets/icons/bluescode-logo-dark.svg"
 				},
 				"category": "%configuration.title%"
 			},
@@ -416,28 +400,13 @@
 					"when": "view == blues-code.SidebarProvider"
 				},
 				{
-					"command": "blues-code.mcpButtonClicked",
-					"group": "navigation@2",
-					"when": "view == blues-code.SidebarProvider"
-				},
-				{
 					"command": "blues-code.historyButtonClicked",
 					"group": "navigation@3",
 					"when": "view == blues-code.SidebarProvider"
 				},
 				{
-					"command": "blues-code.profileButtonClicked",
-					"group": "navigation@4",
-					"when": "view == blues-code.SidebarProvider"
-				},
-				{
 					"command": "blues-code.settingsButtonClicked",
 					"group": "navigation@5",
-					"when": "view == blues-code.SidebarProvider"
-				},
-				{
-					"command": "blues-code.popoutButtonClicked",
-					"group": "navigation@6",
 					"when": "view == blues-code.SidebarProvider"
 				},
 				{
@@ -453,18 +422,8 @@
 					"when": "activeWebviewPanelId == blues-code.TabPanelProvider"
 				},
 				{
-					"command": "blues-code.mcpButtonClicked",
-					"group": "navigation@2",
-					"when": "activeWebviewPanelId == blues-code.TabPanelProvider"
-				},
-				{
 					"command": "blues-code.historyButtonClicked",
 					"group": "navigation@3",
-					"when": "activeWebviewPanelId == blues-code.TabPanelProvider"
-				},
-				{
-					"command": "blues-code.popoutButtonClicked",
-					"group": "navigation@4",
 					"when": "activeWebviewPanelId == blues-code.TabPanelProvider"
 				},
 				{

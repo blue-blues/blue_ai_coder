@@ -15,13 +15,13 @@ import { getModelEndpoints } from "./fetchers/modelEndpointCache"
 
 /**
  * A custom OpenRouter handler that overrides the getModel function
- * to provide custom model information and fetches models from the KiloCode OpenRouter endpoint.
+ * to provide custom model information and fetches models from the Blues Code OpenRouter endpoint.
  */
 export class BluesCodeOpenrouterHandler extends OpenRouterHandler {
 	protected override models: ModelRecord = {}
 
 	constructor(options: ApiHandlerOptions) {
-		const baseUri = getKiloBaseUri(options)
+		const baseUri = getBluesBaseUri(options)
 		options = {
 			...options,
 			openRouterBaseUrl: `${baseUri}/api/openrouter/`,
@@ -35,14 +35,14 @@ export class BluesCodeOpenrouterHandler extends OpenRouterHandler {
 		return metadata
 			? {
 					headers: {
-						"X-KiloCode-TaskId": metadata.taskId,
+						"X-BluesCode-TaskId": metadata.taskId,
 					},
 				}
 			: undefined
 	}
 
 	override getTotalCost(lastUsage: CompletionUsage): number {
-		// https://github.com/Kilo-Org/bluescode-backend/blob/eb3d382df1e933a089eea95b9c4387db0c676e35/src/lib/processUsage.ts#L281
+		// https://github.com/Blues-Org/bluescode-backend/blob/eb3d382df1e933a089eea95b9c4387db0c676e35/src/lib/processUsage.ts#L281
 		if (lastUsage.is_byok) {
 			return lastUsage.cost_details?.upstream_inference_cost || 0
 		}
@@ -100,6 +100,6 @@ export class BluesCodeOpenrouterHandler extends OpenRouterHandler {
 	}
 }
 
-function getKiloBaseUri(options: ApiHandlerOptions) {
+function getBluesBaseUri(options: ApiHandlerOptions) {
 	return getBluesBaseUriFromToken(options.bluesCodeToken ?? "")
 }

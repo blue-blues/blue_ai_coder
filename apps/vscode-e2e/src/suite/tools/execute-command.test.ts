@@ -171,7 +171,7 @@ suite("Roo Code execute_command Tool", function () {
 				configuration: {
 					mode: "code",
 					autoApprovalEnabled: true,
-					alwaysAllowExecute: true,
+					alwaysAllowExecute: false, // SECURITY: Always require manual approval for commands
 					allowedCommands: ["*"],
 					terminalShellIntegrationDisabled: true,
 				},
@@ -277,7 +277,7 @@ Then use the attempt_completion tool to complete the task. Do not suggest any co
 				configuration: {
 					mode: "code",
 					autoApprovalEnabled: true,
-					alwaysAllowExecute: true,
+					alwaysAllowExecute: false, // SECURITY: Always require manual approval for commands
 					allowedCommands: ["*"],
 					terminalShellIntegrationDisabled: true,
 				},
@@ -391,7 +391,7 @@ Avoid at all costs suggesting a command when using the attempt_completion tool`,
 				configuration: {
 					mode: "code",
 					autoApprovalEnabled: true,
-					alwaysAllowExecute: true,
+					alwaysAllowExecute: false, // SECURITY: Always require manual approval for commands
 					allowedCommands: ["*"],
 					terminalShellIntegrationDisabled: true,
 				},
@@ -513,7 +513,7 @@ After both commands are executed, use the attempt_completion tool to complete th
 				configuration: {
 					mode: "code",
 					autoApprovalEnabled: true,
-					alwaysAllowExecute: true,
+					alwaysAllowExecute: false, // SECURITY: Always require manual approval for commands
 					allowedCommands: ["*"],
 					terminalShellIntegrationDisabled: true,
 				},

@@ -25,7 +25,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 		allowedMaxRequests, // kilocode_change
 		setAlwaysAllowReadOnly,
 		setAlwaysAllowWrite,
-		setAlwaysAllowExecute,
+		// SECURITY: setAlwaysAllowExecute removed to prevent auto-execution bypass
 		setAlwaysAllowBrowser,
 		setAlwaysAllowMcp,
 		setAlwaysAllowModeSwitch,
@@ -63,9 +63,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 				case "alwaysAllowWrite":
 					setAlwaysAllowWrite(value)
 					break
-				case "alwaysAllowExecute":
-					setAlwaysAllowExecute(value)
-					break
+				// SECURITY: alwaysAllowExecute case removed to prevent auto-execution bypass
 				case "alwaysAllowBrowser":
 					setAlwaysAllowBrowser(value)
 					break
@@ -114,7 +112,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 			hasEnabledOptions,
 			setAlwaysAllowReadOnly,
 			setAlwaysAllowWrite,
-			setAlwaysAllowExecute,
+			// SECURITY: setAlwaysAllowExecute removed from dependency array
 			setAlwaysAllowBrowser,
 			setAlwaysAllowMcp,
 			setAlwaysAllowModeSwitch,

@@ -1,0 +1,53 @@
+<!-- BluesCode Logo - Horizontal White Variant -->
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="120" viewBox="0 0 400 120" fill="none">
+  <defs>
+    <!-- Main gradient for horizontal logo - white theme -->
+    <linearGradient id="gradient1-horiz-white" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#c7d2fe;stop-opacity:0.9"/>
+    </linearGradient>
+    
+    <!-- Core gradient for horizontal logo -->
+    <radialGradient id="coreGradient-horiz-white" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.98"/>
+      <stop offset="20%" style="stop-color:#f8fafc;stop-opacity:0.95"/>
+      <stop offset="70%" style="stop-color:#c7d2fe"/>
+      <stop offset="100%" style="stop-color:#a78bfa"/>
+    </radialGradient>
+    
+    <!-- Glow effect for horizontal logo -->
+    <filter id="glow-horiz-white" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Logo circle on the left -->
+  <g transform="translate(60, 60)">
+    <!-- Outer ring -->
+    <circle cx="0" cy="0" r="45" fill="url(#gradient1-horiz-white)" opacity="0.4"/>
+    
+    <!-- Middle ring -->
+    <circle cx="0" cy="0" r="35" fill="url(#gradient1-horiz-white)" opacity="0.6"/>
+    
+    <!-- Inner core -->
+    <circle cx="0" cy="0" r="25" fill="url(#coreGradient-horiz-white)" filter="url(#glow-horiz-white)"/>
+    
+    <!-- Central core -->
+    <circle cx="0" cy="0" r="15" fill="url(#gradient1-horiz-white)" opacity="0.8"/>
+    
+    <!-- Highlight dot -->
+    <circle cx="-5" cy="-5" r="4" fill="#ffffff" opacity="0.8"/>
+  </g>
+  
+  <!-- BluesCode text -->
+  <text x="140" y="45" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#ffffff">
+    Blues
+  </text>
+  <text x="140" y="75" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#f8fafc">
+    Code
+  </text>
+</svg>

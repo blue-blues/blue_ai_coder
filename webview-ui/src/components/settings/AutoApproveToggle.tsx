@@ -13,7 +13,6 @@ type AutoApproveToggles = Pick<
 	| "alwaysAllowMcp"
 	| "alwaysAllowModeSwitch"
 	| "alwaysAllowSubtasks"
-	| "alwaysAllowExecute"
 	| "alwaysAllowFollowupQuestions"
 	| "alwaysAllowUpdateTodoList"
 >
@@ -77,13 +76,6 @@ export const autoApproveSettingsConfig: Record<AutoApproveSetting, AutoApproveCo
 		descriptionKey: "settings:autoApprove.subtasks.description",
 		icon: "list-tree",
 		testId: "always-allow-subtasks-toggle",
-	},
-	alwaysAllowExecute: {
-		key: "alwaysAllowExecute",
-		labelKey: "settings:autoApprove.execute.label",
-		descriptionKey: "settings:autoApprove.execute.description",
-		icon: "terminal",
-		testId: "always-allow-execute-toggle",
 	},
 	alwaysAllowFollowupQuestions: {
 		key: "alwaysAllowFollowupQuestions",

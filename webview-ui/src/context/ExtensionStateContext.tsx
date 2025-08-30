@@ -220,8 +220,8 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		mcpEnabled: true,
 		enableMcpServerCreation: false,
 		alwaysApproveResubmit: false,
-		alwaysAllowWrite: true, // kilocode_change
-		alwaysAllowReadOnly: true, // kilocode_change
+		alwaysAllowWrite: false, // kilocode_change - DISABLED for security
+		alwaysAllowReadOnly: false, // kilocode_change - DISABLED for security
 		requestDelaySeconds: 5,
 		currentApiConfigName: "default",
 		listApiConfigMeta: [],
@@ -236,7 +236,7 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		condensingApiConfigId: "", // Default empty string for condensing API config ID
 		customCondensingPrompt: "", // Default empty string for custom condensing prompt
 		hasOpenedModeSelector: false, // Default to false (not opened yet)
-		autoApprovalEnabled: true,
+		autoApprovalEnabled: false, // DISABLED for security - require manual approval
 		customModes: [],
 		maxOpenTabsContext: 20,
 		maxWorkspaceFiles: 200,
@@ -276,7 +276,7 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 			codebaseIndexSearchMinScore: undefined,
 		},
 		codebaseIndexModels: { ollama: {}, openai: {} },
-		alwaysAllowUpdateTodoList: true,
+		alwaysAllowUpdateTodoList: false, // DISABLED for security - require manual approval
 		includeDiagnosticMessages: true,
 		maxDiagnosticMessages: 50,
 	})

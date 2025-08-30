@@ -19,7 +19,7 @@ export const AccountView = ({ userInfo, isAuthenticated, cloudApiUrl, onDone }: 
 	const { t } = useAppTranslation()
 	const wasAuthenticatedRef = useRef(false)
 
-	const rooLogoUri = (window as any).IMAGES_BASE_URI + "/roo-logo.svg"
+	const bluesCodeLogoUri = (window as any).IMAGES_BASE_URI + "/bluescode-logo.svg"
 
 	// Track authentication state changes to detect successful logout
 	useEffect(() => {
@@ -112,14 +112,14 @@ export const AccountView = ({ userInfo, isAuthenticated, cloudApiUrl, onDone }: 
 							<div
 								className="w-12 h-12 bg-vscode-foreground"
 								style={{
-									WebkitMaskImage: `url('${rooLogoUri}')`,
+									WebkitMaskImage: `url('${bluesCodeLogoUri}')`,
 									WebkitMaskRepeat: "no-repeat",
 									WebkitMaskSize: "contain",
-									maskImage: `url('${rooLogoUri}')`,
+									maskImage: `url('${bluesCodeLogoUri}')`,
 									maskRepeat: "no-repeat",
 									maskSize: "contain",
 								}}>
-								<img src={rooLogoUri} alt="Roo logo" className="w-12 h-12 opacity-0" />
+								<img src={bluesCodeLogoUri} alt="BluesCode logo" className="w-12 h-12 opacity-0" />
 							</div>
 						</div>
 					</div>

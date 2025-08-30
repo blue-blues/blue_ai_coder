@@ -83,7 +83,10 @@ export const TabTrigger = forwardRef<
 			role="tab"
 			aria-selected={isSelected}
 			tabIndex={isSelected ? 0 : -1}
-			className={cn("focus:outline-none focus:ring-2 focus:ring-vscode-focusBorder", className)}
+			className={cn(
+				"focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors",
+				className,
+			)}
 			onClick={onSelect}
 			{...props}>
 			{children}
