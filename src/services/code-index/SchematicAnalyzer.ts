@@ -382,14 +382,15 @@ export class SchematicAnalyzer {
 		switch (category) {
 			case FileCategory.ENTRY_POINT:
 				return ImportanceLevel.CRITICAL
-			case FileCategory.CONFIGURATION:
+			case FileCategory.CONFIGURATION: {
 				// Main config files are critical, others are high
 				const fileName = path.basename(filePath).toLowerCase()
 				if (["package.json", "tsconfig.json", "webpack.config.js", "vite.config.js"].includes(fileName)) {
 					return ImportanceLevel.CRITICAL
 				}
 				return ImportanceLevel.HIGH
-			case FileCategory.CORE_LOGIC:
+			}
+			case FileCategory.CORE_LOGIC: {
 				// Analyze content complexity and dependencies
 				const complexity = this.calculateComplexity(content, null)
 				const dependencies = this.extractDependencies(
@@ -401,6 +402,7 @@ export class SchematicAnalyzer {
 					return ImportanceLevel.HIGH
 				}
 				return ImportanceLevel.MEDIUM
+			}
 			case FileCategory.UTILITY:
 				return ImportanceLevel.MEDIUM
 			case FileCategory.TEST:
@@ -512,7 +514,7 @@ export class SchematicAnalyzer {
 
 		switch (language) {
 			case "typescript":
-			case "javascript":
+			case "javascript": {
 				// ES6 imports and CommonJS requires
 				const importMatches = content.match(/import\s+.*?\s+from\s+['"`]([^'"`]+)['"`]/g)
 				const requireMatches = content.match(/require\s*\(\s*['"`]([^'"`]+)['"`]\s*\)/g)
@@ -531,8 +533,9 @@ export class SchematicAnalyzer {
 					})
 				}
 				break
+			}
 
-			case "python":
+			case "python": {
 				const pythonImports = content.match(/(?:from\s+(\S+)\s+import|import\s+(\S+))/g)
 				if (pythonImports) {
 					pythonImports.forEach((match) => {
@@ -543,8 +546,9 @@ export class SchematicAnalyzer {
 					})
 				}
 				break
+			}
 
-			case "java":
+			case "java": {
 				const javaImports = content.match(/import\s+([^;]+);/g)
 				if (javaImports) {
 					javaImports.forEach((match) => {
@@ -553,6 +557,7 @@ export class SchematicAnalyzer {
 					})
 				}
 				break
+			}
 		}
 
 		return [...new Set(dependencies)] // Remove duplicates
@@ -566,7 +571,7 @@ export class SchematicAnalyzer {
 
 		switch (language) {
 			case "typescript":
-			case "javascript":
+			case "javascript": {
 				// Named exports
 				const namedExports = content.match(/export\s+(?:const|let|var|function|class|interface|type)\s+(\w+)/g)
 				if (namedExports) {
@@ -595,6 +600,7 @@ export class SchematicAnalyzer {
 					exports.push("default")
 				}
 				break
+			}
 		}
 
 		return [...new Set(exports)] // Remove duplicates
@@ -1034,52 +1040,50 @@ export class SchematicAnalyzer {
 	/**
 	 * Gets files sorted by processing priority
 	 */
-	getFilesByPriority(filePaths: string[]): Promise<string[]> {
-		return new Promise(async (resolve) => {
-			const fileAnalyses: Array<{ path: string; importance: ImportanceLevel; category: FileCategory }> = []
+	async getFilesByPriority(filePaths: string[]): Promise<string[]> {
+		const fileAnalyses: Array<{ path: string; importance: ImportanceLevel; category: FileCategory }> = []
 
-			for (const filePath of filePaths) {
-				try {
-					const analysis = await this.analyzeFile(filePath)
-					fileAnalyses.push({
-						path: filePath,
-						importance: analysis.importance,
-						category: analysis.category,
-					})
-				} catch (error) {
-					// Add with low priority if analysis fails
-					fileAnalyses.push({
-						path: filePath,
-						importance: ImportanceLevel.LOW,
-						category: FileCategory.UNKNOWN,
-					})
-				}
+		for (const filePath of filePaths) {
+			try {
+				const analysis = await this.analyzeFile(filePath)
+				fileAnalyses.push({
+					path: filePath,
+					importance: analysis.importance,
+					category: analysis.category,
+				})
+			} catch (error) {
+				// Add with low priority if analysis fails
+				fileAnalyses.push({
+					path: filePath,
+					importance: ImportanceLevel.LOW,
+					category: FileCategory.UNKNOWN,
+				})
 			}
+		}
 
-			// Sort by importance (highest first), then by category priority
-			const categoryPriority = {
-				[FileCategory.ENTRY_POINT]: 1,
-				[FileCategory.CONFIGURATION]: 2,
-				[FileCategory.CORE_LOGIC]: 3,
-				[FileCategory.UTILITY]: 4,
-				[FileCategory.TEST]: 5,
-				[FileCategory.DOCUMENTATION]: 6,
-				[FileCategory.ASSET]: 7,
-				[FileCategory.GENERATED]: 8,
-				[FileCategory.UNKNOWN]: 9,
+		// Sort by importance (highest first), then by category priority
+		const categoryPriority = {
+			[FileCategory.ENTRY_POINT]: 1,
+			[FileCategory.CONFIGURATION]: 2,
+			[FileCategory.CORE_LOGIC]: 3,
+			[FileCategory.UTILITY]: 4,
+			[FileCategory.TEST]: 5,
+			[FileCategory.DOCUMENTATION]: 6,
+			[FileCategory.ASSET]: 7,
+			[FileCategory.GENERATED]: 8,
+			[FileCategory.UNKNOWN]: 9,
+		}
+
+		fileAnalyses.sort((a, b) => {
+			// First sort by importance (higher importance first)
+			if (a.importance !== b.importance) {
+				return b.importance - a.importance
 			}
-
-			fileAnalyses.sort((a, b) => {
-				// First sort by importance (higher importance first)
-				if (a.importance !== b.importance) {
-					return b.importance - a.importance
-				}
-				// Then by category priority
-				return categoryPriority[a.category] - categoryPriority[b.category]
-			})
-
-			resolve(fileAnalyses.map((f) => f.path))
+			// Then by category priority
+			return categoryPriority[a.category] - categoryPriority[b.category]
 		})
+
+		return fileAnalyses.map((f) => f.path)
 	}
 
 	/**
