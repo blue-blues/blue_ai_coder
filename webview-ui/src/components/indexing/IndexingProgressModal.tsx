@@ -51,7 +51,7 @@ export const IndexingProgressModal: React.FC<IndexingProgressModalProps> = ({
 		estimatedRemainingMs: 0,
 		filesPerSecond: 0,
 	})
-	const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetrics>({
+	const [_performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetrics>({
 		memoryUsage: 0,
 		cpuUsage: 0,
 		throughput: 0,

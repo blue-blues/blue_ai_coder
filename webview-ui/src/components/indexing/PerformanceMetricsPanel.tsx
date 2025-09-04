@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react"
-import { BarChart3, Zap, Clock, HardDrive, Cpu, TrendingUp, TrendingDown, AlertCircle, CheckCircle } from "lucide-react"
+import React, { useState, useEffect } from "react"
+import { BarChart3, Zap, HardDrive, Cpu, TrendingUp, TrendingDown, AlertCircle, CheckCircle } from "lucide-react"
 import { cn } from "@src/lib/utils"
 import { vscode } from "@src/utils/vscode"
 import { useAppTranslation } from "@/i18n/TranslationContext"

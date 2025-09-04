@@ -25,7 +25,6 @@ import { formatReminderSection } from "./reminder"
 import { OpenRouterHandler } from "../../api/providers/openrouter"
 import { TelemetryService } from "@blues-code/telemetry"
 import { t } from "../../i18n"
-import { BluesCodeOllamaHandler } from "../../api/providers/kilocode-ollama"
 // bluescode_change end
 
 export async function getEnvironmentDetails(cline: Task, includeFileDetails: boolean = false) {
@@ -212,7 +211,7 @@ export async function getEnvironmentDetails(cline: Task, includeFileDetails: boo
 
 	// bluescode_change start
 	// Be sure to fetch the model information before we need it.
-	if (cline.api instanceof OpenRouterHandler || cline.api instanceof BluesCodeOllamaHandler) {
+	if (cline.api instanceof OpenRouterHandler || cline.api instanceof OllamaHandler) {
 		try {
 			await cline.api.fetchModel()
 		} catch (e) {

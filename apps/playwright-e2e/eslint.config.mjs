@@ -1,4 +1,4 @@
-import { config } from "@roo-code/config-eslint/base"
+import { config } from "@blues-code/config-eslint/base"
 
 export default [
     ...config,

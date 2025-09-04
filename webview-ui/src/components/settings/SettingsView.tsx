@@ -4,7 +4,7 @@ import React, {
 	useCallback,
 	useEffect,
 	useImperativeHandle,
-	useLayoutEffect,
+	useLayoutEffect as _useLayoutEffect,
 	useMemo,
 	useRef,
 	useState,
@@ -18,10 +18,10 @@ import {
 	Server, // kilocode_change
 	Bot, // kilocode_change
 	LucideIcon,
-	Briefcase,
-	Link,
-	Settings,
-	HelpCircle,
+	Briefcase as _Briefcase,
+	Link as _Link,
+	Settings as _Settings,
+	HelpCircle as _HelpCircle,
 } from "lucide-react"
 
 // kilocode_change
@@ -44,10 +44,10 @@ import {
 	AlertDialogHeader,
 	AlertDialogFooter,
 	Button,
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
+	Tooltip as _Tooltip,
+	TooltipContent as _TooltipContent,
+	TooltipProvider as _TooltipProvider,
+	TooltipTrigger as _TooltipTrigger,
 	StandardTooltip,
 } from "@src/components/ui"
 
@@ -160,7 +160,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 		maxImageFileSize,
 		maxTotalImageSize,
 		terminalCompressProgressBar,
-		maxConcurrentFileReads,
+		maxConcurrentFileReads: _maxConcurrentFileReads,
 		allowVeryLargeReads, // kilocode_change
 		terminalCommandApiConfigId, // kilocode_change
 		condensingApiConfigId,
@@ -284,7 +284,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 		})
 	}, [])
 
-	const setCustomSupportPromptsField = useCallback((prompts: Record<string, string | undefined>) => {
+	const _setCustomSupportPromptsField = useCallback((prompts: Record<string, string | undefined>) => {
 		setCachedState((prevState) => {
 			if (JSON.stringify(prevState.customSupportPrompts) === JSON.stringify(prompts)) {
 				return prevState
@@ -438,7 +438,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 		Object.fromEntries(sectionNames.map((name) => [name, null])) as Record<SectionName, HTMLButtonElement | null>,
 	)
 
-	const containerRef = useRef<HTMLDivElement>(null)
+	const _containerRef = useRef<HTMLDivElement>(null)
 
 	const sections: { id: SectionName; icon: LucideIcon }[] = useMemo(
 		() => [

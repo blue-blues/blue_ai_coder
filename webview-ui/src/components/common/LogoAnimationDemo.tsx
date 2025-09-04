@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import AnimatedLogo, { LogoAnimationState } from "./AnimatedLogo"
 import LoadingLogo from "./LoadingLogo"
 import { useAnimationPreferences } from "./useLogoAnimation"
@@ -10,7 +10,10 @@ const LogoAnimationDemo = () => {
 	const [isActive, setIsActive] = useState(false)
 	const { prefersReducedMotion } = useAnimationPreferences()
 
-	const animationStates: LogoAnimationState[] = ["none", "subtle", "active", "loading", "breathing", "processing"]
+	const animationStates: LogoAnimationState[] = useMemo(
+		() => ["none", "subtle", "active", "loading", "breathing", "processing"],
+		[],
+	)
 
 	// Auto-cycle through animation states for demo
 	useEffect(() => {
@@ -25,7 +28,7 @@ const LogoAnimationDemo = () => {
 		}, 3000)
 
 		return () => clearInterval(interval)
-	}, [prefersReducedMotion])
+	}, [prefersReducedMotion, animationStates])
 
 	return (
 		<div className="p-8 space-y-8">

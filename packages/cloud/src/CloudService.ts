@@ -67,14 +67,17 @@ export class CloudService extends EventEmitter<CloudServiceEvents> implements vs
 
 			if (cloudToken && cloudToken.length > 0) {
 				this.authService = new StaticTokenAuthService(this.context, cloudToken, this.log)
+				await this.authService.initialize()
+
+				this.authService.on("auth-state-changed", this.authStateListener)
+				this.authService.on("user-info", this.authUserInfoListener)
 			} else {
 				this.authService = new WebAuthService(this.context, this.log)
+				await this.authService.initialize()
+
+				this.authService.on("auth-state-changed", this.authStateListener)
+				this.authService.on("user-info", this.authUserInfoListener)
 			}
-
-			await this.authService.initialize()
-
-			this.authService.on("auth-state-changed", this.authStateListener)
-			this.authService.on("user-info", this.authUserInfoListener)
 
 			// Check for static settings environment variable.
 			const staticOrgSettings = process.env.ROO_CODE_CLOUD_ORG_SETTINGS

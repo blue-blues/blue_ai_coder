@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react"
-import { Database, AlertTriangle, CheckCircle, Clock, Zap, Pause } from "lucide-react"
+import { Database as _Database, AlertTriangle, CheckCircle, Clock, Zap, Pause } from "lucide-react"
 import { cn } from "@src/lib/utils"
 import { vscode } from "@src/utils/vscode"
 import { useAppTranslation } from "@/i18n/TranslationContext"

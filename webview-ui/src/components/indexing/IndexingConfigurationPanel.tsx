@@ -76,7 +76,7 @@ export const IndexingConfigurationPanel: React.FC<IndexingConfigurationPanelProp
 	onConfigChange,
 }) => {
 	const { t } = useAppTranslation()
-	const { codebaseIndexConfig } = useExtensionState()
+	const { codebaseIndexConfig: _codebaseIndexConfig } = useExtensionState()
 	const [config, setConfig] = useState<IndexingConfiguration>(DEFAULT_CONFIG)
 	const [originalConfig, setOriginalConfig] = useState<IndexingConfiguration>(DEFAULT_CONFIG)
 	const [activeSection, setActiveSection] = useState<string>("performance")
@@ -106,7 +106,7 @@ export const IndexingConfigurationPanel: React.FC<IndexingConfigurationPanelProp
 
 		window.addEventListener("message", handleMessage)
 		return () => window.removeEventListener("message", handleMessage)
-	}, [])
+	}, [config])
 
 	// Update configuration
 	const updateConfig = <K extends keyof IndexingConfiguration>(key: K, value: IndexingConfiguration[K]) => {

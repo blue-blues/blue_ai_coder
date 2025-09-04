@@ -115,16 +115,7 @@ export const cerebrasDefaultModelId: CerebrasModelId = "gpt-oss-120b"
 
 // RouterName
 
-const routerNames = [
-	"openrouter",
-	"requesty",
-	"glama",
-	"unbound",
-	"litellm",
-	"bluescode-openrouter",
-	"ollama",
-	"lmstudio",
-] as const
+const routerNames = ["openrouter", "requesty", "glama", "unbound", "litellm", "ollama", "lmstudio"] as const
 
 export type RouterName = (typeof routerNames)[number]
 
@@ -225,7 +216,6 @@ export type GetModelsOptions =
 	| { provider: "requesty"; apiKey?: string }
 	| { provider: "unbound"; apiKey?: string }
 	| { provider: "litellm"; apiKey: string; baseUrl: string }
-	| { provider: "bluescode-openrouter"; bluesCodeToken?: string } // bluescode_change
 	| { provider: "cerebras"; cerebrasApiKey?: string } // bluescode_change
 	| { provider: "ollama"; baseUrl?: string }
 	| { provider: "lmstudio"; baseUrl?: string }

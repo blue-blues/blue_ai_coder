@@ -26,11 +26,11 @@ export class StaticTokenAuthService extends EventEmitter<AuthServiceEvents> impl
 	}
 
 	public async login(): Promise<void> {
-		throw new Error("Authentication methods are disabled in StaticTokenAuthService")
+		throw new Error("Login is not supported with static token authentication")
 	}
 
 	public async logout(): Promise<void> {
-		throw new Error("Authentication methods are disabled in StaticTokenAuthService")
+		throw new Error("Logout is not supported with static token authentication")
 	}
 
 	public async handleCallback(
@@ -38,7 +38,7 @@ export class StaticTokenAuthService extends EventEmitter<AuthServiceEvents> impl
 		_state: string | null,
 		_organizationId?: string | null,
 	): Promise<void> {
-		throw new Error("Authentication methods are disabled in StaticTokenAuthService")
+		throw new Error("OAuth callback handling is not supported with static token authentication")
 	}
 
 	public getState(): AuthState {

@@ -13,7 +13,7 @@ import {
 	VertexHandler,
 	AnthropicVertexHandler,
 	OpenAiHandler,
-	// OllamaHandler, // bluescode_change
+	OllamaHandler,
 	LmStudioHandler,
 	GeminiHandler,
 	GeminiCliHandler, // bluescode_change
@@ -39,10 +39,6 @@ import {
 	ZAiHandler,
 	FireworksHandler,
 } from "./providers"
-// bluescode_change start
-import { BluesCodeOpenrouterHandler } from "./providers/kilocode-openrouter"
-import { BluesCodeOllamaHandler } from "./providers/kilocode-ollama"
-// bluescode_change end
 
 export interface SingleCompletionHandler {
 	completePrompt(prompt: string): Promise<string>
@@ -77,8 +73,6 @@ export function buildApiHandler(configuration: ProviderSettings): ApiHandler {
 	const { apiProvider, ...options } = configuration
 
 	switch (apiProvider) {
-		case "bluescode":
-			return new BluesCodeOpenrouterHandler(options)
 		case "anthropic":
 			return new AnthropicHandler(options)
 		case "claude-code":
@@ -96,7 +90,7 @@ export function buildApiHandler(configuration: ProviderSettings): ApiHandler {
 		case "openai":
 			return new OpenAiHandler(options)
 		case "ollama":
-			return new BluesCodeOllamaHandler(options)
+			return new OllamaHandler(options)
 		case "lmstudio":
 			return new LmStudioHandler(options)
 		case "gemini":

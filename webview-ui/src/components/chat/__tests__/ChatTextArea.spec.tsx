@@ -28,7 +28,7 @@ vi.mock("@src/utils/path-mentions", () => ({
 }))
 
 // Get the mocked postMessage function
-const mockPostMessage = vscode.postMessage as ReturnType<typeof vi.fn>
+const _mockPostMessage = vscode.postMessage as ReturnType<typeof vi.fn>
 const mockConvertToMentionPath = pathMentions.convertToMentionPath as ReturnType<typeof vi.fn>
 
 // Mock ExtensionStateContext

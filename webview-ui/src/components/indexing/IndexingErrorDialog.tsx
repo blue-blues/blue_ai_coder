@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { AlertTriangle, RefreshCw, Settings, HelpCircle, Copy, ExternalLink } from "lucide-react"
+import { AlertTriangle, RefreshCw, Settings, HelpCircle, Copy } from "lucide-react"
 import { cn } from "@src/lib/utils"
 import { vscode } from "@src/utils/vscode"
 import { useAppTranslation } from "@/i18n/TranslationContext"
@@ -75,7 +75,7 @@ export const IndexingErrorDialog: React.FC<IndexingErrorDialogProps> = ({
 			await navigator.clipboard.writeText(JSON.stringify(errorReport, null, 2))
 			setCopied(true)
 			setTimeout(() => setCopied(false), 2000)
-		} catch (err) {
+		} catch (_err) {
 			// Fallback for older browsers
 			const textArea = document.createElement("textarea")
 			textArea.value = JSON.stringify(errorReport, null, 2)

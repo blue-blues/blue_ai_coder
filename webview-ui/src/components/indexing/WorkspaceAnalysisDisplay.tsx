@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo as _useMemo } from "react"
 import {
 	FolderTree,
 	FileText,
@@ -8,8 +8,8 @@ import {
 	AlertCircle,
 	CheckCircle,
 	Info,
-	Eye,
-	EyeOff,
+	Eye as _Eye,
+	EyeOff as _EyeOff,
 } from "lucide-react"
 import { cn } from "@src/lib/utils"
 import { vscode } from "@src/utils/vscode"
@@ -442,7 +442,7 @@ export const WorkspaceAnalysisDisplay: React.FC<WorkspaceAnalysisDisplayProps> =
 							{t("indexing:analysis.highPriorityFiles")}
 						</h4>
 						<div className="space-y-2">
-							{analysis.highPriorityFiles.slice(0, 20).map((file, index) => (
+							{analysis.highPriorityFiles.slice(0, 20).map((file, _index) => (
 								<div
 									key={file.path}
 									className="flex items-center justify-between p-3 bg-vscode-editor-background rounded-lg border border-vscode-panel-border hover:bg-vscode-list-hoverBackground">
@@ -504,7 +504,7 @@ export const WorkspaceAnalysisDisplay: React.FC<WorkspaceAnalysisDisplayProps> =
 							</div>
 						) : (
 							<div className="space-y-3">
-								{analysis.recommendations.map((recommendation, index) => (
+								{analysis.recommendations.map((recommendation, _index) => (
 									<div
 										key={index}
 										className={cn(

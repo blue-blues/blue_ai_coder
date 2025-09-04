@@ -5,13 +5,16 @@ export function getCallbackUrl(provider: string, uriScheme?: string) {
 }
 
 export function getGlamaAuthUrl(uriScheme?: string) {
-	return `https://glama.ai/oauth/authorize?callback_url=${getCallbackUrl("glama", uriScheme)}`
+	const callbackUrl = getCallbackUrl("glama", uriScheme)
+	return `https://glama.ai/oauth/authorize?callback_url=${callbackUrl}`
 }
 
 export function getOpenRouterAuthUrl(uriScheme?: string) {
-	return `https://openrouter.ai/auth?callback_url=${getCallbackUrl("openrouter", uriScheme)}`
+	const callbackUrl = getCallbackUrl("openrouter", uriScheme)
+	return `https://openrouter.ai/auth?callback_url=${callbackUrl}`
 }
 
 export function getRequestyAuthUrl(uriScheme?: string) {
-	return `https://app.requesty.ai/oauth/authorize?callback_url=${getCallbackUrl("requesty", uriScheme)}`
+	const callbackUrl = getCallbackUrl("requesty", uriScheme)
+	return `https://requesty.ai/oauth/authorize?callback_url=${callbackUrl}`
 }

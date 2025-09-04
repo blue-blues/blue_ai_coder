@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { vscode } from "@src/utils/vscode"
-import { useExtensionState } from "@src/context/ExtensionStateContext"
+import { useExtensionState as _useExtensionState } from "@src/context/ExtensionStateContext"
 import {
 	IndexingProgressModal,
 	IndexingStatusIndicator,

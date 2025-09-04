@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 
 type LogoProps = Omit<SVGProps<SVGSVGElement>, "xmlns" | "viewBox" | "onClick">
 
-export const Logo = ({ width = 50, height = 50, fill = "#fff", className, ...props }: LogoProps) => {
+export const Logo = ({ width = 50, height = 50, className, ...props }: LogoProps) => {
 	const router = useRouter()
 
 	return (

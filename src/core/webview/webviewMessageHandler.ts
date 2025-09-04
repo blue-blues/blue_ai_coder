@@ -2691,11 +2691,10 @@ export const webviewMessageHandler = async (
 		}
 		case "rooCloudSignIn": {
 			try {
-				TelemetryService.instance.captureEvent(TelemetryEventName.AUTHENTICATION_INITIATED)
 				await CloudService.instance.login()
 			} catch (error) {
-				provider.log(`AuthService#login failed: ${error}`)
-				vscode.window.showErrorMessage("Sign in failed.")
+				provider.log(`[webviewMessageHandler] Error signing in to Roo Code Cloud: ${error}`)
+				vscode.window.showErrorMessage("Failed to sign in to Roo Code Cloud")
 			}
 
 			break
@@ -2703,12 +2702,12 @@ export const webviewMessageHandler = async (
 		case "rooCloudSignOut": {
 			try {
 				await CloudService.instance.logout()
-				await provider.postStateToWebview()
-				provider.postMessageToWebview({ type: "authenticatedUser", userInfo: undefined })
 			} catch (error) {
-				provider.log(`AuthService#logout failed: ${error}`)
-				vscode.window.showErrorMessage("Sign out failed.")
+				provider.log(`[webviewMessageHandler] Error signing out from Roo Code Cloud: ${error}`)
+				vscode.window.showErrorMessage("Failed to sign out from Roo Code Cloud")
 			}
+			await provider.postStateToWebview()
+			provider.postMessageToWebview({ type: "authenticatedUser", userInfo: undefined })
 
 			break
 		}
